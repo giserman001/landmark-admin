@@ -55,7 +55,7 @@ export const constantRoutes = [
   {
     path: '/',
     hidden: true,
-    redirect: '/projectInformation/list'
+    redirect: '/login'
   },
   {
     path: '/projectInformation',

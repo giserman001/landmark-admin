@@ -1,22 +1,157 @@
-export default [
+export const day = [
   {
-    prop: 'start_price',
-    label: '金额阶梯'
+    prop: 'id',
+    label: 'ID'
   },
   {
-    prop: 'channel_rate',
-    label: '代理商服务费率'
+    prop: 'project',
+    label: '项目'
   },
   {
-    prop: 'rate',
-    label: '平台服务费率'
+    prop: 'time',
+    label: '时间'
   },
   {
-    prop: 'pay_amount',
-    label: '结算金额'
+    prop: 'report',
+    label: '日报'
   },
   {
-    prop: 'amount',
-    label: '代理商佣金'
+    prop: 'feedback',
+    label: '反馈兰'
+  },
+  {
+    prop: 'idea',
+    label: '评估意见栏'
+  },
+  {
+    prop: 'action',
+    width: '120px',
+    label: '操作'
+  }
+]
+
+export const week = [
+  {
+    prop: 'id',
+    label: 'ID'
+  },
+  {
+    prop: 'project',
+    label: '项目'
+  },
+  {
+    prop: 'time',
+    label: '时间'
+  },
+  {
+    prop: 'report',
+    label: '周报'
+  },
+  {
+    prop: 'feedback',
+    label: '反馈兰'
+  },
+  {
+    prop: 'idea',
+    label: '评估意见栏'
+  },
+  {
+    prop: 'action',
+    width: '120px',
+    label: '操作'
+  }
+]
+export const mouth = [
+  {
+    prop: 'id',
+    label: 'ID'
+  },
+  {
+    prop: 'project',
+    label: '项目'
+  },
+  {
+    prop: 'time',
+    label: '时间'
+  },
+  {
+    prop: 'report',
+    label: '月报'
+  },
+  // {
+  //   prop: 'feedback',
+  //   label: '反馈兰'
+  // },
+  {
+    prop: 'idea',
+    label: '评估意见栏'
+  },
+  {
+    prop: 'action',
+    width: '120px',
+    label: '操作'
+  }
+]
+export const quarter = [
+  {
+    prop: 'id',
+    label: 'ID'
+  },
+  // {
+  //   prop: 'project',
+  //   label: '项目'
+  // },
+  {
+    prop: 'time',
+    label: '时间'
+  },
+  {
+    prop: 'report',
+    label: '季报'
+  },
+  // {
+  //   prop: 'feedback',
+  //   label: '反馈兰'
+  // },
+  {
+    prop: 'idea',
+    label: '评估意见栏'
+  },
+  {
+    prop: 'action',
+    width: '120px',
+    label: '操作'
+  }
+]
+
+export const year = [
+  {
+    prop: 'id',
+    label: 'ID'
+  },
+  // {
+  //   prop: 'project',
+  //   label: '项目'
+  // },
+  {
+    prop: 'time',
+    label: '时间'
+  },
+  {
+    prop: 'report',
+    label: '年报'
+  },
+  // {
+  //   prop: 'feedback',
+  //   label: '反馈兰'
+  // },
+  {
+    prop: 'idea',
+    label: '评估意见栏'
+  },
+  {
+    prop: 'action',
+    width: '120px',
+    label: '操作'
   }
 ]
