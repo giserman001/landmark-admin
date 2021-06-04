@@ -92,9 +92,6 @@ export default {
       return path
     }
   },
-  mounted() {
-    console.log(this.routes, 'routesroutesroutes')
-  },
   methods: {
     logout() {
       window.localStorage.clear()
