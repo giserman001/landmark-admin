@@ -5,7 +5,8 @@ export default [
   },
   {
     prop: 'name',
-    label: '名称'
+    label: '名称',
+    tooltip: true
   },
   {
     prop: 'area',
@@ -40,17 +41,17 @@ export default [
     prop: 'record',
     label: '国宝单位档案'
   },
-  {
-    prop: 'ownerInfo',
-    label: '业主单位信息'
-  },
-  {
-    prop: 'putInfo',
-    label: '实施单位信息'
-  },
+  // {
+  //   prop: 'ownerInfo',
+  //   label: '业主单位信息'
+  // },
+  // {
+  //   prop: 'putInfo',
+  //   label: '实施单位信息'
+  // },
   {
     prop: 'singleArchitectureInfo',
-    label: '单体建筑信息'
+    label: '项目详细信息'
   },
   {
     prop: 'action',

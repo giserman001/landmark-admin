@@ -17,17 +17,17 @@
       @change="handlePageChange"
     >
       <!-- 业主信息 -->
-      <template
+      <!-- <template
         slot="ownerInfo"
       >
         <svg-icon icon-class="ownerInfo" class-name="svg-class" />
-      </template>
+      </template> -->
       <!-- 实施单位信息 -->
-      <template
+      <!-- <template
         slot="putInfo"
       >
         <svg-icon icon-class="putInfo" class-name="svg-class" />
-      </template>
+      </template> -->
       <!-- 单体建筑信息 -->
       <template
         slot="singleArchitectureInfo"
