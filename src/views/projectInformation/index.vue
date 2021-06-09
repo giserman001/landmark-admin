@@ -2,7 +2,7 @@
   <div class="bgfff out_wrap">
     <div class="flex_between1">
       <el-form :inline="true" :model="form" size="small" label-suffix=":">
-        <el-form-item label="建筑名称">
+        <el-form-item label="名称">
           <el-input v-model="form.name" placeholder="请输入" @change="query" />
         </el-form-item>
       </el-form>
