@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '文物建筑防护性保护项目',
+  title: '文物建筑预防性保护项目检查评估工作台',
 
   /**
    * @type {boolean} true | false

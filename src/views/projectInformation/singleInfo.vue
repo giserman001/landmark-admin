@@ -2,11 +2,13 @@
   <div class="bgfff out_wrap">
     <div class="flex_between1">
       <el-form :inline="true" :model="form" size="small" label-suffix=":">
-        <el-form-item label="建筑名称">
+        <el-form-item label="单体名称">
           <el-input v-model="form.name" placeholder="请输入" @change="query" />
         </el-form-item>
       </el-form>
-      <el-button type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+      <div>
+        <el-button type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+      </div>
     </div>
     <zf-table
       :columns="column"
@@ -16,18 +18,6 @@
       :page-num="pages.page"
       @change="handlePageChange"
     >
-      <!-- 业主信息 -->
-      <!-- <template
-        slot="ownerInfo"
-      >
-        <svg-icon icon-class="ownerInfo" class-name="svg-class" />
-      </template> -->
-      <!-- 实施单位信息 -->
-      <!-- <template
-        slot="putInfo"
-      >
-        <svg-icon icon-class="putInfo" class-name="svg-class" />
-      </template> -->
       <!-- 单体建筑信息 -->
       <template
         slot="singleArchitectureInfo"
@@ -48,58 +38,48 @@
       <el-form :model="addForm" label-suffix=":" label-position="right" label-width="120px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="名称">
-              <el-input v-model="addForm.name" autocomplete="off" />
+            <el-form-item label="单体编号">
+              <el-input v-model="addForm.no" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="占地总面积">
-              <el-input v-model="addForm.area" autocomplete="off" />
+            <el-form-item label="单体名称">
+              <el-input v-model="addForm.name" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="总建筑面积">
-              <el-input v-model="addForm.sumArea" autocomplete="off" />
+            <el-form-item label="建设年代">
+              <el-input v-model="addForm.startYear" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="批准总经费">
+            <el-form-item label="建筑面积">
               <el-input v-model="addForm.approveMoney" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="子项构成">
-              <el-input v-model="addForm.subConstitute" autocomplete="off" />
+            <el-form-item label="历史沿革">
+              <el-input v-model="addForm.history" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="方案制编单位">
-              <el-input v-model="addForm.unit" autocomplete="off" />
+            <el-form-item label="历次修缮情况">
+              <el-input v-model="addForm.historyRepair" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="方案文本">
-              <el-input v-model="addForm.text" autocomplete="off" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="方案预算">
-              <el-input v-model="addForm.budget" autocomplete="off" />
+            <el-form-item label="价值评估结论">
+              <el-input v-model="addForm.value" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="国宝单位档案">
-              <el-input v-model="addForm.record" autocomplete="off" />
-            </el-form-item>
-          </el-col>
           <el-col :span="12">
             <el-form-item label="测绘图">
               <el-upload
@@ -118,6 +98,25 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="图片">
+              <el-upload
+                ref="upload"
+                class="upload-demo"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :auto-upload="false"
+              >
+                <el-button slot="trigger" size="small" type="primary">选取图片</el-button>
+                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
+                <div slot="tip" class="el-upload__tip" style="line-height:20px;">只能上传jpg/png文件，且不超过5M</div>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="formVisible = false">取 消</el-button>
@@ -129,9 +128,9 @@
 
 <script>
 import ZfTable from '@/components/ZfTable/CoreTable'
-import column from './columns/list'
+import column from './columns/singleInfo'
 export default {
-  name: 'List',
+  name: 'SingleInfo',
   components: {
     ZfTable
   },
@@ -144,36 +143,33 @@ export default {
       tableList: [{
         id: 1,
         name: '承德避暑山庄',
+        startYear: '1990-09-10',
         area: '123',
-        allArea: 145,
-        money: 45677,
-        subContent: '承德建筑主群',
-        unit: '博物院',
-        text: '西三脚架看就看写接口',
-        budget: 345678,
-        record: '是撒接口了'
+        history: '手机号啥课',
+        historyRepair: '经历三次重大修复',
+        value: '古建筑具有重大意义',
+        single: '由1,2,3构成',
+        draw: '不知道该如何展示'
       }, {
-        id: 1,
+        id: 2,
         name: '承德避暑山庄',
+        startYear: '1990-09-10',
         area: '123',
-        allArea: 145,
-        money: 45677,
-        subContent: '承德建筑主群',
-        unit: '博物院',
-        text: '西三脚架看就看写接口',
-        budget: 345678,
-        record: '是撒接口了'
+        history: '手机号啥课',
+        historyRepair: '经历三次重大修复',
+        value: '古建筑具有重大意义',
+        single: '由1,2,3构成',
+        draw: '不知道该如何展示'
       }, {
-        id: 1,
+        id: 3,
         name: '承德避暑山庄',
+        startYear: '1990-09-10',
         area: '123',
-        allArea: 145,
-        money: 45677,
-        subContent: '承德建筑主群',
-        unit: '博物院',
-        text: '西三脚架看就看写接口',
-        budget: 345678,
-        record: '是撒接口了'
+        history: '手机号啥课',
+        historyRepair: '经历三次重大修复',
+        value: '古建筑具有重大意义',
+        single: '由1,2,3构成',
+        draw: '不知道该如何展示'
       }],
       pages: {
         page: 1,
@@ -183,12 +179,15 @@ export default {
       formVisible: false,
       mode: 1, // 默认新增模式
       addForm: {
+        no: '',
         name: '',
+        startYear: '',
+        allArea: '',
         area: '',
-        sumArea: '',
-        approveMoney: '', // 批准总经费
-        subConstitute: '', // 子项构成
-        unit: '',
+        single: '',
+        history: '',
+        historyRepair: '',
+        value: '',
         text: '', // 方案文本
         budget: '', // 方案预算
         record: '', // 国宝单位档案
@@ -236,7 +235,7 @@ export default {
       this.mode = 1
     },
     goDetail(row) {
-      this.$router.push('/projectInformation/project-detail')
+      this.$router.push('/projectInformation/single-detail')
     },
     // 文件上传
     submitUpload() {
@@ -252,8 +251,22 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .svg-class{
   cursor: pointer;
+}
+.col-item{
+  span{
+    display: inline-block;
+    &:first-child{
+      width: 172px;
+      text-align: right;
+      // text-align-last: justify;
+      font-weight: bold;
+    }
+    &:last-child{
+      color: #3a8ee6;
+    }
+  }
 }
 </style>

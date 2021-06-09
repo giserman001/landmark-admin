@@ -3,7 +3,9 @@
     <div class="head">
       <div class="head-item head-left">
         <img src="@/assets/logo.png" alt="">
-        <span>文物建筑防护性保护项目</span>
+        <span>
+          <router-link to="/projectInformation/list">文物建筑防护性保护项目</router-link>
+        </span>
       </div>
       <div class="head-item head-middle">
         <el-menu
@@ -132,6 +134,7 @@ export default {
         font-size: 20px;
         margin-left: 10px;
         color: #fff;
+        cursor: pointer;
       }
     }
     .head-middle{

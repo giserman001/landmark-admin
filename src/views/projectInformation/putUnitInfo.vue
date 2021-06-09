@@ -31,9 +31,8 @@
       <!-- 单体建筑信息 -->
       <template
         slot="singleArchitectureInfo"
-        slot-scope="{ row }"
       >
-        <svg-icon icon-class="share" class-name="svg-class" @click="goDetail(row)" />
+        <svg-icon icon-class="share" class-name="svg-class" />
       </template>
       <!-- 操作 -->
       <template
@@ -234,9 +233,6 @@ export default {
     add() {
       this.formVisible = true
       this.mode = 1
-    },
-    goDetail(row) {
-      this.$router.push('/projectInformation/project-detail')
     },
     // 文件上传
     submitUpload() {
