@@ -20,22 +20,21 @@
       <template
         slot="report"
       >
-        <a class="active_color">查看</a>
-        <a class="active_color ml20">下载</a>
+        <a class="active_color">下载</a>
       </template>
       <!-- 反馈栏 -->
       <template
         slot="feedback"
       >
-        <a class="active_color">查看</a>
-        <a class="active_color ml20">编辑</a>
+        <a class="active_color" @click="feedVisible=true;isFeed=false">查看</a>
+        <a class="active_color ml20" @click="feedVisible=true;isFeed=true">编辑</a>
       </template>
       <!-- 评估意见栏 -->
       <template
         slot="idea"
       >
-        <a class="active_color">查看</a>
-        <a class="active_color ml20">编辑</a>
+        <a class="active_color" @click="upVisible=true;isSubmit=false">查看</a>
+        <a class="active_color ml20" @click="upVisible=true;isSubmit=true">编辑</a>
       </template>
       <!-- 操作 -->
       <template
@@ -46,6 +45,77 @@
         <a class="del ml20" @click="del(row)">删除</a>
       </template>
     </zf-table>
+    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}日报`" :visible.sync="addVisible" width="350px" center>
+      <el-form :model="addForm" label-suffix=":">
+        <el-form-item label="时间">
+          <el-date-picker v-model="addForm.time" :editable="false" clearable type="date" placeholder="请选择日期" />
+        </el-form-item>
+        <el-form-item label="项目">
+          <el-select v-model="addForm.time" placeholder="请选择" class="inputWith">
+            <el-option label="项目一" value="shanghai" />
+            <el-option label="项目二" value="beijing" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="日报上传">
+          <el-upload
+            ref="upload"
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :auto-upload="false"
+          >
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
+            <div slot="tip" class="el-upload__tip" style="line-height:20px;">只能上传dwg/jpg/png文件，且不超过20M</div>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog :visible.sync="upVisible" width="450px" center>
+      <el-form ref="form" :model="commentForm" label-width="145px" label-suffix=":">
+        <el-form-item label="评估小组成员意见">
+          <el-input v-if="isSubmit" v-model="commentForm.sunName" />
+          <span v-else>会撒娇就撒娇</span>
+        </el-form-item>
+        <el-form-item label="评估组长意见">
+          <el-input v-if="isSubmit" v-model="commentForm.sunName" />
+          <span v-else>会撒娇就撒娇</span>
+        </el-form-item>
+        <el-form-item label="评估专家意见">
+          <el-input v-if="isSubmit" v-model="commentForm.sunName" />
+          <span v-else>会撒娇就撒娇</span>
+        </el-form-item>
+        <el-form-item label="评估项目组综合意见">
+          <el-input v-if="isSubmit" v-model="commentForm.sunName" />
+          <span v-else>会撒娇就撒娇</span>
+        </el-form-item>
+      </el-form>
+      <div v-if="isSubmit" slot="footer" class="dialog-footer">
+        <el-button @click="upVisible = false">取 消</el-button>
+        <el-button type="primary" @click="upVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog :visible.sync="feedVisible" width="450px" center>
+      <div class="bold mb10">日报反馈内容:</div>
+      <el-input
+        v-if="isFeed"
+        v-model="feed"
+        type="textarea"
+        :rows="6"
+        placeholder="请输入内容"
+      />
+      <div v-else>日报反馈内容日报反馈内容日报反馈内容日报反馈内容日报反馈内容</div>
+      <div v-if="isFeed" slot="footer" class="dialog-footer">
+        <el-button @click="feedVisible = false">取 消</el-button>
+        <el-button type="primary" @click="feedVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -80,7 +150,20 @@ export default {
         page: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      addVisible: false,
+      mode: 1,
+      addForm: {},
+      fileList: [
+        { name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
+        { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
+      ],
+      commentForm: {},
+      upVisible: false,
+      isSubmit: false,
+      feedVisible: false,
+      feed: '',
+      isFeed: false
     }
   },
   mounted() {
@@ -93,9 +176,41 @@ export default {
     handlePageChange({ pageNum, pageSize, sorter: { prop, order }}) {
       console.log('aa')
     },
-    edit(row) {},
-    del(row) {},
-    add() {}
+    edit(row) {
+      this.mode = 2
+      this.addVisible = true
+    },
+    del(row) {
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    add() {
+      this.mode = 1
+      this.addVisible = true
+    },
+    // 文件上传
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    }
   }
 }
 </script>
@@ -103,5 +218,8 @@ export default {
 <style>
 .svg-class{
   cursor: pointer;
+}
+.inputWith {
+  width: 230px;
 }
 </style>

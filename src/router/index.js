@@ -104,6 +104,12 @@ export const constantRoutes = [
       component: () => import('@/views/workReport/week'),
       meta: { title: '周报' }
     }, {
+      path: 'addWeek',
+      name: 'AddWeek',
+      hidden: true,
+      component: () => import('@/views/workReport/addWeek'),
+      meta: { title: '新增周报', activeMenu: '/workReport/week' }
+    }, {
       path: 'mouth',
       name: 'Mouth',
       component: () => import('@/views/workReport/mouth'),

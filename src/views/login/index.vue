@@ -8,11 +8,11 @@
         <div class="bigTit">welcome~</div>
         <div class="subTit">欢迎来到文物建筑防护性保护项目!</div>
         <el-form ref="form" :model="form" :rules="rules" class="login-form">
-          <el-form-item prop="account">
-            <el-input v-model="form.account" type="text" placeholder="请输入账号" clearable prefix-icon="el-icon-user" @keyup.native.13="next" />
+          <el-form-item prop="userName">
+            <el-input v-model="form.userName" type="text" placeholder="请输入账号" clearable prefix-icon="el-icon-user" />
           </el-form-item>
-          <el-form-item prop="pass">
-            <el-input ref="pass" v-model="form.pass" type="password" placeholder="请输入密码" show-password prefix-icon="el-icon-lock" @keyup.native.13="submitForm('form')" />
+          <el-form-item prop="password">
+            <el-input ref="password" v-model="form.password" type="password" placeholder="请输入密码" show-password prefix-icon="el-icon-lock" @keyup.native.13="submitForm('form')" />
           </el-form-item>
           <el-button type="primary" class="login_btn w100 fs18" @click="submitForm('form')">登录</el-button>
         </el-form>
@@ -22,7 +22,8 @@
 </template>
 
 <script>
-// import { get, set } from '@/utils/storage'
+// import { login } from '@/api/common'
+// import { set } from '@/utils/storage'
 export default {
   data() {
     // const validateMobile = (rule, value, callback) => {
@@ -38,34 +39,31 @@ export default {
     // }
     return {
       form: {
-        account: '',
-        pass: ''
+        userName: '',
+        password: ''
       },
       rules: {
-        account: [{ required: true, message: '请输入账号', trigger: 'change' }],
-        pass: [{ required: true, message: '请输入密码', trigger: 'change' }]
+        userName: [{ required: true, message: '请输入账号', trigger: 'change' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'change' }]
       }
     }
   },
   methods: {
-    next() {
-      this.$refs.pass.focus()
-    },
     submitForm(formName) {
-      this.$refs[formName].validate(async valid => {
-        if (valid) {
-          this.$router.replace('/projectInformation/list')
-          // const res = await this.loginFn(this.form)
-          // if (res.code === 200) {
-          //   if (this.timer) {
-          //     clearInterval(this.timer)
-          //   }
-          //   this.login(res.data, 1)
-          // }
-        } else {
-          return false
-        }
-      })
+      this.$router.replace('/projectInformation/list')
+      // this.$refs[formName].validate(async valid => {
+      //   if (valid) {
+      //     const res = await login(this.form)
+      //     if (res.code === 0) {
+      //       set(process.env.VUE_APP_STORAGE_TOKEN, res.date.token)
+      //       set(process.env.VUE_APP_STORAGE_AUTH, res.date.codes)
+      //       set(process.env.VUE_APP_STORAGE_USERINFO, res.date.user)
+      //       this.$router.replace('/projectInformation/list')
+      //     }
+      //   } else {
+      //     return false
+      //   }
+      // })
     }
   }
 }

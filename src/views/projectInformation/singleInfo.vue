@@ -100,7 +100,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="图片">
+            <el-form-item label="周边环境">
               <el-upload
                 ref="upload"
                 class="upload-demo"

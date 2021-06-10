@@ -224,7 +224,7 @@
       <el-row class="mb20">
         <div class="mb10" style="font-weight: bold;">项目组成员信息:</div>
         <zf-table
-          :columns="[{prop: 'name',label: '姓名'}, {prop: 'title',label: '年龄'}, {prop: 'cert',label: '职称'}, {prop: 'manage',label: '专业技能资格'}, {prop: 'manage',label: '项目内分工'}, {prop: 'manage',label: '工作时间'}]"
+          :columns="[{prop: 'name',label: '姓名'}, {prop: 'title',label: '年龄'}, {prop: 'cert',label: '职称'}, {prop: 'manage',label: '专业技能资格'}, {prop: 'manage1',label: '项目内分工'}, {prop: 'time',label: '工作时间'}]"
           :data-source="projectList"
           :pagination="false"
         />
@@ -404,13 +404,17 @@ export default {
         duty: 'CEO',
         title: '教授',
         cert: '高级管理',
-        manage: '高级管理'
+        manage: '高级管理',
+        manage1: '1111',
+        time: '1990-0910'
       }, {
         name: '左干',
         duty: 'CEO',
         title: '教授',
         cert: '高级管理',
-        manage: '高级管理'
+        manage: '高级管理',
+        manage1: '1111',
+        time: '1990-0910'
       }],
       upVisible: false,
       activeName: '1',
@@ -468,7 +472,8 @@ export default {
     },
     handlePreview(file) {
       console.log(file)
-    }
+    },
+    handleClick() {}
   }
 }
 </script>

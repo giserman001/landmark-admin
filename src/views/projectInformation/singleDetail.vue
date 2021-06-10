@@ -69,14 +69,31 @@
 </template>
 
 <script>
-
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 export default {
+  components: {
+    swiper,
+    swiperSlide
+  },
   data() {
     return {
       swiperOption: {
+        loop: true,
+        autoplay: {
+          delay: 3000,
+          stopOnLastSlide: false,
+          disableOnInteraction: false
+        },
+        // 显示分页
         pagination: {
           el: '.swiper-pagination',
-          clickable: true
+          clickable: true // 允许分页点击跳转
+        },
+        // 设置点击箭头
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         }
       }
     }
