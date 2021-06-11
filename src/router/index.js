@@ -75,7 +75,7 @@ export const asyncRoutes = [
       path: 'list',
       name: 'ProjectInformationList',
       component: () => import('@/views/projectInformation/index'),
-      meta: { title: '项目信息', affix: true, code: '0101' }
+      meta: { title: '项目信息', affix: true, code: '01011' }
     }, {
       path: 'project-detail',
       name: 'ProjectDetail',

@@ -78,10 +78,14 @@ export default {
       return false
     },
     isRoot(item) {
-      if (item.children && !item.children.length) {
+      if (item.children && !item.children.length && this.isHidden(item.children)) {
         return false
       }
       return true
+    },
+    isHidden(child) {
+      console.log(child.some((item) => !!item.hidden), 'child.some((item) => !!item.hidden)')
+      return child.some((item) => !!item.hidden)
     }
   }
 }
