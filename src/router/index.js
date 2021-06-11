@@ -53,20 +53,29 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/transfer',
+    component: () => import('@/views/transfer'),
+    hidden: true
+  },
+  {
     path: '/',
     hidden: true,
     redirect: '/login'
-  },
+  }
+  // 404 page must be placed at the end !!!
+
+]
+export const asyncRoutes = [
   {
     path: '/projectInformation',
     component: Layout,
     redirect: '/projectInformation/list',
-    meta: { title: '客户管理', icon: 'el-icon-document' },
+    meta: { title: '项目管理', icon: 'el-icon-document' },
     children: [{
       path: 'list',
       name: 'ProjectInformationList',
       component: () => import('@/views/projectInformation/index'),
-      meta: { title: '项目信息', affix: true }
+      meta: { title: '项目信息', affix: true, code: '0101' }
     }, {
       path: 'project-detail',
       name: 'ProjectDetail',
@@ -97,12 +106,12 @@ export const constantRoutes = [
       path: 'day',
       name: 'Day',
       component: () => import('@/views/workReport/day'),
-      meta: { title: '日报' }
+      meta: { title: '日报', code: '0201' }
     }, {
       path: 'week',
       name: 'Week',
       component: () => import('@/views/workReport/week'),
-      meta: { title: '周报' }
+      meta: { title: '周报', code: '0202' }
     }, {
       path: 'addWeek',
       name: 'AddWeek',
@@ -113,17 +122,17 @@ export const constantRoutes = [
       path: 'mouth',
       name: 'Mouth',
       component: () => import('@/views/workReport/mouth'),
-      meta: { title: '月报' }
+      meta: { title: '月报', code: '0203' }
     }, {
       path: 'quarter',
       name: 'Quarter',
       component: () => import('@/views/workReport/quarter'),
-      meta: { title: '季报' }
+      meta: { title: '季报', code: '0204' }
     }, {
       path: 'year',
       name: 'Year',
       component: () => import('@/views/workReport/year'),
-      meta: { title: '年报' }
+      meta: { title: '年报', code: '0205' }
     }]
   },
   {
@@ -131,80 +140,23 @@ export const constantRoutes = [
     component: Layout,
     name: 'Account',
     redirect: '/account/user',
+    alwaysShow: true,
     meta: { title: '管理员', icon: 'el-icon-s-custom' },
     children: [{
       path: 'user',
       name: 'User',
       component: () => import('@/views/account/user'),
-      meta: { title: '用户' }
+      meta: { title: '用户', code: '0302' }
     }, {
       path: 'role',
       name: 'Role',
       component: () => import('@/views/account/role'),
-      meta: { title: '角色' }
-      // meta: { title: '角色', activeMenu: '/account/employee' }
+      meta: { title: '角色', code: '0301' }
     }]
   },
-  // {
-  //   path: '/nested',
-  //   component: Layout,
-  //   redirect: '/nested/menu1',
-  //   name: 'Nested',
-  //   meta: {
-  //     title: '操作员',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'menu1',
-  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-  //       name: 'Menu1',
-  //       meta: { title: 'Menu1' },
-  //       children: [
-  //         {
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/nested/menu1/menu1-1'),
-  //           name: 'Menu1-1',
-  //           meta: { title: 'Menu1-1' }
-  //         },
-  //         {
-  //           path: 'menu1-2',
-  //           component: () => import('@/views/nested/menu1/menu1-2'),
-  //           name: 'Menu1-2',
-  //           meta: { title: 'Menu1-2' },
-  //           children: [
-  //             {
-  //               path: 'menu1-2-1',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-  //               name: 'Menu1-2-1',
-  //               meta: { title: 'Menu1-2-1' }
-  //             },
-  //             {
-  //               path: 'menu1-2-2',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-  //               name: 'Menu1-2-2',
-  //               meta: { title: 'Menu1-2-2' }
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/nested/menu1/menu1-3'),
-  //           name: 'Menu1-3',
-  //           meta: { title: 'Menu1-3' }
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'menu2',
-  //       component: () => import('@/views/nested/menu2/index'),
-  //       name: 'Menu2',
-  //       meta: { title: 'menu2' }
-  //     }
-  //   ]
-  // },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {
+    path: '*', redirect: '/404', hidden: true
+  }
 ]
 
 const createRouter = () => new Router({

@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!item.hidden" class="head-item">
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)">
+  <div v-if="!item.hidden && isRoot(item)" class="head-item">
+    <template v-if="hasOneShowingChild(item.children, item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren) && !item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)">
-          <item :icon="item.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+          <item :icon="item.meta.icon||(item.meta && item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
@@ -76,6 +76,12 @@ export default {
         return true
       }
       return false
+    },
+    isRoot(item) {
+      if (item.children && !item.children.length) {
+        return false
+      }
+      return true
     }
   }
 }

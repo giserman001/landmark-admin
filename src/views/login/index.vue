@@ -22,8 +22,7 @@
 </template>
 
 <script>
-// import { login } from '@/api/common'
-// import { set } from '@/utils/storage'
+import { mapActions } from 'vuex'
 export default {
   data() {
     // const validateMobile = (rule, value, callback) => {
@@ -49,21 +48,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', ['loginFn']),
     submitForm(formName) {
-      this.$router.replace('/projectInformation/list')
-      // this.$refs[formName].validate(async valid => {
-      //   if (valid) {
-      //     const res = await login(this.form)
-      //     if (res.code === 0) {
-      //       set(process.env.VUE_APP_STORAGE_TOKEN, res.date.token)
-      //       set(process.env.VUE_APP_STORAGE_AUTH, res.date.codes)
-      //       set(process.env.VUE_APP_STORAGE_USERINFO, res.date.user)
-      //       this.$router.replace('/projectInformation/list')
-      //     }
-      //   } else {
-      //     return false
-      //   }
-      // })
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          const res = await this.loginFn(this.form)
+          if (res.code === 0) {
+            this.$router.replace('/transfer')
+          }
+        } else {
+          return false
+        }
+      })
     }
   }
 }
