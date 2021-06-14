@@ -54,7 +54,12 @@ export default {
         if (valid) {
           const res = await this.loginFn(this.form)
           if (res.code === 0) {
-            this.$router.replace('/transfer')
+            if (!res.data.codes.length) {
+              this.$message.error('当前用户没有权限，请联系平台管理员')
+              return
+            }
+            this.$router.replace('/projectInformation/list')
+            // this.$router.replace('/transfer')
           }
         } else {
           return false

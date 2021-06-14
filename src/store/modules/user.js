@@ -32,13 +32,18 @@ const actions = {
   loginFn({ commit }, userInfo) {
     return new Promise((resolve, reject) => {
       login(userInfo).then(res => {
-        commit('SET_TOKEN', res.date.token)
-        commit('SET_USERINFO', res.date.user)
-        commit('SET_AUTH', res.date.codes)
-        set(tokenKey, res.date.token)
-        set(userinfoKey, JSON.stringify(res.date.user))
-        set(authKey, JSON.stringify(res.date.codes))
-        resolve(res)
+        if (res.code === 0) {
+          const { token, user, codes } = res.data
+          if (codes.length) {
+            commit('SET_TOKEN', token)
+            commit('SET_USERINFO', user)
+            commit('SET_AUTH', codes)
+            set(tokenKey, token)
+            set(userinfoKey, JSON.stringify(user))
+            set(authKey, JSON.stringify(codes))
+          }
+          resolve(res)
+        }
       }).catch(err => {
         reject(err)
       })

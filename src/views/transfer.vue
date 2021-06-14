@@ -8,7 +8,6 @@ export default {
     return {}
   },
   mounted() {
-    console.log(this.$store.state.permission.addRoutes[0].path, 'this.$store.state.permission.addRoutes[0].path')
     this.$router.replace(this.$store.state.permission.addRoutes[0].path)
   }
 }

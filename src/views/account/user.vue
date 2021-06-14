@@ -2,11 +2,11 @@
   <div class="bgfff out_wrap">
     <div class="flex_between1">
       <el-form :inline="true" :model="form" size="small" label-suffix=":">
-        <el-form-item label="用户">
-          <el-input v-model="form.name" placeholder="请输入" />
+        <el-form-item label="用户名">
+          <el-input v-model="form.userName" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="手机号">
-          <el-input v-model="form.company_name" placeholder="请输入" />
+          <el-input v-model="form.mobile" placeholder="请输入" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="query">查询</el-button>
@@ -19,7 +19,7 @@
       :data-source="tableList"
       :total="pages.total"
       :page-size="pages.pageSize"
-      :page-num="pages.page"
+      :page-num="pages.pageNum"
       @change="handlePageChange"
     >
       <!-- 操作 -->
@@ -34,22 +34,23 @@
     <el-dialog
       :title="mode == 1 ? '新建员工' : '编辑员工'"
       :visible.sync="dialogVisible"
+      center
       width="400px"
     >
       <el-form ref="ruleForm" :model="groupOne" :rules="rules" class="demo-ruleForm" label-width="120px">
-        <el-form-item label="用户姓名：" prop="name">
-          <el-input v-model="groupOne.name" placeholder="请输入员工姓名" class="w100" clearable />
+        <el-form-item label="用户姓名：" prop="userName">
+          <el-input v-model="groupOne.userName" placeholder="请输入员工姓名" class="w100" clearable />
         </el-form-item>
-        <el-form-item label="手机号：" prop="phone">
-          <el-input v-model="groupOne.phone" placeholder="请输入员工手机号" class="w100" maxlength="11" clearable :disabled="mode == 2" />
+        <el-form-item label="手机号：" prop="mobile">
+          <el-input v-model="groupOne.mobile" placeholder="请输入员工手机号" class="w100" maxlength="11" clearable />
         </el-form-item>
-        <el-form-item label="权限角色：" prop="role_id">
-          <el-select v-model="groupOne.role_id" placeholder="请选择权限角色" class="w100" clearable filterable>
-            <el-option v-for="(item) in optionArr" :key="item.role_id" :label="item.role_name" :value="item.role_id" />
+        <el-form-item label="权限角色：" prop="roleId">
+          <el-select v-model="groupOne.roleId" placeholder="请选择权限角色" class="w100" clearable filterable>
+            <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="mode == 1" label="默认登录密码：">
-          <el-input placeholder="默认登录密码" class="w100" disabled value="111111" />
+        <el-form-item v-if="mode === 1" label="登录密码：" prop="password">
+          <el-input v-model="groupOne.password" placeholder="登录密码" class="w100" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -63,6 +64,7 @@
 <script>
 import ZfTable from '@/components/ZfTable/CoreTable'
 import { user } from './columns/list'
+import { getUserList, getRoleList, saveUser, updataUserById, deteleUserById } from '@/api/common'
 export default {
   name: 'List',
   components: {
@@ -83,61 +85,107 @@ export default {
     return {
       mode: 1,
       groupOne: {
-        name: '',
-        phone: '',
-        role_id: ''
+        userName: '',
+        mobile: '',
+        roleId: '',
+        password: '',
+        userId: ''
       },
       dialogVisible: false,
       rules: {
-        name: [{ required: true, message: '请输入员工姓名', trigger: 'change' }],
-        phone: [{ required: true, validator: validateAccount, trigger: 'change' }],
-        role_id: [{ required: true, message: '请选择权限角色', trigger: 'change' }]
+        userName: [{ required: true, message: '请输入员工姓名', trigger: 'change' }],
+        mobile: [{ required: true, validator: validateAccount, trigger: 'change' }],
+        roleId: [{ required: true, message: '请选择权限角色', trigger: 'change' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'change' }]
       },
       optionArr: [],
       form: {
-        company_name: ''
+        userName: '', // 用户名
+        mobile: '' // 手机号
       },
       column: user,
-      tableList: [{
-        name: '左千',
-        phone: '181568312978',
-        role: '超级管理员',
-        create_time: '2021-06-04'
-      }, {
-        name: '刘亚',
-        phone: '181568312978',
-        role: '普通管理员',
-        create_time: '2021-06-04'
-      }],
+      tableList: [],
       pages: {
-        page: 1,
+        pageNum: 1,
         pageSize: 10,
         total: 0
       }
     }
   },
   mounted() {
-    // this.query()
+    this.query()
+    getRoleList({ pageNum: 1, pageSize: 999999 }).then(res => {
+      this.optionArr = res.data.roleList.rows
+    })
   },
   methods: {
-    query() {
-      // const query = { ...this.page, ...this.form }
+    async query() {
+      const res = await getUserList({ ...this.form, ...this.pages })
+      if (res.code === 0) {
+        this.pages.total = res.data.userList.total
+        this.tableList = res.data.userList.rows
+      }
     },
     handlePageChange({ pageNum, pageSize, sorter: { prop, order }}) {
-      console.log('aa')
+      this.pages.pageNum = pageNum
+      this.pages.pageSize = pageSize
+      this.query()
     },
     edit(row) {
+      this.mode = 2
+      this.groupOne.userId = row.userId
+      this.groupOne.userName = row.username
+      this.groupOne.mobile = row.mobile
+      this.groupOne.roleId = row.role
       this.dialogVisible = true
     },
-    del(row) {},
+    del(row) {
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        const res = await deteleUserById({ userId: row.userId })
+        if (res.code === 0) {
+          this.$message.success('删除用户成功!')
+          this.query()
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
     add() {
+      this.mode = 1
+      // 重置
+      this.groupOne.userId = ''
+      this.groupOne.userName = ''
+      this.groupOne.mobile = ''
+      this.groupOne.roleId = ''
+      this.groupOne.password = ''
       this.dialogVisible = true
     },
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async(valid) => {
         if (valid) {
-          this.dialogVisible = false
-          console.log('验证通过')
+          if (this.mode === 1) {
+            const res = await saveUser(this.groupOne)
+            if (res.code === 0) {
+              this.dialogVisible = false
+              this.$message.success('新增用户成功!')
+              this.query()
+            }
+          } else {
+            delete this.groupOne.password
+            const res = await updataUserById(this.groupOne)
+            if (res.code === 0) {
+              this.dialogVisible = false
+              this.$message.success('编辑用户成功!')
+              this.query()
+            }
+          }
         }
       })
     }

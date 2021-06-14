@@ -23,7 +23,7 @@
         <el-dropdown class="avatar-container" trigger="click">
           <div class="avatar-wrapper">
             <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-            <span class="user-name">{{ userinfo.nickname || '游客' }}</span>
+            <span class="user-name">{{ userinfo.username || '游客' }}</span>
             <i class="el-icon-arrow-down" />
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -97,6 +97,10 @@ export default {
   methods: {
     logout() {
       window.localStorage.clear()
+      this.$store.commit('permission/SAVE', {
+        routes: [],
+        addRoutes: []
+      })
       this.$router.replace({ path: '/login' })
     }
   }

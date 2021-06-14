@@ -38,6 +38,18 @@ const state = {
 }
 
 const mutations = {
+  SAVE: (state, payload) => {
+    Object.keys(payload).forEach(e => {
+      if (Object.prototype.toString.call(state[e]) === '[object Object]') {
+        state[e] = {
+          ...state[e],
+          ...payload[e]
+        }
+      } else {
+        state[e] = payload[e]
+      }
+    })
+  },
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)

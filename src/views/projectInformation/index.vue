@@ -13,7 +13,7 @@
       :data-source="tableList"
       :total="pages.total"
       :page-size="pages.pageSize"
-      :page-num="pages.page"
+      :page-num="pages.pageNum"
       @change="handlePageChange"
     >
       <!-- 业主信息 -->
@@ -44,77 +44,96 @@
         <a class="del ml20" @click="del(row)">删除</a>
       </template>
     </zf-table>
-    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="650px" center>
-      <el-form :model="addForm" label-suffix=":" label-position="right" label-width="120px">
+    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="700px" center>
+      <el-form :model="addForm" label-suffix=":" label-position="right" label-width="120px" :rules="rules">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="名称">
+            <el-form-item label="名称" prop="name">
               <el-input v-model="addForm.name" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="占地总面积">
+            <el-form-item label="子项构成" prop="sonName">
+              <el-input v-model="addForm.sonName" autocomplete="off" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="总建筑面积" prop="architectureArea">
+              <el-input v-model="addForm.architectureArea" autocomplete="off" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="占地总面积" prop="area">
               <el-input v-model="addForm.area" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="总建筑面积">
-              <el-input v-model="addForm.sumArea" autocomplete="off" />
+            <el-form-item label="业主单位" prop="ownerId">
+              <el-select v-model="addForm.ownerId" placeholder="请选择">
+                <el-option
+                  v-for="item in ownerArr"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="批准总经费">
-              <el-input v-model="addForm.approveMoney" autocomplete="off" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="子项构成">
-              <el-input v-model="addForm.subConstitute" autocomplete="off" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="方案制编单位">
-              <el-input v-model="addForm.unit" autocomplete="off" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="方案文本">
-              <el-input v-model="addForm.text" autocomplete="off" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="方案预算">
-              <el-input v-model="addForm.budget" autocomplete="off" />
+            <el-form-item label="项目实施单位" prop="projectExecuteCom">
+              <el-select v-model="addForm.projectExecuteCom" placeholder="请选择">
+                <el-option
+                  v-for="item in projectExecuteComArr"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="国宝单位档案">
-              <el-input v-model="addForm.record" autocomplete="off" />
+            <el-form-item label="批准总经费" prop="expenditure">
+              <el-input v-model="addForm.expenditure" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="测绘图">
-              <el-upload
-                ref="upload"
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :file-list="fileList"
-                :auto-upload="false"
-              >
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
-                <div slot="tip" class="el-upload__tip" style="line-height:20px;">只能上传dwg/jpg/png文件，且不超过20M</div>
-              </el-upload>
+            <el-form-item label="方案制编单位" prop="projectCompileCom">
+              <el-input v-model="addForm.projectCompileCom" autocomplete="off" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="方案文本" prop="ebook">
+              <upload v-model="addForm.ebook" :type="['.doc', '.docx', '.pdf']" :multiple="false" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="方案预算" prop="budget">
+              <upload v-model="addForm.budget" :type="['.xlsx', 'xls', '.pdf']" :multiple="false" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="国宝单位档案" prop="record">
+              <upload v-model="addForm.record" :type="['.doc', '.docx', '.pdf']" :multiple="false" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="说明">
+              <el-input
+                v-model="addForm.introduction"
+                type="textarea"
+                :rows="4"
+                placeholder="请输入内容"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -129,11 +148,15 @@
 
 <script>
 import ZfTable from '@/components/ZfTable/CoreTable'
+import upload from '@/components/upload'
 import column from './columns/list'
+import { getProjectList, getOwnerIdAndName, getExecuteIdAndName } from '@/api/common'
+// saveProject
 export default {
   name: 'List',
   components: {
-    ZfTable
+    ZfTable,
+    upload
   },
   data() {
     return {
@@ -141,42 +164,9 @@ export default {
         name: ''
       },
       column,
-      tableList: [{
-        id: 1,
-        name: '承德避暑山庄',
-        area: '123',
-        allArea: 145,
-        money: 45677,
-        subContent: '承德建筑主群',
-        unit: '博物院',
-        text: '西三脚架看就看写接口',
-        budget: 345678,
-        record: '是撒接口了'
-      }, {
-        id: 1,
-        name: '承德避暑山庄',
-        area: '123',
-        allArea: 145,
-        money: 45677,
-        subContent: '承德建筑主群',
-        unit: '博物院',
-        text: '西三脚架看就看写接口',
-        budget: 345678,
-        record: '是撒接口了'
-      }, {
-        id: 1,
-        name: '承德避暑山庄',
-        area: '123',
-        allArea: 145,
-        money: 45677,
-        subContent: '承德建筑主群',
-        unit: '博物院',
-        text: '西三脚架看就看写接口',
-        budget: 345678,
-        record: '是撒接口了'
-      }],
+      tableList: [],
       pages: {
-        page: 1,
+        pageNum: 1,
         pageSize: 10,
         total: 0
       },
@@ -184,28 +174,48 @@ export default {
       mode: 1, // 默认新增模式
       addForm: {
         name: '',
-        area: '',
-        sumArea: '',
-        approveMoney: '', // 批准总经费
-        subConstitute: '', // 子项构成
-        unit: '',
-        text: '', // 方案文本
-        budget: '', // 方案预算
-        record: '', // 国宝单位档案
-        draw: ''
+        sonName: '', // 子项构成
+        architectureArea: '', // 总建筑面积
+        area: '', // 占地面积
+        ownerId: '', // 业主
+        projectExecuteCom: '', // 项目实施单位
+        expenditure: '', // 批准总经费
+        projectCompileCom: '', // 方案编制单位名称
+        ebook: [
+          // { name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
+        ], // 方案文本
+        budget: [], // 方案预算
+        record: [], // 国宝单位档案
+        introduction: '' // 说明
       },
-      fileList: [
-        { name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
-        { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
-      ]
+      rules: {
+        name: [
+          { required: true, message: '请输入项目名字', trigger: 'blur' }
+        ]
+      },
+      ownerArr: [],
+      projectExecuteComArr: []
     }
   },
   mounted() {
-    // this.query()
+    this.query()
+    // 业主下拉框
+    getOwnerIdAndName().then(res => {
+      console.log(res, 'own')
+      this.ownerArr = res.data.ownerIdAndName
+    })
+    // 实施单位下拉框
+    getExecuteIdAndName().then(res => {
+      this.projectExecuteComArr = res.data.executeIdAndName
+    })
   },
   methods: {
-    query() {
-      // const query = { ...this.page, ...this.form }
+    async query() {
+      const res = await getProjectList({ ...this.form, ...this.pages })
+      if (res.code === 0) {
+        this.pages.total = res.data.projectList.total
+        this.tableList = res.data.projectList.rows
+      }
     },
     handlePageChange({ pageNum, pageSize, sorter: { prop, order }}) {
       console.log('aa')

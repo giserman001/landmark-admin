@@ -13,23 +13,31 @@ export default [
     label: '占地面积'
   },
   {
-    prop: 'allArea',
+    prop: 'architectureArea',
     label: '总建筑面积'
   },
   {
-    prop: 'money',
+    prop: 'expenditure',
     label: '批准总经费(¥)'
   },
+  // {
+  //   prop: 'subContent',
+  //   label: '子项构成'
+  // },
   {
-    prop: 'subContent',
-    label: '子项构成'
-  },
-  {
-    prop: 'unit',
+    prop: 'projectCompileCom',
     label: '方案编制单位'
   },
   {
-    prop: 'text',
+    prop: 'ownerName',
+    label: '业主单位'
+  },
+  {
+    prop: 'introduction',
+    label: '说明'
+  },
+  {
+    prop: 'ebook',
     label: '方案文本',
     tooltip: true
   },
@@ -41,14 +49,6 @@ export default [
     prop: 'record',
     label: '国宝单位档案'
   },
-  // {
-  //   prop: 'ownerInfo',
-  //   label: '业主单位信息'
-  // },
-  // {
-  //   prop: 'putInfo',
-  //   label: '实施单位信息'
-  // },
   {
     prop: 'singleArchitectureInfo',
     label: '项目详细信息'

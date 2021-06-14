@@ -61,11 +61,7 @@ export const constantRoutes = [
     path: '/',
     hidden: true,
     redirect: '/login'
-  }
-  // 404 page must be placed at the end !!!
-
-]
-export const asyncRoutes = [
+  },
   {
     path: '/projectInformation',
     component: Layout,
@@ -75,7 +71,7 @@ export const asyncRoutes = [
       path: 'list',
       name: 'ProjectInformationList',
       component: () => import('@/views/projectInformation/index'),
-      meta: { title: '项目信息', affix: true, code: '01011' }
+      meta: { title: '项目信息', affix: true }
     }, {
       path: 'project-detail',
       name: 'ProjectDetail',
@@ -95,12 +91,17 @@ export const asyncRoutes = [
       component: () => import('@/views/projectInformation/singleDetail'),
       meta: { title: '单体子项详情信息', activeMenu: '/projectInformation/list' }
     }]
-  },
+  }
+  // 404 page must be placed at the end !!!
+
+]
+export const asyncRoutes = [
   {
     path: '/workReport',
     component: Layout,
     name: 'WorkReport',
     redirect: '/workReport/day',
+    alwaysShow: true,
     meta: { title: '工作汇报', icon: 'el-icon-edit-outline' },
     children: [{
       path: 'day',

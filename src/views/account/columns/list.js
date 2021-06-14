@@ -1,18 +1,18 @@
 export const user = [
   {
-    prop: 'name',
-    label: '姓名'
+    prop: 'username',
+    label: '用户姓名'
   },
   {
-    prop: 'phone',
+    prop: 'mobile',
     label: '手机号'
   },
   {
-    prop: 'role',
+    prop: 'roleName',
     label: '权限角色'
   },
   {
-    prop: 'create_time',
+    prop: 'createTime',
     label: '创建时间'
   },
   {
@@ -23,11 +23,11 @@ export const user = [
 ]
 export const role = [
   {
-    prop: 'role',
+    prop: 'name',
     label: '角色名称'
   },
   {
-    prop: 'des',
+    prop: 'remark',
     label: '描述'
   },
   {
