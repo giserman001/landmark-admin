@@ -85,13 +85,14 @@ export default {
       saveFile(params).then(res => {
         if (res.code === 0) {
           console.log(res, '上传文件')
-          // this.fileList =
-          // this.$emit('input', this.files)
+          this.fileList = this.fileList.concat([{ name: res.data.fileName, id: res.data.fileId }])
+          this.$emit('input', this.fileList)
         }
       })
     },
     del(index) {
       this.fileList.splice(index, 1)
+      this.$emit('input', this.fileList)
     }
   }
 }
