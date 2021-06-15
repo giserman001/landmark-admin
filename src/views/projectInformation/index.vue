@@ -21,21 +21,21 @@
         slot="ebookName"
         slot-scope="{ row }"
       >
-        <a class="active_color" @click="downLoad(row.ebookName, row.ebook)">{{ row.ebookName }}</a>
+        <a class="active_color" @click="downLoad(row.ebookName, row.ebook)">{{ row.ebookName || '-' }}</a>
       </template>
       <!-- 方案预算 -->
       <template
         slot="budgetName"
         slot-scope="{ row }"
       >
-        <a class="active_color" @click="downLoad(row.budgetName, row.budget)">{{ row.budgetName }}</a>
+        <a class="active_color" @click="downLoad(row.budgetName, row.budget)">{{ row.budgetName || '-' }}</a>
       </template>
       <!-- 国宝单位档案 -->
       <template
         slot="recordName"
         slot-scope="{ row }"
       >
-        <a class="active_color" @click="downLoad(row.recordName, row.record)">{{ row.recordName }}</a>
+        <a class="active_color" @click="downLoad(row.recordName, row.record)">{{ row.recordName || '-' }}</a>
       </template>
       <!-- 单体建筑信息 -->
       <template
@@ -159,7 +159,7 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import upload from '@/components/upload'
 import column from './columns/list'
-import { getProjectList, getOwnerIdAndName, getExecuteIdAndName, saveProject, updateProject, deteleProjectById, downLoadFile } from '@/api/common'
+import { getProjectList, getOwnerIdAndName, getExecuteIdAndName, saveProject, updateProject, deteleProjectById } from '@/api/common'
 export default {
   name: 'List',
   components: {
@@ -181,6 +181,7 @@ export default {
       formVisible: false,
       mode: 1, // 默认新增模式
       addForm: {
+        id: '',
         name: '',
         sonName: '', // 子项构成
         architectureArea: '', // 总建筑面积
@@ -244,7 +245,12 @@ export default {
               this.query()
             }
           } else {
-            const res = await updateProject(this.groupOne)
+            const res = await updateProject({
+              ...this.addForm,
+              ebook: (this.addForm.ebook.length && this.addForm.ebook[0].id) || '', // 方案文本
+              budget: (this.addForm.budget.length && this.addForm.budget[0].id) || '', // 方案预算
+              record: (this.addForm.record.length && this.addForm.record[0].id) || '' // 国宝单位档案
+            })
             if (res.code === 0) {
               this.formVisible = false
               this.$message.success('编辑项目成功!')
@@ -257,6 +263,19 @@ export default {
     edit(row) {
       this.formVisible = true
       this.mode = 2
+      this.addForm.name = row.name
+      this.addForm.sonName = row.sonName // 子项构成
+      this.addForm.architectureArea = row.architectureArea // 总建筑面积
+      this.addForm.area = row.area // 占地面积
+      this.addForm.ownerId = row.ownerId // 业主
+      this.addForm.projectExecuteCom = row.projectExecuteCom // 项目实施单位
+      this.addForm.expenditure = row.expenditure // 批准总经费
+      this.addForm.projectCompileCom = row.projectCompileCom // 方案编制单位名称
+      this.addForm.ebook = (row.ebookName && row.ebook) ? [{ name: row.ebookName, id: row.ebook }] : [] // 方案文本
+      this.addForm.budget = (row.budgetName && row.budget) ? [{ name: row.budgetName, id: row.budget }] : [] // 方案预算
+      this.addForm.record = (row.recordName && row.record) ? [{ name: row.recordName, id: row.record }] : [] // 国宝单位档案
+      this.addForm.introduction = row.introduction // 说明
+      this.addForm.id = row.id
     },
     del(row) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -264,7 +283,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
-        const res = await deteleProjectById({ userId: row.userId })
+        const res = await deteleProjectById({ projectId: row.id })
         if (res.code === 0) {
           this.$message.success('删除项目成功!')
           this.query()
@@ -279,12 +298,27 @@ export default {
     add() {
       this.formVisible = true
       this.mode = 1
+      // 重置
+      this.addForm.name = ''
+      this.addForm.sonName = '' // 子项构成
+      this.addForm.architectureArea = '' // 总建筑面积
+      this.addForm.area = '' // 占地面积
+      this.addForm.ownerId = '' // 业主
+      this.addForm.projectExecuteCom = '' // 项目实施单位
+      this.addForm.expenditure = '' // 批准总经费
+      this.addForm.projectCompileCom = '' // 方案编制单位名称
+      this.addForm.ebook = [] // 方案文本
+      this.addForm.budget = [] // 方案预算
+      this.addForm.record = [] // 国宝单位档案
+      this.addForm.introduction = '' // 说明
+      this.addForm.id = '' // 项目id
     },
     goDetail(row) {
       this.$router.push('/projectInformation/project-detail')
     },
     // 下载
     downLoad(name, id) {
+      if (!(name && id)) return
       this.$confirm(`即将下载 <span style='color:#3a8ee6;'>${name}</span>, 是否继续?`, '提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
@@ -292,16 +326,12 @@ export default {
         type: 'warning'
       }).then(async() => {
         // 下载
-        const res = await downLoadFile({ ids: id })
-        if (res.code === 0 && res.data.files.length) {
-          const link = document.createElement('a')
-          link.href = res.data.files[0].url
-          link.download = res.data.files[0].name
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
-          this.formVisible = false
-        }
+        const link = document.createElement('a')
+        link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        this.formVisible = false
       }).catch(() => {
         this.$message({
           type: 'info',

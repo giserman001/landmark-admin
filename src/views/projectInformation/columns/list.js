@@ -52,6 +52,7 @@ export default [
   {
     prop: 'action',
     width: '120px',
+    fixed: 'right',
     label: '操作'
   }
 ]
