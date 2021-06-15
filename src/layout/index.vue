@@ -2,9 +2,9 @@
   <div :class="classObj" class="app-wrapper">
     <div class="head">
       <div class="head-item head-left">
-        <img src="@/assets/logo.png" alt="">
+        <img src="@/assets/logo1.png" alt="">
         <span>
-          <router-link to="/projectInformation/list">文物建筑防护性保护项目</router-link>
+          <router-link to="/projectInformation/list">文物建筑预防性保护项目检查评估工作平台</router-link>
         </span>
       </div>
       <div class="head-item head-middle">
@@ -97,9 +97,15 @@ export default {
   methods: {
     logout() {
       window.localStorage.clear()
+      // 清空导动态添加的路由数据
       this.$store.commit('permission/SAVE', {
         routes: [],
         addRoutes: []
+      })
+      // 清空导航栏数据
+      this.$store.commit('tagsView/SAVE', {
+        visitedViews: [],
+        cachedViews: []
       })
       this.$router.replace({ path: '/login' })
     }
@@ -123,7 +129,7 @@ export default {
     height: 65px;
     background-color: #3a8ee6;
     .head-left{
-      flex: 1;
+      flex: 1.5;
       padding-left: 40px;
       box-sizing: border-box;
       display: flex;
@@ -131,6 +137,7 @@ export default {
       img{
         display: inline-block;
         vertical-align: middle;
+        width: 34px;
       }
       span{
         display: inline-block;
@@ -142,7 +149,7 @@ export default {
       }
     }
     .head-middle{
-      flex: 2;
+      flex: 1.5;
       display: flex;
       justify-content: flex-end;
     }

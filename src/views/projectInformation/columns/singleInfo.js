@@ -1,7 +1,7 @@
 export default [
   {
     prop: 'id',
-    label: '子项编号'
+    label: '单体编号'
   },
   {
     prop: 'name',

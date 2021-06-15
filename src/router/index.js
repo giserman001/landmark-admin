@@ -83,7 +83,7 @@ export const constantRoutes = [
       name: 'SingleInfo',
       hidden: true,
       component: () => import('@/views/projectInformation/singleInfo'),
-      meta: { title: '单体子项信息', activeMenu: '/projectInformation/list' }
+      meta: { title: '单体建筑信息', activeMenu: '/projectInformation/list' }
     }, {
       path: 'single-detail',
       name: 'SingleDetail',

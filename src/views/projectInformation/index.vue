@@ -16,18 +16,27 @@
       :page-num="pages.pageNum"
       @change="handlePageChange"
     >
-      <!-- 业主信息 -->
-      <!-- <template
-        slot="ownerInfo"
+      <!-- 方案文本 -->
+      <template
+        slot="ebookName"
+        slot-scope="{ row }"
       >
-        <svg-icon icon-class="ownerInfo" class-name="svg-class" />
-      </template> -->
-      <!-- 实施单位信息 -->
-      <!-- <template
-        slot="putInfo"
+        <a class="active_color" @click="downLoad(row.ebookName, row.ebook)">{{ row.ebookName }}</a>
+      </template>
+      <!-- 方案预算 -->
+      <template
+        slot="budgetName"
+        slot-scope="{ row }"
       >
-        <svg-icon icon-class="putInfo" class-name="svg-class" />
-      </template> -->
+        <a class="active_color" @click="downLoad(row.budgetName, row.budget)">{{ row.budgetName }}</a>
+      </template>
+      <!-- 国宝单位档案 -->
+      <template
+        slot="recordName"
+        slot-scope="{ row }"
+      >
+        <a class="active_color" @click="downLoad(row.recordName, row.record)">{{ row.recordName }}</a>
+      </template>
       <!-- 单体建筑信息 -->
       <template
         slot="singleArchitectureInfo"
@@ -45,7 +54,7 @@
       </template>
     </zf-table>
     <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="700px" center>
-      <el-form :model="addForm" label-suffix=":" label-position="right" label-width="120px" :rules="rules">
+      <el-form ref="addForm" :model="addForm" label-suffix=":" label-position="right" label-width="120px" :rules="rules">
         <el-row>
           <el-col :span="12">
             <el-form-item label="名称" prop="name">
@@ -140,7 +149,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="formVisible = false">取 消</el-button>
-        <el-button type="primary" @click="formVisible = false">确 定</el-button>
+        <el-button type="primary" @click="handleSubmit('addForm')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -150,8 +159,7 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import upload from '@/components/upload'
 import column from './columns/list'
-import { getProjectList, getOwnerIdAndName, getExecuteIdAndName } from '@/api/common'
-// saveProject
+import { getProjectList, getOwnerIdAndName, getExecuteIdAndName, saveProject, updateProject, deteleProjectById, downLoadFile } from '@/api/common'
 export default {
   name: 'List',
   components: {
@@ -181,9 +189,7 @@ export default {
         projectExecuteCom: '', // 项目实施单位
         expenditure: '', // 批准总经费
         projectCompileCom: '', // 方案编制单位名称
-        ebook: [
-          // { name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
-        ], // 方案文本
+        ebook: [], // 方案文本
         budget: [], // 方案预算
         record: [], // 国宝单位档案
         introduction: '' // 说明
@@ -201,7 +207,6 @@ export default {
     this.query()
     // 业主下拉框
     getOwnerIdAndName().then(res => {
-      console.log(res, 'own')
       this.ownerArr = res.data.ownerIdAndName
     })
     // 实施单位下拉框
@@ -218,7 +223,36 @@ export default {
       }
     },
     handlePageChange({ pageNum, pageSize, sorter: { prop, order }}) {
-      console.log('aa')
+      this.pages.pageNum = pageNum
+      this.pages.pageSize = pageSize
+      this.query()
+    },
+    handleSubmit(formName) {
+      console.log(this.addForm, 'this.addFormthis.addFormthis.addFormthis.addForm')
+      this.$refs[formName].validate(async(valid) => {
+        if (valid) {
+          if (this.mode === 1) {
+            const res = await saveProject({
+              ...this.addForm,
+              ebook: (this.addForm.ebook.length && this.addForm.ebook[0].id) || '', // 方案文本
+              budget: (this.addForm.budget.length && this.addForm.budget[0].id) || '', // 方案预算
+              record: (this.addForm.record.length && this.addForm.record[0].id) || '' // 国宝单位档案
+            })
+            if (res.code === 0) {
+              this.formVisible = false
+              this.$message.success('新增项目成功!')
+              this.query()
+            }
+          } else {
+            const res = await updateProject(this.groupOne)
+            if (res.code === 0) {
+              this.formVisible = false
+              this.$message.success('编辑项目成功!')
+              this.query()
+            }
+          }
+        }
+      })
     },
     edit(row) {
       this.formVisible = true
@@ -229,11 +263,12 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+      }).then(async() => {
+        const res = await deteleProjectById({ userId: row.userId })
+        if (res.code === 0) {
+          this.$message.success('删除项目成功!')
+          this.query()
+        }
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -248,15 +283,31 @@ export default {
     goDetail(row) {
       this.$router.push('/projectInformation/project-detail')
     },
-    // 文件上传
-    submitUpload() {
-      this.$refs.upload.submit()
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview(file) {
-      console.log(file)
+    // 下载
+    downLoad(name, id) {
+      this.$confirm(`即将下载 <span style='color:#3a8ee6;'>${name}</span>, 是否继续?`, '提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        // 下载
+        const res = await downLoadFile({ ids: id })
+        if (res.code === 0 && res.data.files.length) {
+          const link = document.createElement('a')
+          link.href = res.data.files[0].url
+          link.download = res.data.files[0].name
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          this.formVisible = false
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消下载'
+        })
+      })
     }
   }
 }

@@ -20,10 +20,6 @@ export default [
     prop: 'expenditure',
     label: '批准总经费(¥)'
   },
-  // {
-  //   prop: 'subContent',
-  //   label: '子项构成'
-  // },
   {
     prop: 'projectCompileCom',
     label: '方案编制单位'
@@ -34,19 +30,19 @@ export default [
   },
   {
     prop: 'introduction',
-    label: '说明'
-  },
-  {
-    prop: 'ebook',
-    label: '方案文本',
+    label: '说明',
     tooltip: true
   },
   {
-    prop: 'budget',
+    prop: 'ebookName',
+    label: '方案文本'
+  },
+  {
+    prop: 'budgetName',
     label: '方案预算'
   },
   {
-    prop: 'record',
+    prop: 'recordName',
     label: '国宝单位档案'
   },
   {

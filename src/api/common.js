@@ -75,6 +75,16 @@ export function saveProject(params) {
   return request({ url: '/project/saveProject', method: 'get', params })
 }
 
+// 编辑项目
+export function updateProject(params) {
+  return request({ url: '/project/updateProject', method: 'get', params })
+}
+
+// 删除项目
+export function deteleProjectById(params) {
+  return request({ url: '/project/deteleProjectById', method: 'get', params })
+}
+
 // 获取业主单位下拉框信息
 export function getOwnerIdAndName(params) {
   return request({ url: '/owner/getOwnerIdAndName', method: 'get', params })
@@ -83,5 +93,10 @@ export function getOwnerIdAndName(params) {
 // 获取实施单位下拉框信息
 export function getExecuteIdAndName(params) {
   return request({ url: '/execute/getExecuteIdAndName', method: 'get', params })
+}
+
+// 根据文件ids下载文件
+export function downLoadFile(params) {
+  return request({ url: '/file/getFilesByIds', method: 'get', params })
 }
 

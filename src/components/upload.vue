@@ -84,7 +84,6 @@ export default {
       params.append('type', '01')
       saveFile(params).then(res => {
         if (res.code === 0) {
-          console.log(res, '上传文件')
           this.fileList = this.fileList.concat([{ name: res.data.fileName, id: res.data.fileId }])
           this.$emit('input', this.fileList)
         }

@@ -4,6 +4,18 @@ const state = {
 }
 
 const mutations = {
+  SAVE: (state, payload) => {
+    Object.keys(payload).forEach(e => {
+      if (Object.prototype.toString.call(state[e]) === '[object Object]') {
+        state[e] = {
+          ...state[e],
+          ...payload[e]
+        }
+      } else {
+        state[e] = payload[e]
+      }
+    })
+  },
   ADD_VISITED_VIEW: (state, view) => {
     if (state.visitedViews.some(v => v.path === view.path)) return
     state.visitedViews.push(
