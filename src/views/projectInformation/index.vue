@@ -313,7 +313,7 @@ export default {
       this.addForm.id = '' // 项目id
     },
     goDetail(row) {
-      this.$router.push(`/projectInformation/project-detail?id=${row.id}`)
+      this.$router.push(`/projectInformation/project-detail?id=${row.id}&ownerId=${row.ownerId}&projectExecuteCom=${row.projectExecuteCom}`)
     },
     // 下载
     downLoad(name, id) {

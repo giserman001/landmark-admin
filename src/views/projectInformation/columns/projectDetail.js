@@ -51,6 +51,7 @@ export default [
   },
   {
     prop: 'action',
+    fixed: 'right',
     width: '120px',
     label: '操作'
   }

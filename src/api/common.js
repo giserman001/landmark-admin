@@ -115,3 +115,23 @@ export function updateProjectSon(params) {
   return request({ url: '/project/son/updateProjectSon', method: 'get', params })
 }
 
+// 删除子项目
+export function deteleProjectSonById(params) {
+  return request({ url: '/project/son/deteleProjectSonById', method: 'get', params })
+}
+
+// 根据业主单位id获取业主单位信息
+export function getOwnerById(params) {
+  return request({ url: '/owner/getOwnerById', method: 'get', params })
+}
+
+// 根据实施单位id获取业主单位信息staffInfo/getById
+export function getExecuteById(params) {
+  return request({ url: '/execute/getExecuteById', method: 'get', params })
+}
+
+// 根据职工id获取职工信息
+export function staffInfoById(params) {
+  return request({ url: '/staffInfo/getById', method: 'get', params })
+}
+

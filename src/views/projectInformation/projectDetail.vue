@@ -7,8 +7,8 @@
         </el-form-item>
       </el-form>
       <div>
-        <el-button type="primary" @click="yzVisible = true">业主单位信息</el-button>
-        <el-button type="primary" @click="ssVisible = true">实施单位信息</el-button>
+        <el-button type="primary" @click="getYZInfo">业主单位信息</el-button>
+        <el-button type="primary" @click="getSSInfo">实施单位信息</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="add">新增子项</el-button>
       </div>
     </div>
@@ -139,54 +139,68 @@
       <el-row class="mb20">
         <el-col :span="12">
           <div class="col-item">
-            <span>单位名称</span>:
-            <span>建筑1</span>
+            <span>单位名称:</span>
+            <span>{{ yzData.name }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="col-item">
-            <span>2020年度经费</span>:
-            <span>20000</span>
+            <span>2020年度经费:</span>
+            <span>{{ yzData.expenditure2020 }}元</span>
           </div>
         </el-col>
       </el-row>
       <el-row class="mb20">
         <el-col :span="12">
           <div class="col-item">
-            <span>在编人员数量</span>:
-            <span>100</span>
+            <span>在编人员数量:</span>
+            <span>{{ yzData.staffNum }}人</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="col-item">
-            <span>项目实施经费拨付方式</span>:
-            <span>支付宝</span>
+            <span>项目实施经费拨付方式:</span>
+            <span>{{ yzData.payType }}</span>
           </div>
         </el-col>
       </el-row>
       <el-row class="mb20">
-        <el-col :span="24">
+        <el-col :span="12">
           <div class="col-item">
-            <span>项目实施单位遴选委托方式</span>:
-            <span>就开始会</span>
+            <span>项目实施单位遴选委托方式:</span>
+            <span>{{ yzData.entrustType }}</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="col-item">
+            <span>单位简介:</span>
+            <span>{{ yzData.introduction }}</span>
           </div>
         </el-col>
       </el-row>
       <el-row class="mb20">
-        <el-col :span="24">
+        <el-col :span="12">
           <div class="col-item">
-            <span>委托合同</span>:
-            <span>111</span>
+            <span>委托合同:</span>
+            <span class="files" @click="downLoad(yzData.contract.id)">{{ yzData.contract && yzData.contract.name }}</span>
           </div>
         </el-col>
       </el-row>
       <el-row class="mb20">
         <div class="mb10" style="font-weight: bold;">项目负责人信息:</div>
         <zf-table
-          :columns="[{prop: 'name',label: '姓名'}, {prop: 'duty',label: '职务'}, {prop: 'title',label: '职称'}, {prop: 'cert',label: '专业证书'}, {prop: 'manage',label: '管理分工'}]"
-          :data-source="projectList"
+          :columns="[{prop: 'name',label: '姓名'}, {prop: 'post',label: '职务'}, {prop: 'professional',label: '职称'}, {prop: 'certificate',label: '专业证书'}, {prop: 'manage',label: '管理分工'}]"
+          :data-source="yzStaffInfo"
           :pagination="false"
-        />
+        >
+          <!-- 单体建筑信息 -->
+          <template
+            slot="professional"
+            slot-scope="{ row }"
+          >
+            <div>{{ mapProfessional(row.professional) }}</div>
+          </template>
+        </zf-table>
       </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button @click="yzVisible = false">取 消</el-button>
@@ -197,13 +211,13 @@
       <el-row class="mb20">
         <el-col :span="12">
           <div class="col-item">
-            <span>单位名称</span>:
+            <span>单位名称:</span>
             <span>建筑1</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="col-item">
-            <span>固定技术人员数量</span>:
+            <span>固定技术人员数量:</span>
             <span>2000</span>
           </div>
         </el-col>
@@ -211,13 +225,13 @@
       <el-row class="mb20">
         <el-col :span="12">
           <div class="col-item">
-            <span>文保工程资质情况</span>:
+            <span>文保工程资质情况:</span>
             <span>建筑1</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="col-item">
-            <span>单位简介</span>:
+            <span>单位简介:</span>
             <span>哈哈撒</span>
           </div>
         </el-col>
@@ -315,10 +329,13 @@
     </el-dialog>
     <el-dialog title="查看" :visible.sync="dlfvisible" width="350px" center>
       <div class="files-warper">
-        <div v-for="(item, index) in showFiles" :key="index" class="file-item">
-          <div class="name">{{ item.name }}</div>
-          <div class="downLoad" @click="downLoad(item.id)">下载</div>
-        </div>
+        <template v-if="showFiles.length">
+          <div v-for="(item, index) in showFiles" :key="index" class="file-item">
+            <div class="name">{{ item.name }}</div>
+            <div class="downLoad" @click="downLoad(item.id)">下载</div>
+          </div>
+        </template>
+        <div v-else style="text-align:center;">暂无数据</div>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dlfvisible = false">关闭</el-button>
@@ -330,7 +347,7 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import column from './columns/projectDetail'
 import upload from '@/components/upload'
-import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles } from '@/api/common'
+import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles, deteleProjectSonById, getOwnerById, getExecuteById, staffInfoById } from '@/api/common'
 export default {
   name: 'ProjectDetail',
   components: {
@@ -339,6 +356,8 @@ export default {
   },
   data() {
     return {
+      ownerId: this.$route.query.ownerId, // 业主id
+      projectExecuteCom: this.$route.query.projectExecuteCom, // 实施单位id
       form: {
         name: '',
         projectId: this.$route.query.id // 子项ID
@@ -354,6 +373,7 @@ export default {
       mode: 1, // 默认新增模式
       addForm: {
         projectId: this.$route.query.id,
+        id: '', // 子项id (用于编辑)
         code: '', // 子项编码
         name: '', // 子项名称
         beginBuildTime: '', // 始建年代
@@ -409,6 +429,7 @@ export default {
         manage1: '1111',
         time: '1990-0910'
       }],
+      yzStaffInfo: [],
       upVisible: false,
       activeName: '1',
       feedBack: '',
@@ -417,13 +438,28 @@ export default {
       },
       isUpload: false,
       dlfvisible: false,
-      showFiles: []
+      showFiles: [],
+      yzData: {}
     }
   },
   mounted() {
     this.query()
   },
   methods: {
+    mapProfessional(id) {
+      const _map = {
+        1: '文保设计师',
+        2: '建筑师',
+        3: '结构工程师',
+        4: '建造师',
+        5: '安全员',
+        6: '木工',
+        7: '瓦工',
+        8: '油漆彩画工',
+        9: '其他'
+      }
+      return _map[id]
+    },
     async query() {
       const res = await getProjectSonList({ ...this.form, ...this.pages })
       if (res.code === 0) {
@@ -477,6 +513,7 @@ export default {
       this.addForm.history = row.history
       this.addForm.maintain = row.maintain
       this.addForm.valueAssess = row.valueAssess
+      this.addForm.id = row.id
       // 通过ids获取文件
       this.addForm.map = await this.getFilesFn(row.map)
       this.addForm.photo = await this.getFilesFn(row.photo)
@@ -501,11 +538,12 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+      }).then(async() => {
+        const res = await deteleProjectSonById({ projectSonId: row.id })
+        if (res.code === 0) {
+          this.$message.success('删除子项成功!')
+          this.query()
+        }
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -516,6 +554,19 @@ export default {
     add() {
       this.formVisible = true
       this.mode = 1
+      this.addForm.name = ''
+      this.addForm.code = ''
+      this.addForm.beginBuildTime = ''
+      this.addForm.architectureArea = ''
+      this.addForm.area = ''
+      this.addForm.monomer = ''
+      this.addForm.history = ''
+      this.addForm.maintain = ''
+      this.addForm.valueAssess = ''
+      this.addForm.id = ''
+      // 通过ids获取文件
+      this.addForm.map = []
+      this.addForm.photo = []
     },
     goDetail(row) {
       this.$router.push('/projectInformation/single-info')
@@ -532,6 +583,28 @@ export default {
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
+    },
+    async getYZInfo() {
+      this.yzVisible = true
+      const res = await getOwnerById({ id: this.ownerId })
+      if (res.code === 0) {
+        this.yzData = res.data.owner
+        const result = await getFiles({ ids: this.yzData.contract })
+        if (result.code === 0 && result.data.files.length) {
+          this.yzData.contract = result.data.files[0]
+        }
+        const staffInfo = await staffInfoById({ id: this.yzData.principal })
+        if (staffInfo.code === 0 && staffInfo.data) {
+          this.yzStaffInfo = [{ ...staffInfo.data.staffInfo }]
+        }
+      }
+    },
+    // 对接到实施单位信息
+    getSSInfo() {
+      this.ssVisible = true
+      getExecuteById({ id: this.projectExecuteCom }).then(res => {
+        console.log(res, 'getExecuteById')
+      })
     }
   }
 }
@@ -567,15 +640,24 @@ export default {
   }
 }
 .col-item{
+  display: flex;
   span{
     display: inline-block;
     &:first-child{
-      width: 172px;
+      width: 173px;
       text-align: right;
       font-weight: bold;
     }
     &:last-child{
+      padding-left: 5px;
+      flex: 1;
       color: #3a8ee6;
+    }
+    &.files{
+      cursor: pointer;
+      &:hover{
+        text-decoration: underline;
+      }
     }
   }
 }
