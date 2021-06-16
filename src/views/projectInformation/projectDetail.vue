@@ -589,10 +589,12 @@ export default {
       const res = await getOwnerById({ id: this.ownerId })
       if (res.code === 0) {
         this.yzData = res.data.owner
+        // 委托合同获取
         const result = await getFiles({ ids: this.yzData.contract })
         if (result.code === 0 && result.data.files.length) {
           this.yzData.contract = result.data.files[0]
         }
+        // 职工信息获取
         const staffInfo = await staffInfoById({ id: this.yzData.principal })
         if (staffInfo.code === 0 && staffInfo.data) {
           this.yzStaffInfo = [{ ...staffInfo.data.staffInfo }]
