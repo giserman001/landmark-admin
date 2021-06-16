@@ -78,7 +78,6 @@ export default {
       return type && size
     },
     doUploadFile(file) {
-      console.log(file, 'file', this.fileList)
       const params = new FormData()
       params.append('file', file.file)
       params.append('type', '01')

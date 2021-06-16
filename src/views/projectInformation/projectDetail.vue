@@ -2,7 +2,7 @@
   <div class="bgfff out_wrap">
     <div class="flex_between1">
       <el-form :inline="true" :model="form" size="small" label-suffix=":">
-        <el-form-item label="建筑名称">
+        <el-form-item label="子项名称">
           <el-input v-model="form.name" placeholder="请输入" @change="query" />
         </el-form-item>
       </el-form>
@@ -17,9 +17,23 @@
       :data-source="tableList"
       :total="pages.total"
       :page-size="pages.pageSize"
-      :page-num="pages.page"
+      :page-num="pages.pageNum"
       @change="handlePageChange"
     >
+      <!-- 测绘图 -->
+      <template
+        slot="map"
+        slot-scope="{ row }"
+      >
+        <a class="active_color" @click="view(row.map)">查看</a>
+      </template>
+      <!-- 周边图片 -->
+      <template
+        slot="photo"
+        slot-scope="{ row }"
+      >
+        <a class="active_color" @click="view(row.photo)">查看</a>
+      </template>
       <!-- 单体建筑信息 -->
       <template
         slot="singleArchitectureInfo"
@@ -47,83 +61,78 @@
       </div>
     </div>
     <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="650px" center>
-      <el-form :model="addForm" label-suffix=":" label-position="right" label-width="120px">
+      <el-form ref="addSonProject" :model="addForm" label-suffix=":" label-position="right" label-width="120px" :rules="rules">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="子项编号">
-              <el-input v-model="addForm.no" autocomplete="off" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="子项名称">
+            <el-form-item label="子项名称" prop="name">
               <el-input v-model="addForm.name" autocomplete="off" />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
-            <el-form-item label="始建年代">
-              <el-input v-model="addForm.startYear" autocomplete="off" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="占地面积">
-              <el-input v-model="addForm.approveMoney" autocomplete="off" />
+            <el-form-item label="子项编号" prop="code">
+              <el-input v-model="addForm.code" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="建筑面积">
+            <el-form-item label="始建年代" prop="beginBuildTime">
+              <el-input v-model="addForm.beginBuildTime" autocomplete="off" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="占地面积" prop="area">
               <el-input v-model="addForm.area" autocomplete="off" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
-            <el-form-item label="单体构成">
-              <el-input v-model="addForm.single" autocomplete="off" />
+            <el-form-item label="建筑面积" prop="architectureArea">
+              <el-input v-model="addForm.architectureArea" autocomplete="off" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="单体构成" prop="monomer">
+              <el-input v-model="addForm.monomer" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="历史沿革">
+            <el-form-item label="历史沿革" prop="history">
               <el-input v-model="addForm.history" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="历次修缮情况">
-              <el-input v-model="addForm.historyRepair" autocomplete="off" />
+            <el-form-item label="价值评估结论" prop="valueAssess">
+              <el-input v-model="addForm.valueAssess" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="价值评估结论">
-              <el-input v-model="addForm.value" autocomplete="off" />
+            <el-form-item label="周边状况" prop="photo">
+              <upload v-model="addForm.photo" :limit="5" :type="['.jpg', '.png', '.jpeg']" :multiple="true" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="测绘图">
-              <el-upload
-                ref="upload"
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :file-list="fileList"
-                :auto-upload="false"
-              >
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
-                <div slot="tip" class="el-upload__tip" style="line-height:20px;">只能上传dwg/jpg/png文件，且不超过20M</div>
-              </el-upload>
+            <el-form-item label="测绘图" prop="map">
+              <upload v-model="addForm.map" :limit="5" :type="['.jpg', '.png', '.pdf']" :multiple="true" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="历次修缮情况" prop="maintain">
+              <el-input v-model="addForm.maintain" type="textarea" :rows="4" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="formVisible = false">取 消</el-button>
-        <el-button type="primary" @click="formVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addSonProject('addSonProject')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="业主单位信息" :visible.sync="yzVisible" width="650px" center>
@@ -304,83 +313,67 @@
         <el-button type="primary" @click="upVisible = false">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="查看" :visible.sync="dlfvisible" width="350px" center>
+      <div class="files-warper">
+        <div v-for="(item, index) in showFiles" :key="index" class="file-item">
+          <div class="name">{{ item.name }}</div>
+          <div class="downLoad" @click="downLoad(item.id)">下载</div>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dlfvisible = false">关闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
-
 <script>
 import ZfTable from '@/components/ZfTable/CoreTable'
 import column from './columns/projectDetail'
+import upload from '@/components/upload'
+import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles } from '@/api/common'
 export default {
   name: 'ProjectDetail',
   components: {
-    ZfTable
+    ZfTable,
+    upload
   },
   data() {
     return {
       form: {
-        name: ''
+        name: '',
+        projectId: this.$route.query.id // 子项ID
       },
       column,
-      tableList: [{
-        id: 1,
-        name: '承德避暑山庄',
-        startYear: '1990-09-10',
-        area: '123',
-        allArea: 145,
-        history: '手机号啥课',
-        historyRepair: '经历三次重大修复',
-        value: '古建筑具有重大意义',
-        single: '由1,2,3构成',
-        draw: '不知道该如何展示'
-      }, {
-        id: 2,
-        name: '承德避暑山庄',
-        startYear: '1990-09-10',
-        area: '123',
-        allArea: 145,
-        history: '手机号啥课',
-        historyRepair: '经历三次重大修复',
-        value: '古建筑具有重大意义',
-        single: '由1,2,3构成',
-        draw: '不知道该如何展示'
-      }, {
-        id: 3,
-        name: '承德避暑山庄',
-        startYear: '1990-09-10',
-        area: '123',
-        allArea: 145,
-        history: '手机号啥课',
-        historyRepair: '经历三次重大修复',
-        value: '古建筑具有重大意义',
-        single: '由1,2,3构成',
-        draw: '不知道该如何展示'
-      }],
+      tableList: [],
       pages: {
-        page: 1,
+        pageNum: 1,
         pageSize: 10,
         total: 0
       },
       formVisible: false,
       mode: 1, // 默认新增模式
       addForm: {
-        no: '',
-        name: '',
-        startYear: '',
-        allArea: '',
-        area: '',
-        single: '',
-        history: '',
-        historyRepair: '',
-        value: '',
-        text: '', // 方案文本
-        budget: '', // 方案预算
-        record: '', // 国宝单位档案
-        draw: ''
+        projectId: this.$route.query.id,
+        code: '', // 子项编码
+        name: '', // 子项名称
+        beginBuildTime: '', // 始建年代
+        architectureArea: '', // 建筑面积
+        area: '', // 占地面积
+        monomer: '', // 单体构成
+        history: '', // 历史沿革
+        maintain: '', // 历次修缮情况
+        valueAssess: '', // 价值评估结论
+        map: [], // 测绘图（文件id，多个的情况下用“，”隔开，如：1,2,3）
+        photo: [] // 周边现状（文件id，多个的情况下用“，”隔开，如：1,2,3）
       },
-      fileList: [
-        { name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
-        { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
-      ],
+      rules: {
+        name: [
+          { required: true, message: '请输入子项名字', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入子项编码', trigger: 'blur' }
+        ]
+      },
       report: [{
         name: '日报',
         value: 1
@@ -422,22 +415,86 @@ export default {
       commentForm: {
         sunName: ''
       },
-      isUpload: false
+      isUpload: false,
+      dlfvisible: false,
+      showFiles: []
     }
   },
   mounted() {
-    // this.query()
+    this.query()
   },
   methods: {
-    query() {
-      // const query = { ...this.page, ...this.form }
+    async query() {
+      const res = await getProjectSonList({ ...this.form, ...this.pages })
+      if (res.code === 0) {
+        this.pages.total = res.data.projectSonList.total
+        this.tableList = res.data.projectSonList.rows
+      }
     },
     handlePageChange({ pageNum, pageSize, sorter: { prop, order }}) {
-      console.log('aa')
+      this.pages.pageNum = pageNum
+      this.pages.pageSize = pageSize
+      this.query()
     },
-    edit(row) {
+    addSonProject(formName) {
+      this.$refs[formName].validate(async(valid) => {
+        if (valid) {
+          if (this.mode === 1) {
+            const res = await saveProjectSon({
+              ...this.addForm,
+              map: this.addForm.map.map(item => item.id).join(',') || '', // 测绘图
+              photo: this.addForm.photo.map(item => item.id).join(',') || '' // 周边状况
+            })
+            if (res.code === 0) {
+              this.formVisible = false
+              this.$message.success('新增子项成功!')
+              this.query()
+            }
+          } else {
+            const res = await updateProjectSon({
+              ...this.addForm,
+              map: this.addForm.map.map(item => item.id).join(',') || '', // 测绘图
+              photo: this.addForm.photo.map(item => item.id).join(',') || '' // 周边状况
+            })
+            if (res.code === 0) {
+              this.formVisible = false
+              this.$message.success('编辑子项成功!')
+              this.query()
+            }
+          }
+        }
+      })
+    },
+    async edit(row) {
       this.formVisible = true
       this.mode = 2
+      this.addForm.name = row.name
+      this.addForm.code = row.code
+      this.addForm.beginBuildTime = row.beginBuildTime
+      this.addForm.architectureArea = row.architectureArea
+      this.addForm.area = row.area
+      this.addForm.monomer = row.monomer
+      this.addForm.history = row.history
+      this.addForm.maintain = row.maintain
+      this.addForm.valueAssess = row.valueAssess
+      // 通过ids获取文件
+      this.addForm.map = await this.getFilesFn(row.map)
+      this.addForm.photo = await this.getFilesFn(row.photo)
+    },
+    getFilesFn(ids) {
+      return new Promise((resolve, reject) => {
+        getFiles({ ids }).then(res => {
+          const arr = res.data.files.map(item => {
+            return {
+              name: item.name,
+              id: item.id
+            }
+          })
+          resolve(arr)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
     },
     del(row) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -463,17 +520,19 @@ export default {
     goDetail(row) {
       this.$router.push('/projectInformation/single-info')
     },
-    // 文件上传
-    submitUpload() {
-      this.$refs.upload.submit()
+    handleClick() {},
+    async view(ids) {
+      this.dlfvisible = true
+      this.showFiles = []
+      this.showFiles = await this.getFilesFn(ids)
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview(file) {
-      console.log(file)
-    },
-    handleClick() {}
+    downLoad(id) {
+      const link = document.createElement('a')
+      link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
   }
 }
 </script>
@@ -513,7 +572,6 @@ export default {
     &:first-child{
       width: 172px;
       text-align: right;
-      // text-align-last: justify;
       font-weight: bold;
     }
     &:last-child{
@@ -530,6 +588,24 @@ export default {
     &:last-child{
       flex: 1;
       color: #3a8ee6;
+      cursor: pointer;
+    }
+  }
+}
+.files-warper{
+  .file-item{
+    display: flex;
+    margin-bottom: 10px;
+    &:last-child{
+      margin-bottom: 0;
+    }
+    .name{
+      flex: 2;
+    }
+    .downLoad{
+      flex: 1;
+      text-align: right;
+      color: red;
       cursor: pointer;
     }
   }

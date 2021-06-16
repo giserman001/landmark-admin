@@ -229,7 +229,6 @@ export default {
       this.query()
     },
     handleSubmit(formName) {
-      console.log(this.addForm, 'this.addFormthis.addFormthis.addFormthis.addForm')
       this.$refs[formName].validate(async(valid) => {
         if (valid) {
           if (this.mode === 1) {
@@ -314,7 +313,7 @@ export default {
       this.addForm.id = '' // 项目id
     },
     goDetail(row) {
-      this.$router.push('/projectInformation/project-detail')
+      this.$router.push(`/projectInformation/project-detail?id=${row.id}`)
     },
     // 下载
     downLoad(name, id) {

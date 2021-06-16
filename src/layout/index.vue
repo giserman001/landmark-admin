@@ -46,6 +46,7 @@
 <script>
 import { AppMain, HeadItem, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import { resetRouter } from '@/router'
 
 export default {
   name: 'Layout',
@@ -107,6 +108,8 @@ export default {
         visitedViews: [],
         cachedViews: []
       })
+      // 重置路由
+      resetRouter()
       this.$router.replace({ path: '/login' })
     }
   }

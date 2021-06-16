@@ -95,8 +95,23 @@ export function getExecuteIdAndName(params) {
   return request({ url: '/execute/getExecuteIdAndName', method: 'get', params })
 }
 
-// 根据文件ids下载文件
-export function downLoadFile(params) {
+// 根据文件ids获取文件
+export function getFiles(params) {
   return request({ url: '/file/getFilesByIds', method: 'get', params })
+}
+
+// 获取子项信息
+export function getProjectSonList(params) {
+  return request({ url: '/project/son/getProjectSonList', method: 'get', params })
+}
+
+// 添加子项目
+export function saveProjectSon(params) {
+  return request({ url: '/project/son/saveProjectSon', method: 'get', params })
+}
+
+// 编辑子项目
+export function updateProjectSon(params) {
+  return request({ url: '/project/son/updateProjectSon', method: 'get', params })
 }
 
