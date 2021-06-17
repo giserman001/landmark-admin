@@ -3,47 +3,47 @@
     <div class="detail-warper">
       <div class="swiper-box">
         <swiper class="swiper" :options="swiperOption">
-          <swiper-slide>
-            <img class="img-item" src="@/assets/test/1.jpg" alt="">
+          <swiper-slide v-for="(item, index) in swiperArr" :key="index">
+            <img class="img-item" :src="item.url" alt="">
           </swiper-slide>
-          <swiper-slide>
+          <!-- <swiper-slide>
             <img class="img-item" src="@/assets/test/2.jpg" alt="">
           </swiper-slide>
           <swiper-slide>
             <img class="img-item" src="@/assets/test/3.jpg" alt="">
-          </swiper-slide>
+          </swiper-slide> -->
           <div slot="pagination" class="swiper-pagination" />
         </swiper>
       </div>
       <div class="single-detail">
         <el-row class="mb20">
           <el-col :span="12">
-            <span class="label">单体编号：</span>
-            <span>hsaksajajkh</span>
+            <span class="label">单体名称：</span>
+            <span>{{ detail.name }}</span>
           </el-col>
           <el-col :span="12">
-            <span class="label">单体名称：</span>
-            <span>睡觉睡觉</span>
+            <span class="label">单体编号：</span>
+            <span>{{ detail.code }}</span>
           </el-col>
         </el-row>
         <el-row class="mb20">
           <el-col :span="12">
             <span class="label">始建年代：</span>
-            <span>1900-12-09</span>
+            <span>{{ detail.beginBuildTime }}</span>
           </el-col>
           <el-col :span="12">
             <span class="label">历史沿革：</span>
-            <span>睡觉睡觉</span>
+            <span>{{ detail.history }}</span>
           </el-col>
         </el-row>
         <el-row class="mb20">
           <el-col :span="12">
             <span class="label">历史修缮情况：</span>
-            <span>hsaksajajkh</span>
+            <span>{{ detail.maintain }}</span>
           </el-col>
           <el-col :span="12">
             <span class="label">价值评估结论：</span>
-            <span>睡觉睡觉</span>
+            <span>{{ detail.valueAssess }}</span>
           </el-col>
         </el-row>
         <el-row>
@@ -51,14 +51,13 @@
             <div class="flex">
               <span class="label">测绘图附件：</span>
               <div style="flex:1;">
-                <div class="file-con mb10">
-                  <div>ghaj.jpg</div>
-                  <div>下载</div>
-                </div>
-                <div class="file-con">
-                  <div>ghaj1.jpg</div>
-                  <div>下载</div>
-                </div>
+                <template v-if="filesArr.length">
+                  <div v-for="(item, index) in filesArr" :key="index" :class="['file-con', (filesArr.length - 1) === index ? '' : 'mb10']">
+                    <div>{{ item.name }}</div>
+                    <div @click="downLoad(item.id)">下载</div>
+                  </div>
+                </template>
+                <div v-else>暂无数据</div>
               </div>
             </div>
           </el-col>
@@ -71,6 +70,7 @@
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
+import { getArchitectureById, getFiles } from '@/api/common'
 export default {
   components: {
     swiper,
@@ -95,7 +95,54 @@ export default {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev'
         }
+      },
+      swiperArr: [],
+      filesArr: [],
+      detail: {}
+    }
+  },
+  mounted() {
+    this.getDetail()
+  },
+  methods: {
+    async getDetail() {
+      const res = await getArchitectureById({ id: this.$route.query.id })
+      if (res.code === 0) {
+        // 通过ids获取文件
+        if (res.data && res.data.architecture.map) {
+          this.filesArr = await this.getFilesFn(res.data.architecture.map)
+        }
+        if (res.data && res.data.architecture.photo) {
+          this.swiperArr = await this.getFilesFn(res.data.architecture.photo)
+        }
+        this.detail = res.data.architecture
       }
+    },
+    getFilesFn(ids) {
+      return new Promise((resolve, reject) => {
+        getFiles({ ids }).then(res => {
+          let arr = []
+          if (res.code === 0 && res.data) {
+            arr = res.data.files.map(item => {
+              return {
+                name: item.name,
+                id: item.id,
+                url: item.url2
+              }
+            })
+          }
+          resolve(arr)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    },
+    downLoad(id) {
+      const link = document.createElement('a')
+      link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     }
   }
 }

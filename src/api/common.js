@@ -130,6 +130,11 @@ export function getExecuteById(params) {
   return request({ url: '/execute/getExecuteById', method: 'get', params })
 }
 
+// 获取实施单位项目组成员信息
+export function getListByTypeAndComId(params) {
+  return request({ url: 'staffInfo/getListByTypeAndComId', method: 'get', params })
+}
+
 // 根据职工id获取职工信息
 export function staffInfoById(params) {
   return request({ url: '/staffInfo/getById', method: 'get', params })
@@ -154,3 +159,9 @@ export function updateArchitecture(params) {
 export function deteleArchitectureById(params) {
   return request({ url: '/project/architecture/deteleArchitectureById', method: 'get', params })
 }
+
+// 单体建筑详情
+export function getArchitectureById(params) {
+  return request({ url: '/project/architecture/getById', method: 'get', params })
+}
+

@@ -203,11 +203,10 @@
         </zf-table>
       </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="yzVisible = false">取 消</el-button>
-        <el-button type="primary" @click="yzVisible = false">确 定</el-button>
+        <el-button @click="yzVisible = false">关 闭</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="实施单位信息" :visible.sync="ssVisible" width="650px" center>
+    <el-dialog title="实施单位信息" :visible.sync="ssVisible" width="680px" center>
       <el-row class="mb20">
         <el-col :span="12">
           <div class="col-item">
@@ -242,25 +241,33 @@
           :columns="[{prop: 'name',label: '姓名'}, {prop: 'professional',label: '职称'}, {prop: 'certificate',label: '专业证书'}, {prop: 'speciality',label: '专长'}]"
           :data-source="ssStaffInfo"
           :pagination="false"
-        />
+        >
+          <!-- 职称 -->
+          <template
+            slot="professional"
+            slot-scope="{ row }"
+          >
+            <div>{{ mapProfessional(row.professional) }}</div>
+          </template></zf-table>
       </el-row>
-      <!-- <el-row class="mb20">
+      <el-row class="mb20">
         <div class="mb10" style="font-weight: bold;">项目组成员信息:</div>
         <zf-table
-          :columns="[{prop: 'name',label: '姓名'}, {prop: 'title',label: '年龄'}, {prop: 'cert',label: '职称'}, {prop: 'manage',label: '专业技能资格'}, {prop: 'manage1',label: '项目内分工'}, {prop: 'time',label: '工作时间'}]"
-          :data-source="projectList"
+          :columns="[{prop: 'name',label: '姓名'}, {prop: 'age',label: '年龄'}, {prop: 'professional',label: '职称'}, {prop: 'certificate',label: '专业证书'}, {prop: 'job',label: '项目内分工'}, {prop: 'workTime',label: '工作时间'}]"
+          :data-source="projectMember"
           :pagination="false"
-        />
-      </el-row> -->
-      <!-- <el-row class="mb20">
-        <div class="mb10" style="font-weight: bold;">项目组成员构成:</div>
-        <div>
-          暂无
-        </div>
-      </el-row> -->
+        >
+          <!-- 职称 -->
+          <template
+            slot="professional"
+            slot-scope="{ row }"
+          >
+            <div>{{ mapProfessional(row.professional) }}</div>
+          </template>
+        </zf-table>
+      </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="ssVisible = false">取 消</el-button>
-        <el-button type="primary" @click="ssVisible = false">确 定</el-button>
+        <el-button @click="ssVisible = false">关 闭</el-button>
       </div>
     </el-dialog>
     <el-dialog :visible.sync="upVisible" width="450px" center>
@@ -347,7 +354,7 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import column from './columns/projectDetail'
 import upload from '@/components/upload'
-import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles, deteleProjectSonById, getOwnerById, getExecuteById, staffInfoById } from '@/api/common'
+import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles, deteleProjectSonById, getOwnerById, getExecuteById, staffInfoById, getListByTypeAndComId } from '@/api/common'
 export default {
   name: 'ProjectDetail',
   components: {
@@ -441,7 +448,8 @@ export default {
       showFiles: [],
       yzData: {},
       ssData: {},
-      ssStaffInfo: []
+      ssStaffInfo: [],
+      projectMember: []
     }
   },
   mounted() {
@@ -523,15 +531,16 @@ export default {
     getFilesFn(ids) {
       return new Promise((resolve, reject) => {
         getFiles({ ids }).then(res => {
+          let arr = []
           if (res.code === 0 && res.data) {
-            const arr = res.data.files.map(item => {
+            arr = res.data.files.map(item => {
               return {
                 name: item.name,
                 id: item.id
               }
             })
-            resolve(arr)
           }
+          resolve(arr)
         }).catch((err) => {
           reject(err)
         })
@@ -616,6 +625,9 @@ export default {
         if (staffInfo.code === 0 && staffInfo.data) {
           this.ssStaffInfo = [{ ...staffInfo.data.staffInfo }]
         }
+        const info = await getListByTypeAndComId({ type: 2, comId: res.data.execute.id })
+        console.log(info, 'uuuuuuuuuuuuuuuuu')
+        this.projectMember = info.data.list
       }
     }
   }

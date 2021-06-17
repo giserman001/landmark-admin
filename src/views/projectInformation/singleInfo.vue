@@ -270,7 +270,7 @@ export default {
       this.addForm.photo = []
     },
     goDetail(row) {
-      this.$router.push('/projectInformation/single-detail')
+      this.$router.push(`/projectInformation/single-detail?id=${row.id}`)
     },
     async view(ids) {
       this.dlfvisible = true
@@ -278,17 +278,19 @@ export default {
       this.showFiles = await this.getFilesFn(ids)
     },
     getFilesFn(ids) {
+      console.log(ids, 'aaaaaaaaaaaaaaa')
       return new Promise((resolve, reject) => {
         getFiles({ ids }).then(res => {
+          let arr = []
           if (res.code === 0 && res.data) {
-            const arr = res.data.files.map(item => {
+            arr = res.data.files.map(item => {
               return {
                 name: item.name,
                 id: item.id
               }
             })
-            resolve(arr)
           }
+          resolve(arr)
         }).catch((err) => {
           reject(err)
         })
