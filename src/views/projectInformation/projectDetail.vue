@@ -212,13 +212,13 @@
         <el-col :span="12">
           <div class="col-item">
             <span>单位名称:</span>
-            <span>建筑1</span>
+            <span>{{ ssData.name }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="col-item">
             <span>固定技术人员数量:</span>
-            <span>2000</span>
+            <span>{{ ssData.technologyStaffNum }}</span>
           </div>
         </el-col>
       </el-row>
@@ -226,38 +226,38 @@
         <el-col :span="12">
           <div class="col-item">
             <span>文保工程资质情况:</span>
-            <span>建筑1</span>
+            <span>{{ ssData.certificationRemark }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="col-item">
             <span>单位简介:</span>
-            <span>哈哈撒</span>
+            <span>{{ ssData.introduction }}</span>
           </div>
         </el-col>
       </el-row>
       <el-row class="mb20">
         <div class="mb10" style="font-weight: bold;">项目负责人信息:</div>
         <zf-table
-          :columns="[{prop: 'name',label: '姓名'}, {prop: 'title',label: '职称'}, {prop: 'cert',label: '专业证书'}, {prop: 'manage',label: '专长'}]"
-          :data-source="projectList"
+          :columns="[{prop: 'name',label: '姓名'}, {prop: 'professional',label: '职称'}, {prop: 'certificate',label: '专业证书'}, {prop: 'speciality',label: '专长'}]"
+          :data-source="ssStaffInfo"
           :pagination="false"
         />
       </el-row>
-      <el-row class="mb20">
+      <!-- <el-row class="mb20">
         <div class="mb10" style="font-weight: bold;">项目组成员信息:</div>
         <zf-table
           :columns="[{prop: 'name',label: '姓名'}, {prop: 'title',label: '年龄'}, {prop: 'cert',label: '职称'}, {prop: 'manage',label: '专业技能资格'}, {prop: 'manage1',label: '项目内分工'}, {prop: 'time',label: '工作时间'}]"
           :data-source="projectList"
           :pagination="false"
         />
-      </el-row>
-      <el-row class="mb20">
+      </el-row> -->
+      <!-- <el-row class="mb20">
         <div class="mb10" style="font-weight: bold;">项目组成员构成:</div>
         <div>
           暂无
         </div>
-      </el-row>
+      </el-row> -->
       <div slot="footer" class="dialog-footer">
         <el-button @click="ssVisible = false">取 消</el-button>
         <el-button type="primary" @click="ssVisible = false">确 定</el-button>
@@ -439,7 +439,9 @@ export default {
       isUpload: false,
       dlfvisible: false,
       showFiles: [],
-      yzData: {}
+      yzData: {},
+      ssData: {},
+      ssStaffInfo: []
     }
   },
   mounted() {
@@ -521,13 +523,15 @@ export default {
     getFilesFn(ids) {
       return new Promise((resolve, reject) => {
         getFiles({ ids }).then(res => {
-          const arr = res.data.files.map(item => {
-            return {
-              name: item.name,
-              id: item.id
-            }
-          })
-          resolve(arr)
+          if (res.code === 0 && res.data) {
+            const arr = res.data.files.map(item => {
+              return {
+                name: item.name,
+                id: item.id
+              }
+            })
+            resolve(arr)
+          }
         }).catch((err) => {
           reject(err)
         })
@@ -569,7 +573,7 @@ export default {
       this.addForm.photo = []
     },
     goDetail(row) {
-      this.$router.push('/projectInformation/single-info')
+      this.$router.push(`/projectInformation/single-info?sonId=${row.id}`)
     },
     handleClick() {},
     async view(ids) {
@@ -602,11 +606,17 @@ export default {
       }
     },
     // 对接到实施单位信息
-    getSSInfo() {
+    async getSSInfo() {
       this.ssVisible = true
-      getExecuteById({ id: this.projectExecuteCom }).then(res => {
-        console.log(res, 'getExecuteById')
-      })
+      const res = await getExecuteById({ id: this.projectExecuteCom })
+      if (res.code === 0) {
+        this.ssData = res.data.execute
+        // 职工信息获取
+        const staffInfo = await staffInfoById({ id: this.ssData.principal })
+        if (staffInfo.code === 0 && staffInfo.data) {
+          this.ssStaffInfo = [{ ...staffInfo.data.staffInfo }]
+        }
+      }
     }
   }
 }

@@ -125,7 +125,7 @@ export function getOwnerById(params) {
   return request({ url: '/owner/getOwnerById', method: 'get', params })
 }
 
-// 根据实施单位id获取业主单位信息staffInfo/getById
+// 根据实施单位id获取业主单位信息
 export function getExecuteById(params) {
   return request({ url: '/execute/getExecuteById', method: 'get', params })
 }
@@ -135,3 +135,22 @@ export function staffInfoById(params) {
   return request({ url: '/staffInfo/getById', method: 'get', params })
 }
 
+// 获取单体建筑信息列表
+export function getProjectArchitectureList(params) {
+  return request({ url: '/project/architecture/getProjectArchitectureList', method: 'get', params })
+}
+
+// 添加单体建筑
+export function saveArchitecture(params) {
+  return request({ url: '/project/architecture/saveArchitecture', method: 'get', params })
+}
+
+// 修改单体建筑
+export function updateArchitecture(params) {
+  return request({ url: '/project/architecture/updateArchitecture', method: 'get', params })
+}
+
+// 删除单体建筑
+export function deteleArchitectureById(params) {
+  return request({ url: '/project/architecture/deteleArchitectureById', method: 'get', params })
+}
