@@ -55,8 +55,8 @@
       <div v-for="item in report" :key="item.value" class="report-item">
         <div class="head">{{ item.name }}</div>
         <div class="operate">
-          <svg-icon icon-class="upload" class-name="svg-class" @click="isUpload = true;upVisible = true" />
-          <svg-icon icon-class="view" class-name="svg-class ml20" @click="isUpload = false;upVisible = true" />
+          <svg-icon icon-class="upload" class-name="svg-class" @click="upReport(item)" />
+          <svg-icon icon-class="view" class-name="svg-class ml20" @click="viewReport(item)" />
         </div>
       </div>
     </div>
@@ -273,63 +273,48 @@
     <el-dialog :visible.sync="upVisible" width="450px" center>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="日报上传" name="1">
-          <el-upload
-            v-if="isUpload"
-            drag
-            action="https://jsonplaceholder.typicode.com/posts/"
-            multiple
-          >
-            <i class="el-icon-upload" />
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
+          <upload v-if="isUpload" v-model="addForm.fileIds" :limit="5" :type="['.doc', '.docx', '.pdf', '.xlsx', '.xls']" :multiple="true" />
           <template v-else>
             <div class="mb10 bold">日报内容：</div>
-            <div class="file-con mb10">
-              <div>ghaj.jpg</div>
-              <div>下载</div>
-            </div>
-            <div class="file-con">
-              <div>ghaj1.jpg</div>
-              <div>下载</div>
+            <div class="files-warper">
+              <template v-if="showFiles.length">
+                <div v-for="(item, index) in showFiles" :key="index" class="file-item">
+                  <div class="name">{{ item.name }}</div>
+                  <div class="downLoad" @click="downLoad(item.id)">下载</div>
+                </div>
+              </template>
+              <div v-else style="text-align:center;">暂无数据</div>
             </div>
           </template>
         </el-tab-pane>
         <el-tab-pane label="反馈栏" name="2">
           <div class="mb10 bold">请输入资料检查反馈信息:</div>
           <el-input
-            v-if="isUpload"
-            v-model="feedBack"
+            v-model="feedback"
+            :disabled="!isUpload"
             type="textarea"
             :rows="4"
             placeholder="请输入内容"
           />
-          <div v-else>
-            是世界上看数据就是撒垃圾奥科吉
-          </div>
         </el-tab-pane>
         <el-tab-pane label="评估意见栏" name="3">
           <el-form ref="form" :model="commentForm" label-width="145px" label-suffix=":">
             <el-form-item label="评估小组成员意见">
-              <el-input v-if="isUpload" v-model="commentForm.sunName" />
-              <span v-else>会撒娇就撒娇</span>
+              <el-input v-model="commentForm.suggest1" :disabled="!isUpload" />
             </el-form-item>
             <el-form-item label="评估组长意见">
-              <el-input v-if="isUpload" v-model="commentForm.sunName" />
-              <span v-else>会撒娇就撒娇</span>
+              <el-input v-model="commentForm.suggest2" :disabled="!isUpload" />
             </el-form-item>
             <el-form-item label="评估专家意见">
-              <el-input v-if="isUpload" v-model="commentForm.sunName" />
-              <span v-else>会撒娇就撒娇</span>
+              <el-input v-model="commentForm.suggest3" :disabled="!isUpload" />
             </el-form-item>
             <el-form-item label="评估项目组综合意见">
-              <el-input v-if="isUpload" v-model="commentForm.sunName" />
-              <span v-else>会撒娇就撒娇</span>
+              <el-input v-model="commentForm.suggest4" :disabled="!isUpload" />
             </el-form-item>
           </el-form>
         </el-tab-pane>
       </el-tabs>
-      <div slot="footer" class="dialog-footer">
+      <div v-if="isUpload" slot="footer" class="dialog-footer">
         <el-button @click="upVisible = false">取 消</el-button>
         <el-button type="primary" @click="upVisible = false">确 定</el-button>
       </div>
@@ -417,39 +402,26 @@ export default {
         name: '年报',
         value: 5
       }],
-      yzVisible: false,
-      ssVisible: false,
-      projectList: [{
-        name: '李军',
-        duty: 'CEO',
-        title: '教授',
-        cert: '高级管理',
-        manage: '高级管理',
-        manage1: '1111',
-        time: '1990-0910'
-      }, {
-        name: '左干',
-        duty: 'CEO',
-        title: '教授',
-        cert: '高级管理',
-        manage: '高级管理',
-        manage1: '1111',
-        time: '1990-0910'
-      }],
-      yzStaffInfo: [],
-      upVisible: false,
-      activeName: '1',
-      feedBack: '',
-      commentForm: {
-        sunName: ''
+      yzVisible: false, // 业主弹框
+      ssVisible: false, // 实施单位弹框
+      yzStaffInfo: [], // 业主单位职工
+      upVisible: false, // 日，周，月，季，年报上传
+      activeName: '1', // tab
+      feedback: '', // 反馈兰
+      commentForm: { // 评估意见栏
+        suggest1: '',
+        suggest2: '',
+        suggest3: '',
+        suggest4: ''
       },
-      isUpload: false,
+      isUpload: false, // 查看日报还是上传日报
       dlfvisible: false,
-      showFiles: [],
-      yzData: {},
-      ssData: {},
-      ssStaffInfo: [],
-      projectMember: []
+      showFiles: [], // 显示下载的文件列表
+      yzData: {}, // 业主信息
+      ssData: {}, // 实施单位信息
+      ssStaffInfo: [], // 实施单位职工
+      projectMember: [], // 实施单位项目成员
+      reportType: 1 // 默认是日报
     }
   },
   mounted() {
@@ -626,9 +598,20 @@ export default {
           this.ssStaffInfo = [{ ...staffInfo.data.staffInfo }]
         }
         const info = await getListByTypeAndComId({ type: 2, comId: res.data.execute.id })
-        console.log(info, 'uuuuuuuuuuuuuuuuu')
         this.projectMember = info.data.list
       }
+    },
+    viewReport(item) {
+      console.log(item)
+      this.reportType = item.value
+      this.isUpload = false
+      this.upVisible = true
+    },
+    upReport(item) {
+      console.log(item)
+      this.reportType = item.value
+      this.isUpload = true
+      this.upVisible = true
     }
   }
 }

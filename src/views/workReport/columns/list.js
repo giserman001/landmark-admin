@@ -4,15 +4,15 @@ export const day = [
     label: 'ID'
   },
   {
-    prop: 'project',
+    prop: 'projectName',
     label: '项目'
   },
   {
-    prop: 'time',
+    prop: 'createTime',
     label: '时间'
   },
   {
-    prop: 'report',
+    prop: 'fileIds',
     label: '日报'
   },
   {
@@ -36,17 +36,17 @@ export const week = [
     label: 'ID'
   },
   {
-    prop: 'project',
+    prop: 'projectName',
     label: '项目'
   },
   {
-    prop: 'time',
+    prop: 'createTime',
     label: '时间'
   },
-  {
-    prop: 'report',
-    label: '周报'
-  },
+  // {
+  //   prop: 'report',
+  //   label: '周报'
+  // },
   {
     prop: 'feedback',
     label: '反馈兰'

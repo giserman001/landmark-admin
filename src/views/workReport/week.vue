@@ -2,6 +2,12 @@
   <div class="bgfff out_wrap">
     <div class="flex_between1">
       <el-form :inline="true" :model="form" size="small" label-suffix=":">
+        <el-form-item label="项目">
+          <el-select v-model="form.projectId" placeholder="请选择" class="w100" clearable @change="query">
+            <el-option label="全部" value="" />
+            <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="时间">
           <el-date-picker v-model="form.time" type="daterange" range-separator="~" start-placeholder="开始日期" end-placeholder="结束日期" :editable="false" :value-format="'yyyy-MM-dd'" @change="query" />
         </el-form-item>
@@ -13,28 +19,24 @@
       :data-source="tableList"
       :total="pages.total"
       :page-size="pages.pageSize"
-      :page-num="pages.page"
+      :page-num="pages.pageNum"
       @change="handlePageChange"
     >
-      <!-- 报告 -->
-      <template
-        slot="report"
-      >
-        <a class="active_color">下载</a>
-      </template>
       <!-- 反馈栏 -->
       <template
         slot="feedback"
+        slot-scope="{ row }"
       >
-        <a class="active_color" @click="feedVisible=true;isFeed=false">查看</a>
-        <a class="active_color ml20" @click="feedVisible=true;isFeed=true">编辑</a>
+        <a class="active_color" @click="feedBackView(row)">查看</a>
+        <a class="active_color ml20" @click="feedBackEdit(row)">编辑</a>
       </template>
       <!-- 评估意见栏 -->
       <template
         slot="idea"
+        slot-scope="{ row }"
       >
-        <a class="active_color" @click="upVisible=true;isSubmit=false">查看</a>
-        <a class="active_color ml20" @click="upVisible=true;isSubmit=true">编辑</a>
+        <a class="active_color" @click="upView(row)">查看</a>
+        <a class="active_color ml20" @click="upEdit(row)">编辑</a>
       </template>
       <!-- 操作 -->
       <template
@@ -46,42 +48,37 @@
       </template>
     </zf-table>
     <el-dialog :visible.sync="upVisible" width="450px" center>
-      <el-form ref="form" :model="commentForm" label-width="145px" label-suffix=":">
+      <el-form ref="form" :model="commentForm" label-width="145px" label-suffix=":" :disabled="!isSubmit">
         <el-form-item label="评估小组成员意见">
-          <el-input v-if="isSubmit" v-model="commentForm.sunName" />
-          <span v-else>会撒娇就撒娇</span>
+          <el-input v-model="commentForm.suggest1" />
         </el-form-item>
         <el-form-item label="评估组长意见">
-          <el-input v-if="isSubmit" v-model="commentForm.sunName" />
-          <span v-else>会撒娇就撒娇</span>
+          <el-input v-model="commentForm.suggest2" />
         </el-form-item>
         <el-form-item label="评估专家意见">
-          <el-input v-if="isSubmit" v-model="commentForm.sunName" />
-          <span v-else>会撒娇就撒娇</span>
+          <el-input v-model="commentForm.suggest3" />
         </el-form-item>
         <el-form-item label="评估项目组综合意见">
-          <el-input v-if="isSubmit" v-model="commentForm.sunName" />
-          <span v-else>会撒娇就撒娇</span>
+          <el-input v-model="commentForm.suggest4" />
         </el-form-item>
       </el-form>
       <div v-if="isSubmit" slot="footer" class="dialog-footer">
         <el-button @click="upVisible = false">取 消</el-button>
-        <el-button type="primary" @click="upVisible = false">确 定</el-button>
+        <el-button type="primary" @click="commentSubmit">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog :visible.sync="feedVisible" width="450px" center>
-      <div class="bold mb10">日报反馈内容:</div>
+      <div class="bold mb10">周报反馈内容:</div>
       <el-input
-        v-if="isFeed"
-        v-model="feed"
+        v-model="feedback"
+        :disabled="!isFeed"
         type="textarea"
         :rows="6"
         placeholder="请输入内容"
       />
-      <div v-else>日报反馈内容日报反馈内容日报反馈内容日报反馈内容日报反馈内容</div>
       <div v-if="isFeed" slot="footer" class="dialog-footer">
         <el-button @click="feedVisible = false">取 消</el-button>
-        <el-button type="primary" @click="feedVisible = false">确 定</el-button>
+        <el-button type="primary" @click="feedBackSubmit">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -90,6 +87,7 @@
 <script>
 import ZfTable from '@/components/ZfTable/CoreTable'
 import { week } from './columns/list'
+import { getProjectList, getWeekReportList, deteleWeekReportById, updateWeekReport } from '@/api/common'
 export default {
   name: 'List',
   components: {
@@ -98,62 +96,73 @@ export default {
   data() {
     return {
       form: {
+        projectId: '',
         time: ''
       },
       column: week,
-      tableList: [{
-        id: 1,
-        project: '承德避暑山庄',
-        time: '2021-06-04'
-      }, {
-        id: 1,
-        project: '承德避暑山庄',
-        time: '2021-06-04'
-      }, {
-        id: 1,
-        project: '承德避暑山庄',
-        time: '2021-06-04'
-      }],
+      optionArr: [],
+      tableList: [],
       pages: {
-        page: 1,
+        pageNum: 1,
         pageSize: 10,
         total: 0
       },
-      fileList: [
-        { name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
-        { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
-      ],
-      commentForm: {},
+      commentForm: {
+        suggest1: '',
+        suggest2: '',
+        suggest3: '',
+        suggest4: ''
+      },
       upVisible: false,
       isSubmit: false,
       feedVisible: false,
-      feed: '',
+      feedback: '',
       isFeed: false
     }
   },
   mounted() {
-    // this.query()
+    this.query()
+    getProjectList({ pageNum: 1, pageSize: 9999 }).then(res => {
+      this.optionArr = res.data.projectList.rows
+    })
   },
   methods: {
-    query() {
-      // const query = { ...this.page, ...this.form }
+    async query() {
+      const query = {
+        beginTime: '',
+        endTime: '',
+        projectId: ''
+      }
+      if (this.form.time && this.form.time.length) {
+        query.beginTime = this.form.time[0]
+        query.endTime = this.form.time[1]
+      }
+      query.projectId = this.form.projectId
+      const res = await getWeekReportList({ ...query, ...this.pages })
+      if (res.code === 0) {
+        this.pages.total = res.data.weekReportList.total
+        this.tableList = res.data.weekReportList.rows
+      }
     },
     handlePageChange({ pageNum, pageSize, sorter: { prop, order }}) {
-      console.log('aa')
+      this.pages.pageNum = pageNum
+      this.pages.pageSize = pageSize
+      this.query()
     },
     edit(row) {
-      this.$router.push('/workReport/addWeek?a=2')
+      this.$router.push(`/workReport/addWeek?id=${row.id}`)
     },
     del(row) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+      }).then(async() => {
+        const res = await deteleWeekReportById({ weekReportId: row.id })
+        if (res.code === 0) {
+          this.$message.success('删除周报成功!')
+          this.query()
+        }
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -162,17 +171,67 @@ export default {
       })
     },
     add() {
-      this.$router.push('/workReport/addWeek?a=1')
+      this.$router.push('/workReport/addWeek')
     },
-    // 文件上传
-    submitUpload() {
-      this.$refs.upload.submit()
+    upView(row) {
+      this.upVisible = true
+      this.isSubmit = false
+      this.commentForm.suggest1 = row.suggest1
+      this.commentForm.suggest2 = row.suggest2
+      this.commentForm.suggest3 = row.suggest3
+      this.commentForm.suggest4 = row.suggest4
+      // this.addForm.id = row.id
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
+    upEdit(row) {
+      this.upVisible = true
+      this.isSubmit = true
+      this.commentForm.suggest1 = row.suggest1
+      this.commentForm.suggest2 = row.suggest2
+      this.commentForm.suggest3 = row.suggest3
+      this.commentForm.suggest4 = row.suggest4
+      this.form.id = row.id
     },
-    handlePreview(file) {
-      console.log(file)
+    async commentSubmit() {
+      if (!(this.commentForm.suggest1 || this.commentForm.suggest2 || this.commentForm.suggest3 || this.commentForm.suggest4)) {
+        this.$message.error('至少填写一项意见')
+        return
+      }
+      const res = await updateWeekReport({
+        id: this.form.id,
+        ...this.commentForm
+      })
+      if (res.code === 0) {
+        this.upVisible = false
+        this.$message.success('编辑成功!')
+        this.query()
+      }
+    },
+    feedBackView(row) {
+      this.feedVisible = true
+      this.isFeed = false
+      this.feedback = row.feedback
+      // this.form.id = row.id
+    },
+    feedBackEdit(row) {
+      this.feedVisible = true
+      this.isFeed = true
+      this.feedback = row.feedback
+      this.form.id = row.id
+    },
+    async feedBackSubmit() {
+      if (!this.feedback) {
+        this.$message.error('请填写反馈兰内容')
+        return
+      }
+      const res = await updateWeekReport({
+        id: this.form.id,
+        feedback: this.feedback
+      })
+      if (res.code === 0) {
+        this.feedVisible = false
+        this.$message.success('编辑成功!')
+        this.query()
+      }
     }
   }
 }

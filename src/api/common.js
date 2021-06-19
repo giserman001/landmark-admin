@@ -165,3 +165,48 @@ export function getArchitectureById(params) {
   return request({ url: '/project/architecture/getById', method: 'get', params })
 }
 
+// 获取日报列表
+export function getDayReportList(params) {
+  return request({ url: '/dayReport/getDayReportList', method: 'get', params })
+}
+
+// 添加日报
+export function saveDayReport(params) {
+  return request({ url: '/dayReport/saveDayReport', method: 'get', params })
+}
+
+// 编辑日报
+export function updateDayReport(params) {
+  return request({ url: '/dayReport/updateDayReport', method: 'get', params })
+}
+
+// 编辑日报
+export function deteleDayReportById(params) {
+  return request({ url: '/dayReport/deteleDayReportById', method: 'get', params })
+}
+
+// 获取周报列表
+export function getWeekReportList(params) {
+  return request({ url: '/weekReport/getWeekReportList', method: 'get', params })
+}
+
+// 新增周报列表
+export function saveWeekReport(params) {
+  return request({ url: '/weekReport/saveWeekReport', method: 'get', params })
+}
+
+// 删除周报
+export function deteleWeekReportById(params) {
+  return request({ url: '/weekReport/deteleDayReportById', method: 'get', params })
+}
+
+// 修改周报
+export function updateWeekReport(params) {
+  return request({ url: '/weekReport/updateWeekReport', method: 'get', params })
+}
+
+// 获取周报详情
+export function getWeekReportByIdDetail(params) {
+  return request({ url: '/weekReport/getById', method: 'get', params })
+}
+
