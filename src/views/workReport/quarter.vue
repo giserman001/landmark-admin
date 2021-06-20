@@ -3,7 +3,7 @@
     <div class="flex_between1">
       <el-form :inline="true" :model="form" size="small" label-suffix=":">
         <el-form-item label="项目">
-          <el-select v-model="form.projectId" placeholder="请选择" class="w100" clearable>
+          <el-select v-model="form.projectId" placeholder="请选择" class="w100" @change="query">
             <el-option label="全部" value="" />
             <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
@@ -11,6 +11,7 @@
         <el-form-item label="时间">
           <el-date-picker v-model="form.time" type="daterange" range-separator="~" start-placeholder="开始日期" end-placeholder="结束日期" :editable="false" :value-format="'yyyy-MM-dd'" @change="query" />
         </el-form-item>
+        <el-button type="primary" @click="query">查询</el-button>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
