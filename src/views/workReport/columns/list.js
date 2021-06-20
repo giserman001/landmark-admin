@@ -67,21 +67,21 @@ export const mouth = [
     label: 'ID'
   },
   {
-    prop: 'project',
+    prop: 'projectName',
     label: '项目'
   },
   {
-    prop: 'time',
+    prop: 'createTime',
     label: '时间'
   },
   {
-    prop: 'report',
+    prop: 'fileIds',
     label: '月报'
   },
-  // {
-  //   prop: 'feedback',
-  //   label: '反馈兰'
-  // },
+  {
+    prop: 'feedback',
+    label: '反馈兰'
+  },
   {
     prop: 'idea',
     label: '评估意见栏'
@@ -97,22 +97,22 @@ export const quarter = [
     prop: 'id',
     label: 'ID'
   },
-  // {
-  //   prop: 'project',
-  //   label: '项目'
-  // },
   {
-    prop: 'time',
+    prop: 'projectName',
+    label: '项目'
+  },
+  {
+    prop: 'createTime',
     label: '时间'
   },
   {
-    prop: 'report',
+    prop: 'fileIds',
     label: '季报'
   },
-  // {
-  //   prop: 'feedback',
-  //   label: '反馈兰'
-  // },
+  {
+    prop: 'feedback',
+    label: '反馈兰'
+  },
   {
     prop: 'idea',
     label: '评估意见栏'
@@ -129,22 +129,22 @@ export const year = [
     prop: 'id',
     label: 'ID'
   },
-  // {
-  //   prop: 'project',
-  //   label: '项目'
-  // },
   {
-    prop: 'time',
+    prop: 'projectName',
+    label: '项目'
+  },
+  {
+    prop: 'createTime',
     label: '时间'
   },
   {
-    prop: 'report',
+    prop: 'fileIds',
     label: '年报'
   },
-  // {
-  //   prop: 'feedback',
-  //   label: '反馈兰'
-  // },
+  {
+    prop: 'feedback',
+    label: '反馈兰'
+  },
   {
     prop: 'idea',
     label: '评估意见栏'

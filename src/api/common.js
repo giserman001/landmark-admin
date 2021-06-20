@@ -210,3 +210,66 @@ export function getWeekReportByIdDetail(params) {
   return request({ url: '/weekReport/getById', method: 'get', params })
 }
 
+// 获取月报列表
+export function getMonthReportList(params) {
+  return request({ url: '/monthReport/getMonthReportList', method: 'get', params })
+}
+
+// 删除月报
+export function deteleMonthReportById(params) {
+  return request({ url: '/monthReport/deteleMonthReportById', method: 'get', params })
+}
+
+// 编辑月报
+export function updateMonthReport(params) {
+  return request({ url: '/monthReport/updateMonthReport', method: 'get', params })
+}
+
+// 新增月报
+export function saveMonthReport(params) {
+  return request({ url: '/monthReport/saveMonthReport', method: 'get', params })
+}
+
+// 季报
+
+// 获取季报列表
+export function getQuarterReportList(params) {
+  return request({ url: '/quarterReport/getQuarterReportList', method: 'get', params })
+}
+
+// 删除季报
+export function deteleQuarterReportById(params) {
+  return request({ url: '/quarterReport/deteleQuarterReportById', method: 'get', params })
+}
+
+// 编辑季报
+export function updateQuarterReport(params) {
+  return request({ url: '/quarterReport/updateQuarterReport', method: 'get', params })
+}
+
+// 新增季报
+export function saveQuarterReport(params) {
+  return request({ url: '/quarterReport/saveQuarterReport', method: 'get', params })
+}
+
+// 年报
+
+// 获取年报列表
+export function getYearReportList(params) {
+  return request({ url: '/yearReport/getYearReportList', method: 'get', params })
+}
+
+// 删除年报
+export function deteleYearReportById(params) {
+  return request({ url: '/yearReport/deteleYearReportById', method: 'get', params })
+}
+
+// 编辑年报
+export function updateYearReport(params) {
+  return request({ url: '/yearReport/updateYearReport', method: 'get', params })
+}
+
+// 新增年报
+export function saveYearReport(params) {
+  return request({ url: '/yearReport/saveYearReport', method: 'get', params })
+}

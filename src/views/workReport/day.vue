@@ -136,7 +136,7 @@ export default {
   data() {
     return {
       form: {
-        projectId: '',
+        projectId: +this.$route.query.id || '',
         time: '',
         beginTime: '',
         endTime: ''
@@ -302,6 +302,7 @@ export default {
       this.isFeed = true
       this.feedback = row.feedback
       this.addForm.id = row.id
+      this.addForm.fileIds = row.fileIds
     },
     async feedBackSubmit() {
       if (!this.feedback) {
@@ -310,6 +311,7 @@ export default {
       }
       const res = await updateDayReport({
         id: this.addForm.id,
+        fileIds: this.addForm.fileIds,
         feedback: this.feedback
       })
       if (res.code === 0) {
@@ -335,6 +337,7 @@ export default {
       this.commentForm.suggest3 = row.suggest3
       this.commentForm.suggest4 = row.suggest4
       this.addForm.id = row.id
+      this.addForm.fileIds = row.fileIds
     },
     async commentSubmit() {
       if (!(this.commentForm.suggest1 || this.commentForm.suggest2 || this.commentForm.suggest3 || this.commentForm.suggest4)) {
@@ -343,6 +346,7 @@ export default {
       }
       const res = await updateDayReport({
         id: this.addForm.id,
+        fileIds: this.addForm.fileIds,
         ...this.commentForm
       })
       if (res.code === 0) {

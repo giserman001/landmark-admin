@@ -55,8 +55,8 @@
       <div v-for="item in report" :key="item.value" class="report-item">
         <div class="head">{{ item.name }}</div>
         <div class="operate">
-          <svg-icon icon-class="upload" class-name="svg-class" @click="upReport(item)" />
-          <svg-icon icon-class="view" class-name="svg-class ml20" @click="viewReport(item)" />
+          <!-- <svg-icon icon-class="upload" class-name="svg-class" @click="upReport(item)" /> -->
+          <svg-icon icon-class="view" class-name="svg-class" @click="viewReport(item)" />
         </div>
       </div>
     </div>
@@ -603,16 +603,34 @@ export default {
     },
     viewReport(item) {
       console.log(item)
-      this.reportType = item.value
-      this.isUpload = false
-      this.upVisible = true
-    },
-    upReport(item) {
-      console.log(item)
-      this.reportType = item.value
-      this.isUpload = true
-      this.upVisible = true
+      switch (item.value) {
+        case 1:
+          this.$router.push(`/workReport/day?id=${this.$route.query.id}`)
+          break
+        case 2:
+          this.$router.push(`/workReport/week?id=${this.$route.query.id}`)
+          break
+        case 3:
+          this.$router.push(`/workReport/mouth?id=${this.$route.query.id}`)
+          break
+        case 4:
+          this.$router.push(`/workReport/quarter?id=${this.$route.query.id}`)
+          break
+        default:
+          this.$router.push(`/workReport/year?id=${this.$route.query.id}`)
+          break
+      }
+      // this.reportType = item.value
+      // this.isUpload = false
+      // this.upVisible = true
     }
+    // upReport(item) {
+    //   this.$router.push()
+    //   // console.log(item)
+    //   // this.reportType = item.value
+    //   // this.isUpload = true
+    //   // this.upVisible = true
+    // }
   }
 }
 </script>

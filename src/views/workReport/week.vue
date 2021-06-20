@@ -96,8 +96,13 @@ export default {
   data() {
     return {
       form: {
-        projectId: '',
+        projectId: +this.$route.query.id || '',
         time: ''
+      },
+      addForm: {
+        diseasePhotos: '',
+        diseaseSolveWay: '',
+        reconditionPhoto: ''
       },
       column: week,
       optionArr: [],
@@ -190,6 +195,9 @@ export default {
       this.commentForm.suggest3 = row.suggest3
       this.commentForm.suggest4 = row.suggest4
       this.form.id = row.id
+      this.addForm.diseasePhotos = row.diseasePhotos
+      this.addForm.diseaseSolveWay = row.diseaseSolveWay
+      this.addForm.reconditionPhoto = row.reconditionPhoto
     },
     async commentSubmit() {
       if (!(this.commentForm.suggest1 || this.commentForm.suggest2 || this.commentForm.suggest3 || this.commentForm.suggest4)) {
@@ -198,6 +206,9 @@ export default {
       }
       const res = await updateWeekReport({
         id: this.form.id,
+        diseasePhotos: this.addForm.diseasePhotos,
+        diseaseSolveWay: this.addForm.diseaseSolveWay,
+        reconditionPhoto: this.addForm.reconditionPhoto,
         ...this.commentForm
       })
       if (res.code === 0) {
@@ -217,6 +228,9 @@ export default {
       this.isFeed = true
       this.feedback = row.feedback
       this.form.id = row.id
+      this.addForm.diseasePhotos = row.diseasePhotos
+      this.addForm.diseaseSolveWay = row.diseaseSolveWay
+      this.addForm.reconditionPhoto = row.reconditionPhoto
     },
     async feedBackSubmit() {
       if (!this.feedback) {
@@ -225,6 +239,9 @@ export default {
       }
       const res = await updateWeekReport({
         id: this.form.id,
+        diseasePhotos: this.addForm.diseasePhotos,
+        diseaseSolveWay: this.addForm.diseaseSolveWay,
+        reconditionPhoto: this.addForm.reconditionPhoto,
         feedback: this.feedback
       })
       if (res.code === 0) {
