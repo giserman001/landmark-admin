@@ -1,11 +1,75 @@
 <template>
   <div class="bgfff out_wrap">
     <el-form ref="form" :model="form" label-width="115px" label-suffix=":">
-      <div class="top-select mb20">
-        <span>项目:</span>
-        <el-select v-model="form.projectId" placeholder="请选择" class="ml10">
-          <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
-        </el-select>
+      <div class="top-select">
+        <el-form-item label="项目" label-width="50px">
+          <el-select v-model="form.projectId" placeholder="请选择" class="ml10">
+            <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="子项" label-width="60px">
+          <el-select v-model="form.son" placeholder="请选择" class="ml10">
+            <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="单体" label-width="60px">
+          <el-select v-model="form.single" placeholder="请选择" class="ml10">
+            <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <div class="ml20">
+          <el-button type="primary" @click="add">添加</el-button>
+        </div>
+      </div>
+      <div class="table-custom">
+        <div class="head flex">
+          <div class="th flex1">所属项目</div>
+          <div class="th flex1">子项</div>
+          <div class="th flex1">单体</div>
+          <div class="th flex1">实施日期</div>
+          <div class="th flex1">巡查及其延伸工作</div>
+          <div class="th flex1">单体列表实施人员</div>
+          <div class="th flex1">详情</div>
+          <div class="th flex1">其他相关工作</div>
+          <div class="th flex1">操作</div>
+        </div>
+        <div class="body">
+          <template v-if="addForm.info.length">
+            <div v-for="(item, index) in addForm.info" :key="item.key" class="tr flex">
+              <div class="td flex1">{{ item.project }}</div>
+              <div class="td flex1">{{ item.son }}</div>
+              <div class="td flex1">{{ item.single }}</div>
+              <div class="td flex1">
+                <el-form-item label-width="0">
+                  <el-input v-model="item.time" placeholder="请输入日期" style="width:120px;" />
+                </el-form-item>
+              </div>
+              <div class="td flex1">
+                <el-form-item label-width="0">
+                  <el-select v-model="item.work" placeholder="请选择">
+                    <el-option label="常规巡查" value="1" />
+                    <el-option label="定期观测" value="2" />
+                    <el-option label="专业检修" value="3" />
+                    <el-option label="检修效果评估" value="4" />
+                  </el-select>
+                </el-form-item>
+              </div>
+              <div class="td flex1">{{ item.people }}</div>
+              <div class="td flex1">
+                <a class="active_color" @click="view(item, index)">查看</a>
+              </div>
+              <div class="td flex1">
+                <el-form-item label-width="0">
+                  <el-input v-model="item.otherWork" placeholder="请输入" style="width:120px;" />
+                </el-form-item>
+              </div>
+              <div class="td flex1">
+                <a class="del" @click="del(item, index)">删除</a>
+              </div>
+            </div>
+          </template>
+          <div v-else class="no-data flex_center">暂无数据</div>
+        </div>
       </div>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="本周巡查" name="1">
@@ -46,9 +110,6 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="子项">
-                  <!-- <el-select v-model="form.projectSonId" placeholder="请选择" class="ml10" clearable>
-                    <el-option v-for="item in sonProject" :key="item.id" :label="item.name" :value="item.id" />
-                  </el-select> -->
                   暂无
                 </el-form-item>
               </el-col>
@@ -146,7 +207,6 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="检修实施时间">
-                  <!-- <el-date-picker v-model="form.reconditionTime" type="daterange" range-separator="~" start-placeholder="开始日期" end-placeholder="结束日期" :editable="false" :value-format="'yyyy-MM-dd'" /> -->
                   <el-input v-model="form.reconditionTime" class="inputWith" />
                 </el-form-item>
               </el-col>
@@ -232,21 +292,19 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-      <div class="center">
-        <el-button v-if="activeName !== '1'" type="primary" @click="back">上一步</el-button>
-        <el-button v-if="activeName !== '5'" type="primary" @click="next">下一步</el-button>
+      <div class="center mt20">
         <el-button type="primary" @click="submitForm">提交</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="clear">清除</el-button>
       </div>
     </el-form>
   </div>
 </template>
 <script>
 import { getProjectList, getProjectSonList, saveWeekReport, getWeekReportByIdDetail, getFiles, updateWeekReport } from '@/api/common'
-import upload from '@/components/upload'
+// import upload from '@/components/upload'
 export default {
   components: {
-    upload
+    // upload
   },
   data() {
     return {
@@ -256,6 +314,10 @@ export default {
       activeName: '1',
       form: {
         id: this.$route.query.id || '', // 周报id(用于编辑)
+        // TODO
+        son: '',
+        single: '',
+        // TODO
         projectId: '', // 项目id
         patrolContent: '', // 巡查内容
         patrolBy: '', // 巡查人员
@@ -281,13 +343,16 @@ export default {
         afterComparison: '', // 检修后观测对比
         afterVerdict: '', // 检修后评估结论
         otherWork: '' // 本周其他相关工作
+      },
+      // TODO 2021-06-27修改
+      addForm: {
+        info: []
       }
     }
   },
   mounted() {
     if (this.$route.query.id) {
       getWeekReportByIdDetail({ id: this.$route.query.id }).then(async(res) => {
-        console.log(res, 'fffffffffffffff')
         const {
           projectId,
           patrolContent,
@@ -412,6 +477,45 @@ export default {
           reject(err)
         })
       })
+    },
+    add() {
+      if (!this.form.projectId) {
+        this.$message.error('请选择项目')
+        return
+      }
+      if (!this.form.son) {
+        this.$message.error('请选择子项')
+        return
+      }
+      if (!this.form.single) {
+        this.$message.error('请选择单体')
+        return
+      }
+      this.addForm.info.push({
+        project: 'test1',
+        son: 'test2',
+        single: 'test3',
+        time: '',
+        work: '',
+        people: '左千',
+        otherWork: '',
+        key: Date.now()
+      })
+    },
+    view(item, index) {
+      if (!this.addForm.info[index].work) {
+        this.$message.error('请选择巡查及其延伸工作')
+        return
+      }
+    },
+    del(item) {
+      var index = this.addForm.info.indexOf(item)
+      if (index !== -1) {
+        this.addForm.info.splice(index, 1)
+      }
+    },
+    clear() {
+      this.addForm.info = []
     }
   }
 }
@@ -428,5 +532,38 @@ export default {
 .head-tit{
   font-size: 16px;
   font-weight: bold;
+}
+.top-select{
+  display: flex;
+}
+.table-custom{
+  .head{
+    background-color: #F5F8FA;
+    .th{
+      padding: 12px 0;
+      text-align: center;
+    }
+  }
+  .body{
+    .tr{
+      border-bottom: 1px solid #EBEEF5;
+      &:hover{
+        background-color: #F5F8FA;
+      }
+    }
+    .td{
+      padding: 9px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .el-form-item{
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+.no-data{
+  color: #999;
+  padding: 50px 0;
 }
 </style>

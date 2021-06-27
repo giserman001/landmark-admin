@@ -17,7 +17,7 @@ export const day = [
   },
   {
     prop: 'feedback',
-    label: '反馈兰'
+    label: '反馈栏'
   },
   {
     prop: 'idea',
@@ -49,7 +49,7 @@ export const week = [
   // },
   {
     prop: 'feedback',
-    label: '反馈兰'
+    label: '反馈栏'
   },
   {
     prop: 'idea',
@@ -80,7 +80,7 @@ export const mouth = [
   },
   {
     prop: 'feedback',
-    label: '反馈兰'
+    label: '反馈栏'
   },
   {
     prop: 'idea',
@@ -111,7 +111,7 @@ export const quarter = [
   },
   {
     prop: 'feedback',
-    label: '反馈兰'
+    label: '反馈栏'
   },
   {
     prop: 'idea',
@@ -143,7 +143,7 @@ export const year = [
   },
   {
     prop: 'feedback',
-    label: '反馈兰'
+    label: '反馈栏'
   },
   {
     prop: 'idea',
