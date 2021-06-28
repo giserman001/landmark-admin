@@ -71,7 +71,7 @@
           <div v-else class="no-data flex_center">暂无数据</div>
         </div>
       </div>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="本周巡查" name="1">
           <div class="form-warper">
             <el-row>
@@ -291,7 +291,7 @@
             </el-row>
           </div>
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs> -->
       <div class="center mt20">
         <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button @click="clear">清除</el-button>
