@@ -273,3 +273,13 @@ export function updateYearReport(params) {
 export function saveYearReport(params) {
   return request({ url: '/yearReport/saveYearReport', method: 'get', params })
 }
+
+// 添加业主单位
+export function saveOwner(params) {
+  return request({ url: '/owner/saveOwner', method: 'get', params })
+}
+
+// 添加实施单位
+export function saveExecute(params) {
+  return request({ url: '/execute/saveExecute', method: 'get', params })
+}

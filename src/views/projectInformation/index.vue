@@ -53,7 +53,7 @@
         <a class="del ml20" @click="del(row)">删除</a>
       </template>
     </zf-table>
-    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="700px" center>
+    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="840px" center>
       <el-form ref="addForm" :model="addForm" label-suffix=":" label-position="right" label-width="120px" :rules="rules">
         <el-row>
           <el-col :span="12">
@@ -82,7 +82,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="业主单位" prop="ownerId">
-              <el-select v-model="addForm.ownerId" placeholder="请选择">
+              <el-select v-model="addForm.ownerId" style="width:145px;" placeholder="请选择">
                 <el-option
                   v-for="item in ownerArr"
                   :key="item.id"
@@ -90,11 +90,12 @@
                   :value="item.id"
                 />
               </el-select>
+              <el-button class="ml10" type="primary" icon="el-icon-plus" @click="addOwner">业主</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="项目实施单位" prop="projectExecuteCom">
-              <el-select v-model="addForm.projectExecuteCom" placeholder="请选择">
+              <el-select v-model="addForm.projectExecuteCom" style="width:145px;" placeholder="请选择">
                 <el-option
                   v-for="item in projectExecuteComArr"
                   :key="item.id"
@@ -102,6 +103,7 @@
                   :value="item.id"
                 />
               </el-select>
+              <el-button class="ml10" type="primary" icon="el-icon-plus" @click="addExecute">实施单位</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -147,6 +149,94 @@
           </el-col>
         </el-row>
       </el-form>
+      <el-dialog
+        width="640px"
+        title="新增业主单位"
+        :visible.sync="innerVisible1"
+        append-to-body
+        center
+      >
+        <el-form ref="ownerform" :model="ownerform" class="ownerform" :rules="ownerformRules" label-suffix=":" label-position="right" label-width="120px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="名称" prop="name">
+                <el-input v-model="ownerform.name" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="在编人员数量" prop="staffNum">
+                <el-input v-model="ownerform.staffNum" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="2020年度总经费" prop="expenditure2020">
+                <el-input v-model="ownerform.expenditure2020" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="单位简介" prop="introduction">
+                <el-input v-model="ownerform.introduction" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="项目实施单位遴选委托方式" prop="entrustType">
+                <el-input v-model="ownerform.entrustType" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="项目实施经费拨付方式" prop="payType">
+                <el-input v-model="ownerform.payType" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="innerVisible1 = false">取 消</el-button>
+          <el-button type="primary" @click="ownerSubmit('ownerform')">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog
+        width="640px"
+        title="新增实施单位"
+        :visible.sync="innerVisible2"
+        append-to-body
+        center
+      >
+        <el-form ref="executeFrom" :model="executeFrom" class="executeFrom" :rules="executeFromRules" label-suffix=":" label-position="right" label-width="120px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="名称" prop="name">
+                <el-input v-model="executeFrom.name" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="固定技术人员数量" prop="technologyStaffNum">
+                <el-input v-model="executeFrom.technologyStaffNum" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="文保工程资质情况" prop="certificationRemark">
+                <el-input v-model="executeFrom.certificationRemark" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="单位简介" prop="introduction">
+                <el-input v-model="executeFrom.introduction" autocomplete="off" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="innerVisible2 = false">取 消</el-button>
+          <el-button type="primary" @click="executeSubmit('executeFrom')">确 定</el-button>
+        </div>
+      </el-dialog>
       <div slot="footer" class="dialog-footer">
         <el-button @click="formVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleSubmit('addForm')">确 定</el-button>
@@ -159,7 +249,7 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import upload from '@/components/upload'
 import column from './columns/list'
-import { getProjectList, getOwnerIdAndName, getExecuteIdAndName, saveProject, updateProject, deteleProjectById } from '@/api/common'
+import { getProjectList, getOwnerIdAndName, getExecuteIdAndName, saveProject, updateProject, deteleProjectById, saveOwner, saveExecute } from '@/api/common'
 export default {
   name: 'List',
   components: {
@@ -201,21 +291,59 @@ export default {
         ]
       },
       ownerArr: [],
-      projectExecuteComArr: []
+      projectExecuteComArr: [],
+      innerVisible1: false,
+      innerVisible2: false,
+      ownerform: {
+        name: '', // 名称
+        staffNum: '', // 在编人员数量
+        expenditure2020: '', // 2020年度总经费
+        introduction: '', // 单位简介
+        principal: '',	// 项目责任人（职工id）
+        entrustType: '', // 项目实施单位遴选委托方式
+        payType:	'',	// 项目实施经费拨付方式
+        contract: '' // 委托合同（文件id）
+      },
+      ownerformRules: {
+        name: [
+          { required: true, message: '请输入名字', trigger: 'blur' }
+        ]
+      },
+      // 实施单位新增
+      executeFrom: {
+        name: '', // 名称
+        technologyStaffNum: '', // 固定技术人员数量
+        certificationRemark: '', //	文保工程资质情况
+        introduction: '', // 单位简介
+        principal: '' // 项目责任人（职工id）
+      },
+      executeFromRules: {
+        name: [
+          { required: true, message: '请输入名字', trigger: 'blur' }
+        ]
+      }
     }
   },
   mounted() {
     this.query()
     // 业主下拉框
-    getOwnerIdAndName().then(res => {
-      this.ownerArr = res.data.ownerIdAndName
-    })
+    this.getOwner()
     // 实施单位下拉框
-    getExecuteIdAndName().then(res => {
-      this.projectExecuteComArr = res.data.executeIdAndName
-    })
+    this.getExecute()
   },
   methods: {
+    getOwner() {
+      // 业主下拉框
+      getOwnerIdAndName().then(res => {
+        this.ownerArr = res.data.ownerIdAndName
+      })
+    },
+    getExecute() {
+      // 实施单位下拉框
+      getExecuteIdAndName().then(res => {
+        this.projectExecuteComArr = res.data.executeIdAndName
+      })
+    },
     async query() {
       const res = await getProjectList({ ...this.form, ...this.pages })
       if (res.code === 0) {
@@ -337,13 +465,64 @@ export default {
           message: '已取消下载'
         })
       })
+    },
+    addOwner() {
+      this.innerVisible1 = true
+      this.ownerform.name = '' // 名称
+      this.ownerform.staffNum = '' // 在编人员数量
+      this.ownerform.expenditure2020 = '' // 2020年度总经费
+      this.ownerform.introduction = '' // 单位简介
+      this.ownerform.principal = ''	// 项目责任人（职工id）
+      this.ownerform.entrustType = '' // 项目实施单位遴选委托方式
+      this.ownerform.payType =	''	// 项目实施经费拨付方式
+      this.ownerform.contract = '' // 委托合同（文件id）
+    },
+    ownerSubmit(formName) {
+      this.$refs[formName].validate(async(valid) => {
+        if (valid) {
+          const res = await saveOwner(this.ownerform)
+          if (res.code === 0) {
+            this.innerVisible1 = false
+            this.$message.success('新增业主单位成功!')
+            // 更新业主下拉框
+            this.getOwner()
+          }
+        }
+      })
+    },
+    addExecute() {
+      this.innerVisible2 = true
+      this.executeFrom.name = '' // 名称
+      this.executeFrom.technologyStaffNum = '' // 固定技术人员数量
+      this.executeFrom.certificationRemark = '' // 文保工程资质情况
+      this.executeFrom.introduction = '' // 单位简介
+    },
+    executeSubmit(formName) {
+      this.$refs[formName].validate(async(valid) => {
+        if (valid) {
+          const res = await saveExecute(this.executeFrom)
+          if (res.code === 0) {
+            this.innerVisible2 = false
+            this.$message.success('新增实施单位成功!')
+            // 更新实施单位下拉框
+            this.getExecute()
+          }
+        }
+      })
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .svg-class{
   cursor: pointer;
+}
+::v-deep{
+  .ownerform, .executeFrom {
+    .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label{
+      line-height: 20px;
+    }
+  }
 }
 </style>
