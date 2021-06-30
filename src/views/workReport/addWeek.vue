@@ -297,14 +297,235 @@
         <el-button @click="clear">清除</el-button>
       </div>
     </el-form>
+    <!-- 详情弹框form表单 -->
+    <el-dialog :title="title[1]" :visible.sync="detailVisible" width="800px" center>
+      <el-form ref="addForm" :model="detailForm" label-suffix=":" label-position="right" label-width="120px">
+        <div v-if="title[0] === '1'">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="巡查工具">
+                <el-input v-model="detailForm.patrolTool" class="inputWith" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="巡查内容">
+                <el-input v-model="detailForm.patrolContent" class="inputWith" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="档案留存">
+                <el-radio-group v-model="detailForm.patrolRecord">
+                  <el-radio :label="1">照片</el-radio>
+                  <el-radio :label="2">图纸</el-radio>
+                  <el-radio :label="3">文字</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="文件" prop="area">
+                <upload v-model="detailForm.file" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="是否发现新病害">
+                <el-radio-group v-model="detailForm.isVirus">
+                  <el-radio :label="1">是</el-radio>
+                  <el-radio :label="2">否</el-radio>
+                </el-radio-group>
+                <el-button v-if="detailForm.isVirus === 1" class="ml20" type="primary" @click="addVirus">添加</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <!-- 病毒害动态新增 -->
+          <div v-if="detailForm.isVirus === 1">
+            <div v-for="(item, index) in detailForm.info" :key="index" class="dynamic-warper">
+              <div class="head-tit flex_between mb10"><span class="left">病毒害{{ index + 1 }}</span> <span v-if="detailForm.info.length > 1" class="right del pointer" @click="delVirus(item)">删除</span></div>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="病害部位">
+                    <el-input v-model="item.diseasePart" class="inputWith" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="病害类型">
+                    <el-input v-model="item.diseaseType" class="inputWith" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="病害表征">
+                    <el-input v-model="item.diseaseTrait" class="inputWith" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="成因分析">
+                    <el-input v-model="item.diseaseCause" class="inputWith" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="照片">
+                    <upload v-model="item.diseasePhotos" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="结构性病害">
+                    <el-select v-model="item.diseaseIsStructure" placeholder="请选择" class="inputWith">
+                      <el-option label="是" value="1" />
+                      <el-option label="否" value="2" />
+                      <el-option label="有待检测鉴定" value="3" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="病害严重程度">
+                    <el-select v-model="item.diseaseDegree" placeholder="请选择" class="inputWith">
+                      <el-option label="轻微" value="1" />
+                      <el-option label="严重" value="2" />
+                      <el-option label="有待检测检测" value="3" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="处理方式" style="margin-bottom:0;">
+                    <el-checkbox-group v-model="item.diseaseSolveWay">
+                      <el-checkbox label="1" name="type">无需任何处理</el-checkbox>
+                      <el-checkbox label="2" name="type">定期巡视观测</el-checkbox>
+                      <el-checkbox label="3" name="type">专业检修</el-checkbox>
+                      <el-checkbox label="4" name="type">检测鉴定</el-checkbox>
+                      <el-checkbox label="5" name="type">专项监测</el-checkbox>
+                      <el-checkbox label="6" name="type">抢险支护</el-checkbox>
+                      <el-checkbox label="7" name="type">修缮工程</el-checkbox>
+                    </el-checkbox-group>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </div>
+        <div v-if="title[0] === '2'">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="观测对比">
+                <el-select v-model="detailForm.beforeComparison" placeholder="请选择" class="inputWith">
+                  <el-option label="无发展" value="1" />
+                  <el-option label="轻微发展" value="2" />
+                  <el-option label="迅速发展" value="3" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="评估结论">
+                <el-select v-model="detailForm.beforeVerdict" placeholder="请选择" class="inputWith">
+                  <el-option label="继续观测" value="1" />
+                  <el-option label="停止观测" value="2" />
+                  <el-option label="加密观测" value="3" />
+                  <el-option label="专业检修" value="4" />
+                  <el-option label="检测鉴定" value="5" />
+                  <el-option label="专项监测" value="6" />
+                  <el-option label="修缮工程" value="7" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="照片">
+                <upload v-model="detailForm.phone" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
+        <div v-if="title[0] === '3'">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="检修方案说明">
+                <el-input v-model="detailForm.reconditionScheme" class="inputWith" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="检修实施时间">
+                <el-input v-model="detailForm.reconditionTime" class="inputWith" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="检修完成状况">
+                <el-input v-model="detailForm.reconditionCondition" class="inputWith" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="检修实施人员">
+                <el-input v-model="detailForm.reconditionStaff" class="inputWith" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="照片">
+                <upload v-model="detailForm.reconditionPhoto" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="备注">
+                <el-input v-model="detailForm.note" class="inputWith" type="textarea" :rows="6" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
+        <div v-if="title[0] === '4'">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="检修后观测对比">
+                <el-select v-model="detailForm.afterComparison" placeholder="请选择" class="inputWith">
+                  <el-option label="效果良好" value="1" />
+                  <el-option label="有一定效果" value="2" />
+                  <el-option label="无效" value="3" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="检修后评估结论">
+                <el-select v-model="detailForm.afterVerdict" placeholder="请选择" class="inputWith">
+                  <el-option label="持续巡查评估" value="1" />
+                  <el-option label="再次检修" value="2" />
+                  <el-option label="检测鉴定" value="3" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="观测图片">
+                <upload v-model="detailForm.afterPhone" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="detailVisible = false">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { getProjectList, getProjectSonList, saveWeekReport, getWeekReportByIdDetail, getFiles, updateWeekReport } from '@/api/common'
-// import upload from '@/components/upload'
+import upload from '@/components/upload'
 export default {
   components: {
-    // upload
+    upload
   },
   data() {
     return {
@@ -346,7 +567,49 @@ export default {
       },
       // TODO 2021-06-27修改
       addForm: {
-        info: []
+        info: [{
+          project: 'test1',
+          son: 'test2',
+          single: 'test3',
+          time: '',
+          work: '',
+          people: '左千',
+          otherWork: '',
+          key: Date.now()
+        }]
+      },
+      // 详情弹框form表单
+      title: '查看',
+      detailVisible: false,
+      detailForm: {
+        patrolTool: '', // 巡查工具
+        patrolContent: '', // 巡查内容
+        patrolRecord: '', // 档案留存
+        isVirus: 1, // 是否病毒还
+        file: [], // 文件
+        info: [{
+          diseasePart: '', // 病害部位
+          diseaseType: '', // 病害类型
+          diseaseTrait: '', // 病害表征
+          diseaseCause: '', // 病害成因分析
+          diseasePhotos: [], // 照片 => 需要处理
+          diseaseIsStructure: '', // 是否结构性病害
+          diseaseDegree: '', // 病害严重程度
+          diseaseSpeed: '', // 病害发展速度
+          diseaseSolveWay: ['1'] // 病毒处理方式 => 需要处理
+        }],
+        beforeComparison: '', // 观测对比
+        beforeVerdict: '', // 评估结论
+        phone: [], // 照片
+        reconditionScheme: '', // 检修方案说明
+        reconditionTime: '', // 检修实施时间
+        reconditionPhoto: [], // 检修照片 => 需要处理
+        reconditionCondition: '', // 检修完成情况
+        reconditionStaff: '', // 检修实施人员
+        note: '', // 备注
+        afterComparison: '', // 检修后观测对比
+        afterVerdict: '', // 检修后评估结论
+        afterPhone: [] // 观测图片
       }
     }
   },
@@ -507,6 +770,21 @@ export default {
         this.$message.error('请选择巡查及其延伸工作')
         return
       }
+      switch (this.addForm.info[index].work) {
+        case '1':
+          this.title = ['1', '常规巡查']
+          break
+        case '2':
+          this.title = ['2', '定期观测']
+          break
+        case '3':
+          this.title = ['3', '专业检修']
+          break
+        default:
+          this.title = ['4', '检修效果评估']
+          break
+      }
+      this.detailVisible = true
     },
     del(item) {
       var index = this.addForm.info.indexOf(item)
@@ -516,6 +794,25 @@ export default {
     },
     clear() {
       this.addForm.info = []
+    },
+    addVirus() {
+      this.detailForm.info.push({
+        diseasePart: '', // 病害部位
+        diseaseType: '', // 病害类型
+        diseaseTrait: '', // 病害表征
+        diseaseCause: '', // 病害成因分析
+        diseasePhotos: [], // 照片 => 需要处理
+        diseaseIsStructure: '', // 是否结构性病害
+        diseaseDegree: '', // 病害严重程度
+        diseaseSpeed: '', // 病害发展速度
+        diseaseSolveWay: ['1'] // 病毒处理方式 => 需要处理
+      })
+    },
+    delVirus(item) {
+      var index = this.detailForm.info.indexOf(item)
+      if (index !== -1) {
+        this.detailForm.info.splice(index, 1)
+      }
     }
   }
 }
@@ -565,5 +862,14 @@ export default {
 .no-data{
   color: #999;
   padding: 50px 0;
+}
+.dynamic-warper{
+  border: 1px solid #EBEEF5;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  &:last-child{
+    margin-bottom: 0;
+  }
 }
 </style>
