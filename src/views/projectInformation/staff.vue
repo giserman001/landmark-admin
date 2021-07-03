@@ -367,7 +367,7 @@ export default {
       this.addForm.manage = row.manage // 管理分工
       this.addForm.jop = row.jop // 项目内分工
       this.addForm.workTime = row.workTime // 工作时间
-      this.addForm.isOfficial = row.isOfficial // 是否临时
+      this.addForm.isOfficial = +row.isOfficial // 是否临时
       this.addForm.id = row.id
     },
     del(row) {

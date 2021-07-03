@@ -1,7 +1,7 @@
 export const day = [
   {
-    prop: 'code',
-    label: '编号'
+    prop: 'id',
+    label: 'ID'
   },
   {
     prop: 'projectName',
@@ -32,8 +32,8 @@ export const day = [
 
 export const week = [
   {
-    prop: 'id',
-    label: 'ID'
+    prop: 'code',
+    label: '编号'
   },
   {
     prop: 'projectName',
@@ -43,10 +43,6 @@ export const week = [
     prop: 'createTime',
     label: '时间'
   },
-  // {
-  //   prop: 'report',
-  //   label: '周报'
-  // },
   {
     prop: 'feedback',
     label: '反馈栏'
