@@ -90,6 +90,12 @@ export const constantRoutes = [
       hidden: true,
       component: () => import('@/views/projectInformation/singleDetail'),
       meta: { title: '单体子项详情信息', activeMenu: '/projectInformation/list' }
+    }, {
+      path: 'staff',
+      name: 'Staff',
+      hidden: true,
+      component: () => import('@/views/projectInformation/staff'),
+      meta: { title: '职工信息', activeMenu: '/projectInformation/list' }
     }]
   }
   // 404 page must be placed at the end !!!

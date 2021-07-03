@@ -1,7 +1,7 @@
 export const day = [
   {
-    prop: 'id',
-    label: 'ID'
+    prop: 'code',
+    label: '编号'
   },
   {
     prop: 'projectName',

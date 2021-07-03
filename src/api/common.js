@@ -190,9 +190,9 @@ export function getWeekReportList(params) {
   return request({ url: '/weekReport/getWeekReportList', method: 'get', params })
 }
 
-// 新增周报列表
-export function saveWeekReport(params) {
-  return request({ url: '/weekReport/saveWeekReport', method: 'get', params })
+// 新增周报
+export function saveWeekReport(data) {
+  return request({ url: '/weekReport/saveWeekReport', method: 'post', data, headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
 }
 
 // 删除周报
@@ -205,9 +205,14 @@ export function updateWeekReport(params) {
   return request({ url: '/weekReport/updateWeekReport', method: 'get', params })
 }
 
+// 修改周报明细
+export function updateWeekReportRecord(data) {
+  return request({ url: '/weekReport/updateWeekReportRecord', method: 'post', data, headers: { 'Content-Type': 'application/json;charset=UTF-8' }})
+}
+
 // 获取周报详情
 export function getWeekReportByIdDetail(params) {
-  return request({ url: '/weekReport/getById', method: 'get', params })
+  return request({ url: '/weekReport/getWeekReportRecordList', method: 'get', params })
 }
 
 // 获取月报列表
@@ -283,3 +288,36 @@ export function saveOwner(params) {
 export function saveExecute(params) {
   return request({ url: '/execute/saveExecute', method: 'get', params })
 }
+
+// 通过项目id获取子项下拉框
+export function getProjectSonIdAndName(params) {
+  return request({ url: '/weekReport/getProjectSonIdAndName', method: 'get', params })
+}
+
+// 通过子项id获取子项下拉框
+export function getArchitectureIdAndName(params) {
+  return request({ url: '/weekReport/getArchitectureIdAndName', method: 'get', params })
+}
+
+// 职工信息
+
+// 获取职工列表
+export function getStaffInfoList(params) {
+  return request({ url: '/staffInfo/getStaffInfoList', method: 'get', params })
+}
+
+// 新增职工
+export function saveStaffInfo(params) {
+  return request({ url: '/staffInfo/saveStaffInfo', method: 'get', params })
+}
+
+// 编辑职工
+export function updateStaffInfo(params) {
+  return request({ url: '/staffInfo/updateStaffInfo', method: 'get', params })
+}
+
+// 删除职工
+export function deteleStaffInfoById(params) {
+  return request({ url: '/staffInfo/deteleStaffInfoById', method: 'get', params })
+}
+

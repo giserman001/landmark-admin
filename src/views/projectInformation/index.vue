@@ -6,7 +6,10 @@
           <el-input v-model="form.name" placeholder="请输入" @change="query" />
         </el-form-item>
       </el-form>
-      <el-button type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+      <div>
+        <el-button type="primary" @click="goZG">职工信息</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+      </div>
     </div>
     <zf-table
       :columns="column"
@@ -509,6 +512,9 @@ export default {
           }
         }
       })
+    },
+    goZG() {
+      this.$router.push(`/projectInformation/staff`)
     }
   }
 }
