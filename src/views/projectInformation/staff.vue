@@ -107,7 +107,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="职工名称" prop="name">
+            <el-form-item label="职工姓名" prop="name">
               <el-input v-model="addForm.name" autocomplete="off" />
             </el-form-item>
           </el-col>
@@ -134,7 +134,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="职称" prop="professional">
+            <el-form-item label="项目组成员构成" prop="professional">
               <el-radio-group v-model="addForm.professional">
                 <el-radio :label="1">文保设计师</el-radio>
                 <el-radio :label="2">建筑师</el-radio>
@@ -144,7 +144,11 @@
                 <el-radio :label="6">木工</el-radio>
                 <el-radio :label="7">瓦工</el-radio>
                 <el-radio :label="8">油漆彩画工</el-radio>
-                <el-radio :label="9">其他</el-radio>
+                <el-radio :label="9">石匠</el-radio>
+                <el-radio :label="10">铁匠</el-radio>
+                <el-radio :label="11">园艺师</el-radio>
+                <el-radio :label="12">其他</el-radio>
+                <el-radio :label="12">水电工</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>

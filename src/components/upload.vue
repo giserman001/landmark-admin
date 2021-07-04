@@ -2,7 +2,7 @@
   <div class="upload">
     <el-upload action="#" :limit="limit" :multiple="multiple" :auto-upload="autoUpload" :show-file-list="false" :file-list="listArr" :before-upload="beforeUploadFile" :on-exceed="onExceed" :http-request="doUploadFile">
       <el-button size="small" type="primary"><i class="el-icon-upload2" /> 上传文件</el-button>
-      <div slot="tip" class="el-upload__tip fs12 c9" style="line-height:18px;">支持扩展名：{{ type.join(',') }} 文件大小{{ size }}MB以内</div>
+      <div v-if="isTips" slot="tip" class="el-upload__tip fs12 c9" style="line-height:18px;">支持扩展名：{{ type.join(',') }} 文件大小{{ size }}MB以内</div>
     </el-upload>
     <div class="file-list">
       <div v-for="(item, index) in fileList" :key="index" class="file-item">
@@ -21,6 +21,12 @@ export default {
     value: { // 文件列表
       type: Array,
       default() { return [] }
+    },
+    isTips: {
+      type: Boolean,
+      default() {
+        return true
+      }
     },
     size: {
       type: Number,

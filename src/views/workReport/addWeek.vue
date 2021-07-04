@@ -29,7 +29,7 @@
           <div class="th flex1">巡查及其延伸工作</div>
           <div class="th flex1">单体列表实施人员</div>
           <div class="th flex1">详情</div>
-          <div class="th flex1">其他相关工作</div>
+          <div class="th flex1">其他相关工作<Tips content="填写除巡查检修外，本周开展的其他相关工作的内容及其成效。如测绘（说明对象）、档案整理（说明内容）、仪器设备维护（说明设备名称）、员工培训学习（说明人员和内容）、工作交流（说明人员和内容）等。" /></div>
           <div class="th flex1">操作</div>
         </div>
         <div class="body">
@@ -92,7 +92,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="巡查内容">
+              <el-form-item>
+                <div slot="label">
+                  <Tips content="根据方案内容填写，应包括此前巡查中提出的需要定期观测的部位的对比，此前专业检修的实施效果评估等。" />巡查内容
+                </div>
                 <el-input v-model="detailForm.patrolContent" class="inputWith" />
               </el-form-item>
             </el-col>
@@ -143,8 +146,11 @@
               </el-row>
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="照片">
-                    <upload v-model="item.diseasePhotos" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" />
+                  <el-form-item>
+                    <div slot="label">
+                      <Tips content="建议上传多张不同角度的病害照片，并辅以文字注释（描述病害部位、面积、表征、严重程度和成因等）。格式: jpg,png,jpeg" />照片
+                    </div>
+                    <upload v-model="item.diseasePhotos" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" :is-tips="false" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -172,13 +178,13 @@
                 <el-col :span="12">
                   <el-form-item label="处理方式" style="margin-bottom:0;">
                     <el-checkbox-group v-model="item.diseaseSolveWay">
-                      <el-checkbox label="1" name="type">无需任何处理</el-checkbox>
-                      <el-checkbox label="2" name="type">定期巡视观测</el-checkbox>
-                      <el-checkbox label="3" name="type">专业检修</el-checkbox>
-                      <el-checkbox label="4" name="type">检测鉴定</el-checkbox>
-                      <el-checkbox label="5" name="type">专项监测</el-checkbox>
-                      <el-checkbox label="6" name="type">抢险支护</el-checkbox>
-                      <el-checkbox label="7" name="type">修缮工程</el-checkbox>
+                      <el-checkbox label="1" name="type">无需任何处理<Tips content="一般针对轻微且无发展（稳定）的非结构性病害" /></el-checkbox>
+                      <el-checkbox label="2" name="type">定期巡视观测<Tips content="针对轻微，发展缓慢的非结构性病害" /></el-checkbox>
+                      <el-checkbox label="3" name="type">专业检修<Tips content="针对非结构性病害，成因明确，且发展迅速，须立即进行检修，以阻止或减缓病害发展" /></el-checkbox>
+                      <el-checkbox label="4" name="type">检测鉴定<Tips content="成因或严重程度不清，需要通过专门的仪器设备检测鉴定其成因或严重程度" /></el-checkbox>
+                      <el-checkbox label="5" name="type">专项监测<Tips content="针对轻微且发展迅速的结构性病害，应明确 监测内容" /></el-checkbox>
+                      <el-checkbox label="6" name="type">抢险支护<Tips content="针对发展迅速的结构性病害，必须立即开展支护等可逆的抢修工程，以防治其破坏" /></el-checkbox>
+                      <el-checkbox label="7" name="type">修缮工程<Tips content="针对严重且发展缓慢的结构性病害，或大面积的严重的非结构性病害，必须单独申报修缮工程立项" /></el-checkbox>
                     </el-checkbox-group>
                   </el-form-item>
                 </el-col>
@@ -213,8 +219,11 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="照片">
-                <upload v-model="detailForm.observationFileId" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" />
+              <el-form-item>
+                <div slot="label">
+                  <Tips content="建议上传历次观测时同一角度病害照片，有需要时辅以文字注释。格式: jpg,png,jpeg" />照片
+                </div>
+                <upload v-model="detailForm.observationFileId" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" :is-tips="false" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -222,32 +231,47 @@
         <div v-if="title[0] === '3'">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="检修方案说明">
+              <el-form-item>
+                <div slot="label">
+                  <Tips content="简要文字说明，草图，或专门绘制的检修方案图纸" />检修方案说明
+                </div>
                 <el-input v-model="detailForm.reconditionScheme" class="inputWith" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="检修实施时间">
+              <el-form-item>
+                <div slot="label">
+                  <Tips content="开始日期和完成日期" />检修实施时间
+                </div>
                 <el-input v-model="detailForm.reconditionTime" class="inputWith" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="检修完成状况">
+              <el-form-item>
+                <div slot="label">
+                  <Tips content="简述施工步骤，说明所用原材料、工具、设备等" />检修完成状况
+                </div>
                 <el-input v-model="detailForm.reconditionCondition" class="inputWith" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="检修实施人员">
+              <el-form-item>
+                <div slot="label">
+                  <Tips content="填写姓名、工种和分工情况" />检修实施人员
+                </div>
                 <el-input v-model="detailForm.reconditionStaff" class="inputWith" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="照片">
-                <upload v-model="detailForm.reconditionPhoto" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" />
+              <el-form-item>
+                <div slot="label">
+                  <Tips content="检修全过程的照片。应至少包括检修施工前病害部位情况的照片1张、检修施工关键过程的照片1张，检修完成后与检修前的同角度对比照片1张，并适当配以文字说明。格式：png,jpg,jpeg" />照片
+                </div>
+                <upload v-model="detailForm.reconditionPhoto" :limit="5" :type="['.png', '.jpg', '.jpeg', '.JPG']" :multiple="true" :is-tips="false" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -289,9 +313,11 @@
 <script>
 import { getProjectList, getProjectSonIdAndName, saveWeekReport, getWeekReportByIdDetail, getFiles, getArchitectureIdAndName, updateWeekReportRecord } from '@/api/common'
 import upload from '@/components/upload'
+import Tips from '@/components/tips.vue'
 export default {
   components: {
-    upload
+    upload,
+    Tips
   },
   data() {
     return {

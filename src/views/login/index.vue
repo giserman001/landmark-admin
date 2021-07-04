@@ -2,10 +2,8 @@
   <div class="login wh100 flex_center hidden pr">
     <div class="wrap flex">
       <div class="login_left">
-        <!-- <img src="@/assets/login_left.jpg" class="login_left_img"> -->
         <div class="img_warper">
           <img src="@/assets/login-img/A.jpg" alt="">
-          <!-- <span></span> -->
         </div>
         <div class="img_warper">
           <img src="@/assets/login-img/B.jpg" alt="">
@@ -53,17 +51,6 @@
 import { mapActions } from 'vuex'
 export default {
   data() {
-    // const validateMobile = (rule, value, callback) => {
-    //   if (!value) {
-    //     callback(new Error('请输入手机号'))
-    //   } else {
-    //     if (!/^1[3456789]\d{9}$/.test(value)) {
-    //       callback(new Error('请输入正确的手机号'))
-    //     } else {
-    //       callback()
-    //     }
-    //   }
-    // }
     return {
       form: {
         userName: '',
@@ -87,7 +74,6 @@ export default {
               return
             }
             this.$router.replace('/projectInformation/list')
-            // this.$router.replace('/transfer')
           }
         } else {
           return false
@@ -109,25 +95,24 @@ export default {
   .wrap{
     align-items: center;
     .login_left{
-      width: 630px;
+      width: 455px;
       display: flex;
       flex-wrap: wrap;
       .img_warper{
         width: calc(calc(100% / 3) - 10px);
-        margin:5px;
+        margin:5px 0;
         display: flex;
         justify-content: center;
         img{
-          width: 200px;
-          height: 200px;
+          width: 132px;
+          height: 132px;
           border-radius: 4px;
         }
       }
     }
     .login_right{
       border-radius: 10px;
-      padding: 30px 50px;
-      margin-left: 20px;
+      padding: 30px 40px;
       width: 480px;
       background: rgba(255, 255, 255, 0.5);
       .login-form{

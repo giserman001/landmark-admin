@@ -64,7 +64,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="建设年代" prop="beginBuildTime">
+            <el-form-item label="始建年代" prop="beginBuildTime">
               <el-input v-model="addForm.beginBuildTime" autocomplete="off" />
             </el-form-item>
           </el-col>
@@ -95,13 +95,19 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="周边环境">
-              <upload v-model="addForm.photo" :limit="5" :type="['.jpg', '.png', '.jpeg']" :multiple="true" />
+            <el-form-item>
+              <div slot="label">
+                <Tips content="包括周边环境、屋面鸟瞰、各向立面、室内梁架、有价值的细部等照片。格式：jpg,png,jpeg" />现状照片
+              </div>
+              <upload v-model="addForm.photo" :limit="5" :type="['.jpg', '.png', '.jpeg']" :multiple="true" :is-tips="false" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="测绘图">
-              <upload v-model="addForm.map" :limit="5" :type="['.jpg', '.png', '.pdf']" :multiple="true" />
+            <el-form-item>
+              <div slot="label">
+                <Tips content="总平面图、各层平面图、屋顶平面图、各立面图、各剖面图、各细部图等。格式：dwg" />测绘图
+              </div>
+              <upload v-model="addForm.map" :limit="5" :type="['.dwg']" :multiple="true" :is-tips="false" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -131,13 +137,15 @@
 <script>
 import ZfTable from '@/components/ZfTable/CoreTable'
 import column from './columns/singleInfo'
+import Tips from '@/components/tips.vue'
 import { getProjectArchitectureList, saveArchitecture, updateArchitecture, deteleArchitectureById, getFiles } from '@/api/common'
 import upload from '@/components/upload'
 export default {
   name: 'SingleInfo',
   components: {
     ZfTable,
-    upload
+    upload,
+    Tips
   },
   data() {
     return {

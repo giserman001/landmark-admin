@@ -112,13 +112,19 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="周边状况" prop="photo">
-              <upload v-model="addForm.photo" :limit="5" :type="['.jpg', '.png', '.jpeg']" :multiple="true" />
+            <el-form-item prop="photo">
+              <div slot="label">
+                <Tips content="包括周边环境、屋面鸟瞰、各向立面、室内梁架、有价值的细部等照片。格式：jpg" />现状照片
+              </div>
+              <upload v-model="addForm.photo" :limit="5" :type="['.jpg']" :multiple="true" :is-tips="false" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="测绘图" prop="map">
-              <upload v-model="addForm.map" :limit="5" :type="['.jpg', '.png', '.pdf']" :multiple="true" />
+            <el-form-item prop="map">
+              <div slot="label">
+                <Tips content="总平面图、各层平面图、屋顶平面图、各立面图、各剖面图、各细部图等。格式：pdf,dwg" />测绘图
+              </div>
+              <upload v-model="addForm.map" :limit="5" :type="['.dwg', '.pdf']" :multiple="true" :is-tips="false" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -189,7 +195,7 @@
       <el-row class="mb20">
         <div class="mb10" style="font-weight: bold;">项目负责人信息:</div>
         <zf-table
-          :columns="[{prop: 'name',label: '姓名'}, {prop: 'post',label: '职务'}, {prop: 'professional',label: '职称'}, {prop: 'certificate',label: '专业证书'}, {prop: 'manage',label: '管理分工'}]"
+          :columns="[{prop: 'name',label: '姓名'}, {prop: 'post',label: '职务'}, {prop: 'professional',label: '职称'}, {prop: 'certificate',label: '专业技术资格'}, {prop: 'manage',label: '管理分工'}]"
           :data-source="yzStaffInfo"
           :pagination="false"
         >
@@ -232,6 +238,14 @@
           <div class="col-item">
             <span>单位简介:</span>
             <span>{{ ssData.introduction }}</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row class="mb20">
+        <el-col :span="12">
+          <div class="col-item">
+            <span>项目组成员结构:</span>
+            <span>{{ returnFn(ssData.staffComposition) }}</span>
           </div>
         </el-col>
       </el-row>
@@ -339,12 +353,14 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import column from './columns/projectDetail'
 import upload from '@/components/upload'
+import Tips from '@/components/tips.vue'
 import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles, deteleProjectSonById, getOwnerById, getExecuteById, staffInfoById, getListByTypeAndComId } from '@/api/common'
 export default {
   name: 'ProjectDetail',
   components: {
     ZfTable,
-    upload
+    upload,
+    Tips
   },
   data() {
     return {
@@ -620,17 +636,26 @@ export default {
           this.$router.push(`/workReport/year?id=${this.$route.query.id}`)
           break
       }
-      // this.reportType = item.value
-      // this.isUpload = false
-      // this.upVisible = true
+    },
+    returnFn(data) {
+      if (!data) return '暂无'
+      const _map = {
+        1: '文保设计师',
+        2: '建筑师',
+        3: '结构工程师',
+        4: '建造师',
+        5: '安全员',
+        6: '木工',
+        7: '瓦工',
+        8: '油漆彩画工',
+        9: '其他'
+      }
+      const arr = []
+      data.split(',').forEach(item => {
+        arr.push(_map[item])
+      })
+      return arr.join(',') || '暂无'
     }
-    // upReport(item) {
-    //   this.$router.push()
-    //   // console.log(item)
-    //   // this.reportType = item.value
-    //   // this.isUpload = true
-    //   // this.upVisible = true
-    // }
   }
 }
 </script>

@@ -93,7 +93,7 @@
                   :value="item.id"
                 />
               </el-select>
-              <el-button class="ml10" type="primary" icon="el-icon-plus" @click="addOwner">业主</el-button>
+              <el-button class="ml10" type="primary" icon="el-icon-plus" @click="addOwner">业主单位</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -141,7 +141,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="说明">
+            <el-form-item>
+              <div slot="label">
+                <Tips content="项目简介，建议200字左右。" />说明
+              </div>
               <el-input
                 v-model="addForm.introduction"
                 type="textarea"
@@ -179,7 +182,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="单位简介" prop="introduction">
+              <el-form-item prop="introduction">
+                <div slot="label">
+                  <Tips content="建议200字左右。" />单位简介
+                </div>
                 <el-input v-model="ownerform.introduction" autocomplete="off" />
               </el-form-item>
             </el-col>
@@ -203,13 +209,13 @@
         </div>
       </el-dialog>
       <el-dialog
-        width="640px"
+        width="800px"
         title="新增实施单位"
         :visible.sync="innerVisible2"
         append-to-body
         center
       >
-        <el-form ref="executeFrom" :model="executeFrom" class="executeFrom" :rules="executeFromRules" label-suffix=":" label-position="right" label-width="120px">
+        <el-form ref="executeFrom" :model="executeFrom" class="executeFrom" :rules="executeFromRules" label-suffix=":" label-position="right" label-width="130px">
           <el-row>
             <el-col :span="12">
               <el-form-item label="名称" prop="name">
@@ -229,8 +235,28 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="单位简介" prop="introduction">
-                <el-input v-model="executeFrom.introduction" autocomplete="off" />
+              <el-form-item prop="introduction">
+                <div slot="label">
+                  <Tips content="建议200字左右。" />单位简介
+                </div>
+                <el-input v-model="executeFrom.introduction" type="textarea" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="项目组成人员构成" prop="staffComposition">
+                <el-checkbox-group v-model="executeFrom.staffComposition">
+                  <el-checkbox label="1">文保设计师</el-checkbox>
+                  <el-checkbox label="2">建筑师</el-checkbox>
+                  <el-checkbox label="3">结构工程师</el-checkbox>
+                  <el-checkbox label="4">建造师</el-checkbox>
+                  <el-checkbox label="5">安全员</el-checkbox>
+                  <el-checkbox label="6">木工</el-checkbox>
+                  <el-checkbox label="7">瓦工</el-checkbox>
+                  <el-checkbox label="8">油漆彩画工</el-checkbox>
+                  <el-checkbox label="9">其他</el-checkbox>
+                </el-checkbox-group>
               </el-form-item>
             </el-col>
           </el-row>
@@ -252,12 +278,14 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import upload from '@/components/upload'
 import column from './columns/list'
+import Tips from '@/components/tips.vue'
 import { getProjectList, getOwnerIdAndName, getExecuteIdAndName, saveProject, updateProject, deteleProjectById, saveOwner, saveExecute } from '@/api/common'
 export default {
   name: 'List',
   components: {
     ZfTable,
-    upload
+    upload,
+    Tips
   },
   data() {
     return {
@@ -318,7 +346,8 @@ export default {
         technologyStaffNum: '', // 固定技术人员数量
         certificationRemark: '', //	文保工程资质情况
         introduction: '', // 单位简介
-        principal: '' // 项目责任人（职工id）
+        principal: '', // 项目责任人（职工id）
+        staffComposition: ['1'] // 项目组成人员构成
       },
       executeFromRules: {
         name: [
@@ -499,11 +528,12 @@ export default {
       this.executeFrom.technologyStaffNum = '' // 固定技术人员数量
       this.executeFrom.certificationRemark = '' // 文保工程资质情况
       this.executeFrom.introduction = '' // 单位简介
+      this.executeFrom.staffComposition = ['1'] // 项目组成人员构成
     },
     executeSubmit(formName) {
       this.$refs[formName].validate(async(valid) => {
         if (valid) {
-          const res = await saveExecute(this.executeFrom)
+          const res = await saveExecute({ ...this.executeFrom, staffComposition: this.executeFrom.staffComposition.join(',') })
           if (res.code === 0) {
             this.innerVisible2 = false
             this.$message.success('新增实施单位成功!')
