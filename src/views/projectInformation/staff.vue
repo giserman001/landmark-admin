@@ -81,7 +81,7 @@
         <a class="del ml20" @click="del(row)">删除</a>
       </template>
     </zf-table>
-    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}职工信息`" :visible.sync="formVisible" width="1000px" center>
+    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}职工信息`" :visible.sync="formVisible" width="1050px" center>
       <el-form ref="addForm" :model="addForm" label-suffix=":" class="addFormcc" label-position="right" label-width="120px" :rules="rules">
         <el-row>
           <el-col :span="12">
@@ -443,6 +443,13 @@ export default {
     .addFormcc{
         .el-input__inner{
             width: 350px;
+        }
+        .el-radio__label{
+          width: 80px;
+          display: inline-block;
+        }
+        .el-radio{
+          margin-bottom: 10px;
         }
     }
 

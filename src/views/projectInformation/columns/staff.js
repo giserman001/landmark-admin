@@ -25,7 +25,7 @@ export default [
   },
   {
     prop: 'professional',
-    label: '职称'
+    label: '项目组成员构成'
   },
   {
     prop: 'certificate',

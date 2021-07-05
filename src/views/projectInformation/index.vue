@@ -124,20 +124,29 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="方案文本" prop="ebook">
-              <upload v-model="addForm.ebook" :type="['.doc', '.docx', '.pdf']" :multiple="false" />
+            <el-form-item prop="ebook">
+              <div slot="label">
+                <Tips content="格式：doc,docx,pdf " />方案文本
+              </div>
+              <upload v-model="addForm.ebook" :type="['.doc', '.docx', '.pdf']" :is-tips="false" :multiple="false" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="方案预算" prop="budget">
-              <upload v-model="addForm.budget" :type="['.xlsx', 'xls', '.pdf']" :multiple="false" />
+              <div slot="label">
+                <Tips content="格式：xlsx,xls,pdf " />方案预算
+              </div>
+              <upload v-model="addForm.budget" :type="['.xlsx', 'xls', '.pdf']" :is-tips="false" :multiple="false" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="国宝单位档案" prop="record">
-              <upload v-model="addForm.record" :type="['.doc', '.docx', '.pdf']" :multiple="false" />
+              <div slot="label">
+                <Tips content="格式：doc,docx,pdf " />国宝单位档案
+              </div>
+              <upload v-model="addForm.record" :type="['.doc', '.docx', '.pdf']" :is-tips="false" :multiple="false" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
