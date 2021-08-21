@@ -7,7 +7,6 @@
         </el-form-item>
       </el-form>
       <div>
-        <el-button type="primary" @click="goZG">职工信息</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="add">新增</el-button>
       </div>
     </div>
@@ -551,9 +550,6 @@ export default {
           }
         }
       })
-    },
-    goZG() {
-      this.$router.push(`/projectInformation/staff`)
     }
   }
 }
