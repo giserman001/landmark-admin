@@ -77,19 +77,19 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="历史沿革" prop="history">
-              <el-input v-model="addForm.history" autocomplete="off" />
+              <el-input v-model="addForm.history" autocomplete="off" type="textarea" :rows="4" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="历次修缮情况" prop="maintain">
-              <el-input v-model="addForm.maintain" autocomplete="off" />
+              <el-input v-model="addForm.maintain" autocomplete="off" type="textarea" :rows="4" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="价值评估结论" prop="valueAssess">
-              <el-input v-model="addForm.valueAssess" autocomplete="off" />
+              <el-input v-model="addForm.valueAssess" autocomplete="off" type="textarea" :rows="4" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -286,7 +286,6 @@ export default {
       this.showFiles = await this.getFilesFn(ids)
     },
     getFilesFn(ids) {
-      console.log(ids, 'aaaaaaaaaaaaaaa')
       return new Promise((resolve, reject) => {
         getFiles({ ids }).then(res => {
           let arr = []

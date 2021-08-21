@@ -67,11 +67,27 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/projectInformation/list',
     meta: { title: '项目管理', icon: 'el-icon-document' },
+    alwaysShow: true,
     children: [{
       path: 'list',
       name: 'ProjectInformationList',
       component: () => import('@/views/projectInformation/index'),
       meta: { title: '项目信息', affix: true }
+    }, {
+      path: 'staff',
+      name: 'Staff',
+      component: () => import('@/views/projectInformation/staff'),
+      meta: { title: '职工信息', activeMenu: '/projectInformation/list' }
+    }, {
+      path: 'owner',
+      name: 'Owner',
+      component: () => import('@/views/projectInformation/owner'),
+      meta: { title: '业主单位信息' }
+    }, {
+      path: 'put',
+      name: 'Put',
+      component: () => import('@/views/projectInformation/put'),
+      meta: { title: '实施单位信息' }
     }, {
       path: 'project-detail',
       name: 'ProjectDetail',
@@ -90,12 +106,6 @@ export const constantRoutes = [
       hidden: true,
       component: () => import('@/views/projectInformation/singleDetail'),
       meta: { title: '单体子项详情信息', activeMenu: '/projectInformation/list' }
-    }, {
-      path: 'staff',
-      name: 'Staff',
-      hidden: true,
-      component: () => import('@/views/projectInformation/staff'),
-      meta: { title: '职工信息', activeMenu: '/projectInformation/list' }
     }]
   }
   // 404 page must be placed at the end !!!

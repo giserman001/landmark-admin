@@ -252,7 +252,7 @@ export default {
           { required: true, message: '请算则所属单位', trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '请输入项目名字', trigger: 'blur' }
+          { required: true, message: '请输入职工姓名', trigger: 'blur' }
         ]
       },
       optionArr: [],

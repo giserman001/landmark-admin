@@ -1,8 +1,8 @@
 export default [
-  {
-    prop: 'id',
-    label: 'ID'
-  },
+  // {
+  //   prop: 'id',
+  //   label: 'ID'
+  // },
   {
     prop: 'name',
     label: '名称',

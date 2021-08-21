@@ -85,17 +85,17 @@
     </el-dialog>
     <el-dialog :visible.sync="upVisible" width="450px" center>
       <el-form ref="form" :model="commentForm" label-width="145px" label-suffix=":" :disabled="!isSubmit">
-        <el-form-item label="评估小组成员意见">
-          <el-input v-model="commentForm.suggest1" />
-        </el-form-item>
         <el-form-item label="评估组长意见">
-          <el-input v-model="commentForm.suggest2" />
+          <el-input v-model="commentForm.suggest2" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="评估专家意见">
-          <el-input v-model="commentForm.suggest3" />
+          <el-input v-model="commentForm.suggest3" type="textarea" :rows="3" />
+        </el-form-item>
+        <el-form-item label="评估小组成员意见">
+          <el-input v-model="commentForm.suggest1" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="评估项目组综合意见">
-          <el-input v-model="commentForm.suggest4" />
+          <el-input v-model="commentForm.suggest4" type="textarea" :rows="3" />
         </el-form-item>
       </el-form>
       <div v-if="isSubmit" slot="footer" class="dialog-footer">

@@ -33,7 +33,7 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(response => {
   const { status, statusText } = response
   if (status === 200) {
-    if (response.data.code === 500) {
+    if (response.data.code === 1000) {
       loading.close()
       MessageBox.confirm('您已经登出，您可以取消以继续停留在此页面，或重新登录', '确认注销', {
         confirmButtonText: '重新登陆',

@@ -22,7 +22,8 @@ export default [
   },
   {
     prop: 'maintain',
-    label: '历次修缮情况'
+    label: '历次修缮情况',
+    tooltip: true
   },
   {
     prop: 'valueAssess',

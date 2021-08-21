@@ -279,16 +279,6 @@ export function saveYearReport(params) {
   return request({ url: '/yearReport/saveYearReport', method: 'get', params })
 }
 
-// 添加业主单位
-export function saveOwner(params) {
-  return request({ url: '/owner/saveOwner', method: 'get', params })
-}
-
-// 添加实施单位
-export function saveExecute(params) {
-  return request({ url: '/execute/saveExecute', method: 'get', params })
-}
-
 // 通过项目id获取子项下拉框
 export function getProjectSonIdAndName(params) {
   return request({ url: '/weekReport/getProjectSonIdAndName', method: 'get', params })
@@ -321,3 +311,46 @@ export function deteleStaffInfoById(params) {
   return request({ url: '/staffInfo/deteleStaffInfoById', method: 'get', params })
 }
 
+// 业主单位模块接口
+
+// 业主单位列表
+export function getOwnerList(params) {
+  return request({ url: '/owner/getOwnerList', method: 'get', params })
+}
+
+// 删除业主单位
+export function deteleOwnerById(params) {
+  return request({ url: '/owner/deteleOwnerById', method: 'get', params })
+}
+
+// 添加业主单位
+export function saveOwner(params) {
+  return request({ url: '/owner/saveOwner', method: 'get', params })
+}
+
+// 修改业主单位
+export function updateOwner(params) {
+  return request({ url: '/owner/updateOwner', method: 'get', params })
+}
+
+// 实施单位模块接口
+
+// 实施单位列表
+export function getExecuteList(params) {
+  return request({ url: '/execute/getExecuteList', method: 'get', params })
+}
+
+// 删除实施单位
+export function deteleExecuteById(params) {
+  return request({ url: '/execute/deteleExecuteById', method: 'get', params })
+}
+
+// 添加实施单位
+export function saveExecute(params) {
+  return request({ url: '/execute/saveExecute', method: 'get', params })
+}
+
+// 修改实施单位
+export function updateExecute(params) {
+  return request({ url: '/execute/updateExecute', method: 'get', params })
+}
