@@ -22,7 +22,8 @@ export default [
   },
   {
     prop: 'history',
-    label: '历史沿革'
+    label: '历史沿革',
+    tooltip: true
   },
   {
     prop: 'maintain',
@@ -36,7 +37,8 @@ export default [
   },
   {
     prop: 'monomer',
-    label: '单体构成'
+    label: '单体构成',
+    tooltip: true
   },
   {
     prop: 'map',

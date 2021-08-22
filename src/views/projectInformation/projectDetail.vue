@@ -81,15 +81,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="占地面积" prop="area">
-              <el-input v-model="addForm.area" autocomplete="off" />
+            <el-form-item label="占地面积(㎡)" prop="area">
+              <el-input v-model="addForm.area" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="建筑面积" prop="architectureArea">
-              <el-input v-model="addForm.architectureArea" autocomplete="off" />
+            <el-form-item label="建筑面积(㎡)" prop="architectureArea">
+              <el-input v-model="addForm.architectureArea" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -101,12 +101,12 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="历史沿革" prop="history">
-              <el-input v-model="addForm.history" autocomplete="off" />
+              <el-input v-model="addForm.history" autocomplete="off" type="textarea" :rows="3" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="价值评估结论" prop="valueAssess">
-              <el-input v-model="addForm.valueAssess" autocomplete="off" />
+              <el-input v-model="addForm.valueAssess" autocomplete="off" type="textarea" :rows="3" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -354,6 +354,7 @@ import ZfTable from '@/components/ZfTable/CoreTable'
 import column from './columns/projectDetail'
 import upload from '@/components/upload'
 import Tips from '@/components/tips.vue'
+// import { validNumber } from '@/utils/fn'
 import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles, deteleProjectSonById, getOwnerById, getExecuteById, staffInfoById, getListByTypeAndComId } from '@/api/common'
 export default {
   name: 'ProjectDetail',

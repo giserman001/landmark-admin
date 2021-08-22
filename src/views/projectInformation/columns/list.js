@@ -22,7 +22,8 @@ export default [
   },
   {
     prop: 'projectCompileCom',
-    label: '方案编制单位'
+    label: '方案编制单位',
+    tooltip: true
   },
   {
     prop: 'ownerName',
@@ -43,7 +44,7 @@ export default [
   },
   {
     prop: 'recordName',
-    label: '国宝单位档案'
+    label: '国保单位档案'
   },
   {
     prop: 'singleArchitectureInfo',

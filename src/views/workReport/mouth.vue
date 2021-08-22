@@ -36,7 +36,7 @@
         slot-scope="{ row }"
       >
         <a class="active_color" @click="feedBackView(row)">查看</a>
-        <a class="active_color ml20" @click="feedBackEdit(row)">编辑</a>
+        <a class="active_color ml10" @click="feedBackEdit(row)">编辑</a>
       </template>
       <!-- 评估意见栏 -->
       <template
@@ -44,38 +44,42 @@
         slot-scope="{ row }"
       >
         <a class="active_color" @click="upView(row)">查看</a>
-        <a class="active_color ml20" @click="upEdit(row)">编辑</a>
+        <a class="active_color ml10" @click="upEdit(row)">编辑</a>
       </template>
       <!-- 操作 -->
       <template
         slot="action"
         slot-scope="{ row }"
       >
-        <a class="active_color" @click="edit(row)">编辑</a>
-        <a class="del ml20" @click="del(row)">删除</a>
+        <a class="active_color" @click="edit(row, 1)">编辑</a>
+        <a class="active_color ml10" @click="edit(row, 2)">查看</a>
+        <a class="del ml10" @click="del(row)">删除</a>
       </template>
     </zf-table>
     <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}月报`" :visible.sync="addVisible" width="600px" center>
-      <el-form ref="mounthReport" :model="addForm" label-suffix=":" :rules="rules">
+      <el-form ref="mounthReport" :model="addForm" label-suffix=":" :rules="rules" :disabled="mode === 3">
         <el-form-item label="项目" prop="projectId">
           <el-select v-model="addForm.projectId" placeholder="请选择" class="inputWith" clearable :disabled="mode === 2">
             <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="当月开展的预防性保护巡查的内容和路线总结">
-          <el-input v-model="addForm.summary1" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.summary1" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="发现的病害问题及处置情况总结">
-          <el-input v-model="addForm.summary2" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.summary2" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="实施的专业检修工作内容，工作量和完成效果">
-          <el-input v-model="addForm.workRemark" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.workRemark" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="其他各项工作情况">
-          <el-input v-model="addForm.otherWork" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.otherWork" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="月报上传">
-          <upload v-model="addForm.fileIds" :limit="5" :type="['.doc', '.docx', '.pdf', '.xlsx', '.xls']" :multiple="true" />
+          <!-- <div slot="label">
+            <Tips content="格式：doc,docx,pdf,xlsx,xls " />月报上传
+          </div> -->
+          <upload v-model="addForm.fileIds" :limit="5" :type="['.doc', '.docx', '.pdf', '.xlsx', '.xls']" :is-tips="true" :disabled="mode === 3" :multiple="true" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -104,7 +108,7 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="feedVisible" width="450px" center>
-      <div class="bold mb10">日报反馈内容:</div>
+      <div class="bold mb10">月报反馈内容:</div>
       <el-input
         v-model="feedback"
         :disabled="!isFeed"
@@ -138,12 +142,14 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import upload from '@/components/upload'
 import { mouth } from './columns/list'
+// import Tips from '@/components/tips.vue'
 import { getMonthReportList, getProjectList, deteleMonthReportById, saveMonthReport, updateMonthReport, getFiles } from '@/api/common'
 export default {
   name: 'List',
   components: {
     ZfTable,
     upload
+    // Tips
   },
   data() {
     return {
@@ -219,9 +225,13 @@ export default {
       this.pages.pageSize = pageSize
       this.query()
     },
-    async edit(row) {
-      this.mode = 2
+    async edit(row, type) {
       this.addVisible = true
+      if (type === 1) {
+        this.mode = 2
+      } else {
+        this.mode = 3
+      }
       this.addForm.id = row.id
       this.addForm.projectId = row.projectId // 项目id
       this.addForm.summary1 = row.summary1 // 当月开展的预防性保护巡查的内容和路线总结
@@ -250,8 +260,8 @@ export default {
       })
     },
     add() {
-      this.mode = 1
       this.addVisible = true
+      this.mode = 1
       this.addForm.id = ''
       this.addForm.projectId = '' // 项目id
       this.addForm.summary1 = '' // 当月开展的预防性保护巡查的内容和路线总结

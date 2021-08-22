@@ -106,13 +106,13 @@ export function getProjectSonList(params) {
 }
 
 // 添加子项目
-export function saveProjectSon(params) {
-  return request({ url: '/project/son/saveProjectSon', method: 'get', params })
+export function saveProjectSon(data) {
+  return request({ url: '/project/son/saveProjectSon', method: 'post', data })
 }
 
 // 编辑子项目
-export function updateProjectSon(params) {
-  return request({ url: '/project/son/updateProjectSon', method: 'get', params })
+export function updateProjectSon(data) {
+  return request({ url: '/project/son/updateProjectSon', method: 'post', data })
 }
 
 // 删除子项目

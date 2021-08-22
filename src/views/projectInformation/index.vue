@@ -55,7 +55,7 @@
         <a class="del ml20" @click="del(row)">删除</a>
       </template>
     </zf-table>
-    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="840px" center>
+    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="800px" center>
       <el-form ref="addForm" :model="addForm" label-suffix=":" label-position="right" label-width="120px" :rules="rules">
         <el-row>
           <el-col :span="12">
@@ -71,20 +71,20 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="总建筑面积" prop="architectureArea">
-              <el-input v-model="addForm.architectureArea" autocomplete="off" />
+            <el-form-item label="总建筑面积(㎡)" prop="architectureArea">
+              <el-input v-model="addForm.architectureArea" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="占地总面积" prop="area">
-              <el-input v-model="addForm.area" autocomplete="off" />
+            <el-form-item label="占地总面积(㎡)" prop="area">
+              <el-input v-model="addForm.area" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="业主单位" prop="ownerId">
-              <el-select v-model="addForm.ownerId" style="width:145px;" placeholder="请选择">
+              <el-select v-model="addForm.ownerId" style="width:253px;" placeholder="请选择">
                 <el-option
                   v-for="item in ownerArr"
                   :key="item.id"
@@ -92,12 +92,12 @@
                   :value="item.id"
                 />
               </el-select>
-              <el-button class="ml10" type="primary" icon="el-icon-plus" @click="addOwner">业主单位</el-button>
+              <!-- <el-button class="ml10" type="primary" icon="el-icon-plus" @click="addOwner">业主单位</el-button> -->
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="项目实施单位" prop="projectExecuteCom">
-              <el-select v-model="addForm.projectExecuteCom" style="width:145px;" placeholder="请选择">
+              <el-select v-model="addForm.projectExecuteCom" style="width:253px;" placeholder="请选择">
                 <el-option
                   v-for="item in projectExecuteComArr"
                   :key="item.id"
@@ -105,14 +105,14 @@
                   :value="item.id"
                 />
               </el-select>
-              <el-button class="ml10" type="primary" icon="el-icon-plus" @click="addExecute">实施单位</el-button>
+              <!-- <el-button class="ml10" type="primary" icon="el-icon-plus" @click="addExecute">实施单位</el-button> -->
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="批准总经费" prop="expenditure">
-              <el-input v-model="addForm.expenditure" autocomplete="off" />
+            <el-form-item label="批准总经费(¥)" prop="expenditure">
+              <el-input v-model="addForm.expenditure" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -141,9 +141,9 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="国宝单位档案" prop="record">
+            <el-form-item label="国保单位档案" prop="record">
               <div slot="label">
-                <Tips content="格式：doc,docx,pdf " />国宝单位档案
+                <Tips content="格式：doc,docx,pdf " />国保单位档案
               </div>
               <upload v-model="addForm.record" :type="['.doc', '.docx', '.pdf']" :is-tips="false" :multiple="false" />
             </el-form-item>

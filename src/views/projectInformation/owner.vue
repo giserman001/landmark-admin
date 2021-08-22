@@ -48,13 +48,13 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="2020年度总经费" prop="expenditure2020">
-              <el-input v-model="addForm.expenditure2020" autocomplete="off" />
+            <el-form-item label="2020年度总经费(¥)" prop="expenditure2020">
+              <el-input v-model="addForm.expenditure2020" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="在编人员数量" prop="staffNum">
-              <el-input v-model="addForm.staffNum" autocomplete="off" />
+              <el-input v-model="addForm.staffNum" autocomplete="off" oninput="value=value.replace(/[^\d]/g,'')" />
             </el-form-item>
           </el-col>
         </el-row>

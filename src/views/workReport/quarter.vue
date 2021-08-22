@@ -36,7 +36,7 @@
         slot-scope="{ row }"
       >
         <a class="active_color" @click="feedBackView(row)">查看</a>
-        <a class="active_color ml20" @click="feedBackEdit(row)">编辑</a>
+        <a class="active_color ml10" @click="feedBackEdit(row)">编辑</a>
       </template>
       <!-- 评估意见栏 -->
       <template
@@ -44,41 +44,45 @@
         slot-scope="{ row }"
       >
         <a class="active_color" @click="upView(row)">查看</a>
-        <a class="active_color ml20" @click="upEdit(row)">编辑</a>
+        <a class="active_color ml10" @click="upEdit(row)">编辑</a>
       </template>
       <!-- 操作 -->
       <template
         slot="action"
         slot-scope="{ row }"
       >
-        <a class="active_color" @click="edit(row)">编辑</a>
-        <a class="del ml20" @click="del(row)">删除</a>
+        <a class="active_color" @click="edit(row, 1)">编辑</a>
+        <a class="active_color ml10" @click="edit(row, 2)">查看</a>
+        <a class="del ml10" @click="del(row)">删除</a>
       </template>
     </zf-table>
-    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}季报`" :visible.sync="addVisible" width="620px" center>
-      <el-form ref="addForm" :model="addForm" label-suffix=":" :rules="rules">
+    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}季报`" :visible.sync="addVisible" width="690px" center>
+      <el-form ref="addForm" :model="addForm" label-suffix=":" :rules="rules" :disabled="mode === 3">
         <el-form-item label="项目" prop="projectId">
           <el-select v-model="addForm.projectId" placeholder="请选择" class="inputWith" clearable :disabled="mode === 2">
             <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="经费使用情况,如未执行或调整方案内容,应说明原因">
-          <el-input v-model="addForm.note2" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.note2" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="取得的不同于既往的工作经验和认识">
-          <el-input v-model="addForm.note3" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.note3" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="存在的问题和矛盾">
-          <el-input v-model="addForm.note4" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.note4" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="下季度工作计划的重点">
-          <el-input v-model="addForm.note5" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.note5" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="总结方案技术内容及执行情况,如未执行或进行调整应说明原因">
-          <el-input v-model="addForm.note1" class="inputWith" autocomplete="off" />
+          <el-input v-model="addForm.note1" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="上传季报">
-          <upload v-model="addForm.fileIds" :limit="5" :type="['.doc', '.docx', '.pdf', '.xlsx', '.xls']" :multiple="true" />
+          <!-- <div slot="label">
+            <Tips content="格式：doc,docx,pdf,xlsx,xls" />上传季报
+          </div> -->
+          <upload v-model="addForm.fileIds" :limit="5" :type="['.doc', '.docx', '.pdf', '.xlsx', '.xls']" :is-tips="true" :disabled="mode === 3" :multiple="true" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -107,7 +111,7 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="feedVisible" width="450px" center>
-      <div class="bold mb10">日报反馈内容:</div>
+      <div class="bold mb10">季报反馈内容:</div>
       <el-input
         v-model="feedback"
         :disabled="!isFeed"
@@ -141,12 +145,14 @@
 import ZfTable from '@/components/ZfTable/CoreTable'
 import { quarter } from './columns/list'
 import upload from '@/components/upload'
+// import Tips from '@/components/tips.vue'
 import { getQuarterReportList, getProjectList, deteleQuarterReportById, updateQuarterReport, saveQuarterReport, getFiles } from '@/api/common'
 export default {
   name: 'List',
   components: {
     ZfTable,
     upload
+    // Tips
   },
   data() {
     return {
@@ -222,8 +228,12 @@ export default {
       this.pages.pageSize = pageSize
       this.query()
     },
-    async edit(row) {
-      this.mode = 2
+    async edit(row, type) {
+      if (type === 1) {
+        this.mode = 2
+      } else {
+        this.mode = 3
+      }
       this.addVisible = true
       this.addForm.id = row.id
       this.addForm.projectId = row.projectId // 项目id
@@ -264,7 +274,7 @@ export default {
       this.addForm.note5 = '' // 下季度工作计划的重点
       this.addForm.note1 = '' // 总结方案技术内容及执行情况,如未执行或进行调整应说明原因
       // 通过ids获取文件
-      this.addForm.fileIds = [] // // 月报文件id（多个时用逗号隔开，如：1,2,3）
+      this.addForm.fileIds = [] // // 季报文件id（多个时用逗号隔开，如：1,2,3）
     },
     handleSubmit(formName) {
       this.$refs[formName].validate(async(valid) => {

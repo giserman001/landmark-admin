@@ -1,8 +1,8 @@
 export const day = [
-  {
-    prop: 'id',
-    label: 'ID'
-  },
+  // {
+  //   prop: 'id',
+  //   label: 'ID'
+  // },
   {
     prop: 'projectName',
     label: '项目'
@@ -58,10 +58,10 @@ export const week = [
   }
 ]
 export const mouth = [
-  {
-    prop: 'id',
-    label: 'ID'
-  },
+  // {
+  //   prop: 'id',
+  //   label: 'ID'
+  // },
   {
     prop: 'projectName',
     label: '项目'
@@ -84,15 +84,15 @@ export const mouth = [
   },
   {
     prop: 'action',
-    width: '120px',
+    width: '160px',
     label: '操作'
   }
 ]
 export const quarter = [
-  {
-    prop: 'id',
-    label: 'ID'
-  },
+  // {
+  //   prop: 'id',
+  //   label: 'ID'
+  // },
   {
     prop: 'projectName',
     label: '项目'
@@ -115,16 +115,16 @@ export const quarter = [
   },
   {
     prop: 'action',
-    width: '120px',
+    width: '160px',
     label: '操作'
   }
 ]
 
 export const year = [
-  {
-    prop: 'id',
-    label: 'ID'
-  },
+  // {
+  //   prop: 'id',
+  //   label: 'ID'
+  // },
   {
     prop: 'projectName',
     label: '项目'
@@ -147,7 +147,7 @@ export const year = [
   },
   {
     prop: 'action',
-    width: '120px',
+    width: '160px',
     label: '操作'
   }
 ]

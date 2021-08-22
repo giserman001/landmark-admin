@@ -205,3 +205,9 @@ export const throttle = function(fn, timerDelay, immediate = false) {
     }
   }
 }
+
+// 校验面积
+
+export const validNumber = (val) => {
+  return /^[+]?(0|([1-9]\d*))(\/\d+)?$/g.test(val)
+}

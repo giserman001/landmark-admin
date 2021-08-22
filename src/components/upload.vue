@@ -7,7 +7,7 @@
     <div class="file-list">
       <div v-for="(item, index) in fileList" :key="index" class="file-item">
         <div class="name">{{ item.name }}</div>
-        <div class="operate" @click="del(index)">删除</div>
+        <div v-if="!disabled" class="operate" @click="del(index)">删除</div>
       </div>
     </div>
   </div>
@@ -30,7 +30,7 @@ export default {
     },
     size: {
       type: Number,
-      default() { return 20 }
+      default() { return 50 }
     },
     type: {
       type: Array,
@@ -51,6 +51,12 @@ export default {
     limit: {
       type: Number,
       default() { return 1 }
+    },
+    disabled: {
+      type: Boolean,
+      default() {
+        return false
+      }
     }
   },
   data() {

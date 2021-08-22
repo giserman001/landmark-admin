@@ -69,8 +69,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="建筑面积" prop="architectureArea">
-              <el-input v-model="addForm.architectureArea" autocomplete="off" />
+            <el-form-item label="建筑面积(㎡)" prop="architectureArea">
+              <el-input v-model="addForm.architectureArea" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
             </el-form-item>
           </el-col>
         </el-row>
