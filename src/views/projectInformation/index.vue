@@ -72,12 +72,12 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="总建筑面积(㎡)" prop="architectureArea">
-              <el-input v-model="addForm.architectureArea" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
+              <el-input v-model="addForm.architectureArea" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="占地总面积(㎡)" prop="area">
-              <el-input v-model="addForm.area" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
+              <el-input v-model="addForm.area" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -112,7 +112,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="批准总经费(¥)" prop="expenditure">
-              <el-input v-model="addForm.expenditure" autocomplete="off" oninput="value=value.replace(/[^0-9.]/g,'')" />
+              <el-input v-model="addForm.expenditure" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">

@@ -123,7 +123,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="年龄" prop="age">
-              <el-input v-model="addForm.age" autocomplete="off" oninput="value=value.replace(/[^\d]/g,'')" />
+              <el-input v-model="addForm.age" autocomplete="off" />
             </el-form-item>
           </el-col>
           <el-col :span="12">

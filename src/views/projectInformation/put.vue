@@ -61,7 +61,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="固定技术人员数量" prop="technologyStaffNum">
-              <el-input v-model="addForm.technologyStaffNum" autocomplete="off" oninput="value=value.replace(/[^\d]/g,'')" />
+              <el-input v-model="addForm.technologyStaffNum" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
