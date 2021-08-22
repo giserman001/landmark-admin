@@ -30,7 +30,7 @@ export default {
     },
     size: {
       type: Number,
-      default() { return 50 }
+      default() { return 200 }
     },
     type: {
       type: Array,

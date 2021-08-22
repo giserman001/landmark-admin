@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}项目信息`" :visible.sync="formVisible" width="650px" center>
+    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}子项信息`" :visible.sync="formVisible" width="650px" center>
       <el-form ref="addSonProject" :model="addForm" label-suffix=":" label-position="right" label-width="120px" :rules="rules">
         <el-row>
           <el-col :span="12">

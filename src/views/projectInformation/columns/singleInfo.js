@@ -18,7 +18,8 @@ export default [
   },
   {
     prop: 'history',
-    label: '历史沿革'
+    label: '历史沿革',
+    tooltip: true
   },
   {
     prop: 'maintain',

@@ -111,7 +111,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="批准总经费(¥)" prop="expenditure">
+            <el-form-item label="批准总经费(万)" prop="expenditure">
               <el-input v-model="addForm.expenditure" autocomplete="off" />
             </el-form-item>
           </el-col>

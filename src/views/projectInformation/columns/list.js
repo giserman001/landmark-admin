@@ -18,7 +18,7 @@ export default [
   },
   {
     prop: 'expenditure',
-    label: '批准总经费(¥)'
+    label: '批准总经费(万)'
   },
   {
     prop: 'projectCompileCom',
