@@ -105,7 +105,7 @@ export const constantRoutes = [
       name: 'SingleDetail',
       hidden: true,
       component: () => import('@/views/projectInformation/singleDetail'),
-      meta: { title: '单体子项详情信息', activeMenu: '/projectInformation/list' }
+      meta: { title: '单体建筑详细信息', activeMenu: '/projectInformation/list' }
     }]
   }
   // 404 page must be placed at the end !!!

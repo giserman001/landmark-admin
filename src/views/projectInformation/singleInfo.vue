@@ -105,9 +105,9 @@
           <el-col :span="12">
             <el-form-item>
               <div slot="label">
-                <Tips content="总平面图、各层平面图、屋顶平面图、各立面图、各剖面图、各细部图等。格式：dwg" />测绘图
+                <Tips content="总平面图、各层平面图、屋顶平面图、各立面图、各剖面图、各细部图等。格式：dwg,pdf" />测绘图
               </div>
-              <upload v-model="addForm.map" :limit="5" :type="['.dwg']" :multiple="true" :is-tips="false" />
+              <upload v-model="addForm.map" :limit="5" :type="['.dwg', '.pdf']" :multiple="true" :is-tips="false" />
             </el-form-item>
           </el-col>
         </el-row>
