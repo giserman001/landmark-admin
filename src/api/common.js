@@ -146,13 +146,13 @@ export function getProjectArchitectureList(params) {
 }
 
 // 添加单体建筑
-export function saveArchitecture(params) {
-  return request({ url: '/project/architecture/saveArchitecture', method: 'get', params })
+export function saveArchitecture(data) {
+  return request({ url: '/project/architecture/saveArchitecture', method: 'post', data })
 }
 
 // 修改单体建筑
-export function updateArchitecture(params) {
-  return request({ url: '/project/architecture/updateArchitecture', method: 'get', params })
+export function updateArchitecture(data) {
+  return request({ url: '/project/architecture/updateArchitecture', method: 'post', data })
 }
 
 // 删除单体建筑
