@@ -10,7 +10,8 @@ export default [
   },
   {
     prop: 'beginBuildTime',
-    label: '始建年代'
+    label: '始建年代',
+    tooltip: true
   },
   {
     prop: 'area',
@@ -28,12 +29,14 @@ export default [
   {
     prop: 'maintain',
     label: '历次修缮情况',
-    tooltip: true
+    tooltip: true,
+    width: 120
   },
   {
     prop: 'valueAssess',
     label: '价值评估结论',
-    tooltip: true
+    tooltip: true,
+    width: 120
   },
   {
     prop: 'monomer',
@@ -50,7 +53,8 @@ export default [
   },
   {
     prop: 'singleArchitectureInfo',
-    label: '单体建筑信息'
+    label: '单体建筑信息',
+    width: 120
   },
   {
     prop: 'action',

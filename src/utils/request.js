@@ -9,7 +9,7 @@ const tokenKey = process.env.VUE_APP_STORAGE_TOKEN
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // 接口地址前缀
-  timeout: 10000 // 请求超时
+  timeout: 1000000 // 请求超时
 })
 let loading // 全局loading实例
 // 请求拦截

@@ -23,21 +23,21 @@
         slot="ebookName"
         slot-scope="{ row }"
       >
-        <a class="active_color" @click="downLoad(row.ebookName, row.ebook)">{{ row.ebookName || '-' }}</a>
+        <a class="active_color ellipsis" style="width:100%;" :title="row.ebookName" @click="downLoad(row.ebookName, row.ebook)">{{ row.ebookName || '-' }}</a>
       </template>
       <!-- 方案预算 -->
       <template
         slot="budgetName"
         slot-scope="{ row }"
       >
-        <a class="active_color" @click="downLoad(row.budgetName, row.budget)">{{ row.budgetName || '-' }}</a>
+        <a class="active_color ellipsis" style="width:100%;" :title="row.budgetName" @click="downLoad(row.budgetName, row.budget)">{{ row.budgetName || '-' }}</a>
       </template>
       <!-- 国宝单位档案 -->
       <template
         slot="recordName"
         slot-scope="{ row }"
       >
-        <a class="active_color" @click="downLoad(row.recordName, row.record)">{{ row.recordName || '-' }}</a>
+        <a class="active_color ellipsis" style="width:100%;" :title="row.recordName" @click="downLoad(row.recordName, row.record)">{{ row.recordName || '-' }}</a>
       </template>
       <!-- 单体建筑信息 -->
       <template

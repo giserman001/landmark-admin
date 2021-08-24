@@ -27,7 +27,8 @@ export default [
   },
   {
     prop: 'ownerName',
-    label: '业主单位'
+    label: '业主单位',
+    tooltip: true
   },
   {
     prop: 'introduction',

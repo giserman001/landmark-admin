@@ -49,7 +49,8 @@
         slot="age"
         slot-scope="{ row }"
       >
-        {{ row.age }}岁
+        <span v-if="row.age">{{ row.age }}岁</span>
+        <span v-else>暂无</span>
       </template>
       <!-- 性别 -->
       <template

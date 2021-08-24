@@ -48,7 +48,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="2020年度总经费(万)" prop="expenditure2020">
+            <el-form-item label="年度总经费(万)" prop="expenditure2020">
               <el-input v-model="addForm.expenditure2020" autocomplete="off" />
             </el-form-item>
           </el-col>
@@ -101,7 +101,7 @@ import column from './columns/owner'
 import Tips from '@/components/tips.vue'
 import { getOwnerList, saveOwner, updateOwner, getListByTypeAndComId, deteleOwnerById, getFiles } from '@/api/common'
 export default {
-  name: 'List',
+  name: 'Owner',
   components: {
     ZfTable,
     upload,

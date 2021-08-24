@@ -5,7 +5,8 @@ export default [
   },
   {
     prop: 'projectName',
-    label: '所属项目'
+    label: '所属项目',
+    tooltip: true
   },
   {
     prop: 'sex',

@@ -33,6 +33,7 @@ import '@/permission' // permission control
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI, { size: 'medium' })
+ElementUI.Dialog.props.closeOnClickModal.default = false
 Vue.prototype.$dateFormat = $dateFormat // 日期时间转化
 Vue.prototype.$dayFormat = $dayFormat // 日期转化
 Vue.prototype.$formatCurrency = formatCurrency // 金额转化

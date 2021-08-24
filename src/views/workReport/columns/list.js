@@ -5,7 +5,8 @@ export const day = [
   // },
   {
     prop: 'projectName',
-    label: '项目'
+    label: '项目',
+    tooltip: true
   },
   {
     prop: 'createTime',
@@ -37,7 +38,8 @@ export const week = [
   },
   {
     prop: 'projectName',
-    label: '项目'
+    label: '项目',
+    tooltip: true
   },
   {
     prop: 'createTime',
@@ -64,7 +66,8 @@ export const mouth = [
   // },
   {
     prop: 'projectName',
-    label: '项目'
+    label: '项目',
+    tooltip: true
   },
   {
     prop: 'createTime',
@@ -95,7 +98,8 @@ export const quarter = [
   // },
   {
     prop: 'projectName',
-    label: '项目'
+    label: '项目',
+    tooltip: true
   },
   {
     prop: 'createTime',
@@ -127,7 +131,8 @@ export const year = [
   // },
   {
     prop: 'projectName',
-    label: '项目'
+    label: '项目',
+    tooltip: true
   },
   {
     prop: 'createTime',

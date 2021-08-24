@@ -72,7 +72,7 @@
         <el-form-item label="存在的问题和矛盾">
           <el-input v-model="addForm.note4" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
-        <el-form-item label="下季度工作计划的重点">
+        <el-form-item label="下年度工作计划的重点">
           <el-input v-model="addForm.note5" class="inputWith" autocomplete="off" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="总结方案技术内容及执行情况,如未执行或进行调整应说明原因">

@@ -10,6 +10,7 @@
         'xm-table-border': bordered,
         'is-flex': showSummary
       }"
+      border
       :data="tableData"
       :max-height="mHeight"
       :stripe="stripe"
@@ -321,7 +322,7 @@ export default {
     // 斑马条纹
     stripe: {
       type: Boolean,
-      default: false
+      default: true
     },
 
     /**

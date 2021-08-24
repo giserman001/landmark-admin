@@ -1,7 +1,8 @@
 export default [
   {
     prop: 'name',
-    label: '业主单位名称'
+    label: '业主单位名称',
+    tooltip: true
   },
   {
     prop: 'staffNum',
@@ -22,7 +23,8 @@ export default [
   },
   {
     prop: 'entrustType',
-    label: '项目实施单位遴选委托方式'
+    label: '项目实施单位遴选委托方式',
+    width: 200
   },
   {
     prop: 'payType',
