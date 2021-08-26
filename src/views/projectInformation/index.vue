@@ -127,7 +127,7 @@
               <div slot="label">
                 <Tips content="格式：doc,docx,pdf " />方案文本
               </div>
-              <upload v-model="addForm.ebook" :type="['.doc', '.docx', '.pdf']" :is-tips="false" :multiple="false" />
+              <upload v-model="addForm.ebook" :type="['.doc', '.docx', '.pdf']" :is-tips="false" :limit="4" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
