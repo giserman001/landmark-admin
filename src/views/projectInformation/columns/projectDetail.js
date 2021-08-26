@@ -49,7 +49,7 @@ export default [
   },
   {
     prop: 'photo',
-    label: '周边现状'
+    label: '现状照片'
   },
   {
     prop: 'singleArchitectureInfo',
