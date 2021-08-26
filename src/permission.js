@@ -19,6 +19,8 @@ router.beforeEach(async(to, from, next) => {
   // 在路由全局钩子beforeEach中，根据keepAlive属性，统一设置页面的缓存性
   if (to.meta.keepAlive) {
     store.commit('keepAlive/addkeepAlive', to.name)
+  } else {
+    store.commit('keepAlive/removeKeepAlive', to.name)
   }
   // 确定用户是否已经登录
   const hasToken = get(tokenKey)
@@ -38,7 +40,7 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
           const accessRoutes = await store.dispatch('permission/generateRoutes', auth)
-          console.log(accessRoutes, 'accessRoutes')
+          // console.log(accessRoutes, 'accessRoutes')
           router.addRoutes(accessRoutes)
           next({ ...to, replace: true })
         } catch (error) {
