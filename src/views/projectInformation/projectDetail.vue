@@ -114,9 +114,9 @@
           <el-col :span="12">
             <el-form-item prop="photo">
               <div slot="label">
-                <Tips content="包括周边环境、屋面鸟瞰、各向立面、室内梁架、有价值的细部等照片。格式：jpg" />现状照片
+                <Tips content="包括周边环境、屋面鸟瞰、各向立面、室内梁架、有价值的细部等照片。格式：jpg,png,pdf" />现状照片
               </div>
-              <upload v-model="addForm.photo" :limit="5" :type="['.jpg']" :multiple="true" :is-tips="false" />
+              <upload v-model="addForm.photo" :limit="5" :type="['.jpg', '.png', '.pdf']" :multiple="true" :is-tips="false" />
             </el-form-item>
           </el-col>
           <el-col :span="12">

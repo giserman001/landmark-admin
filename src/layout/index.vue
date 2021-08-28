@@ -125,9 +125,15 @@ export default {
     position: relative;
     height: 100%;
     width: 100%;
+    padding-top: 65px;
   }
   // 自定义样式
   .head{
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     height: 65px;
     background-color: #3a8ee6;

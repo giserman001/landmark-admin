@@ -23,14 +23,14 @@
         slot="ebookName"
         slot-scope="{ row }"
       >
-        <a class="active_color ellipsis" style="width:100%;" :title="row.ebookName" @click="downLoad(row.ebookName, row.ebook)">{{ row.ebookName || '-' }}</a>
+        <a class="active_color ellipsis" style="width:100%;" @click="ebookDownLoad(row)">下载</a>
       </template>
       <!-- 方案预算 -->
       <template
         slot="budgetName"
         slot-scope="{ row }"
       >
-        <a class="active_color ellipsis" style="width:100%;" :title="row.budgetName" @click="downLoad(row.budgetName, row.budget)">{{ row.budgetName || '-' }}</a>
+        <a class="active_color ellipsis" style="width:100%;" @click="budgetDownLoad(row)">下载</a>
       </template>
       <!-- 国宝单位档案 -->
       <template
@@ -279,6 +279,17 @@
         <el-button type="primary" @click="handleSubmit('addForm')">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="downLoadDialog" width="500px" title="文件下载" center :before-close="handleClose">
+      <div v-if="fileArr.length" class="downloadList">
+        <div v-for="(item, index) in fileArr" :key="index" class="list flex_between">
+          <span class="name flex1 ellipsis">{{ item.name }}</span><span class="active_color action" @click="downLoad(item.name, item.id)">下载</span>
+        </div>
+      </div>
+      <div v-else class="center">暂无数据</div>
+      <template #footer>
+        <el-button @click="downLoadDialog = false">关 闭</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -361,7 +372,9 @@ export default {
         name: [
           { required: true, message: '请输入名字', trigger: 'blur' }
         ]
-      }
+      },
+      downLoadDialog: false,
+      fileArr: [] // 文件下载列表
     }
   },
   mounted() {
@@ -372,6 +385,18 @@ export default {
     this.getExecute()
   },
   methods: {
+    handleClose(done) {
+      this.fileArr = []
+      done()
+    },
+    ebookDownLoad(row) {
+      this.downLoadDialog = true
+      this.fileArr = this.parseData(row.ebookName) || []
+    },
+    budgetDownLoad(row) {
+      this.downLoadDialog = true
+      this.fileArr = this.parseData(row.budgetName) || []
+    },
     getOwner() {
       // 业主下拉框
       getOwnerIdAndName().then(res => {
@@ -402,8 +427,8 @@ export default {
           if (this.mode === 1) {
             const res = await saveProject({
               ...this.addForm,
-              ebook: (this.addForm.ebook.length && this.addForm.ebook[0].id) || '', // 方案文本
-              budget: (this.addForm.budget.length && this.addForm.budget[0].id) || '', // 方案预算
+              ebook: this.addForm.ebook.map(item => item.id).join(',') || '', // 方案文本
+              budget: this.addForm.budget.map(item => item.id).join(',') || '', // 方案预算
               record: (this.addForm.record.length && this.addForm.record[0].id) || '' // 国宝单位档案
             })
             if (res.code === 0) {
@@ -414,8 +439,8 @@ export default {
           } else {
             const res = await updateProject({
               ...this.addForm,
-              ebook: (this.addForm.ebook.length && this.addForm.ebook[0].id) || '', // 方案文本
-              budget: (this.addForm.budget.length && this.addForm.budget[0].id) || '', // 方案预算
+              ebook: this.addForm.ebook.map(item => item.id).join(',') || '', // 方案文本
+              budget: this.addForm.budget.map(item => item.id).join(',') || '', // 方案预算
               record: (this.addForm.record.length && this.addForm.record[0].id) || '' // 国宝单位档案
             })
             if (res.code === 0) {
@@ -438,11 +463,21 @@ export default {
       this.addForm.projectExecuteCom = row.projectExecuteCom // 项目实施单位
       this.addForm.expenditure = row.expenditure // 批准总经费
       this.addForm.projectCompileCom = row.projectCompileCom // 方案编制单位名称
-      this.addForm.ebook = (row.ebookName && row.ebook) ? [{ name: row.ebookName, id: row.ebook }] : [] // 方案文本
-      this.addForm.budget = (row.budgetName && row.budget) ? [{ name: row.budgetName, id: row.budget }] : [] // 方案预算
+      this.addForm.ebook = this.parseData(row.ebookName) || [] // 方案文本
+      this.addForm.budget = this.parseData(row.budgetName) || [] // 方案预算
       this.addForm.record = (row.recordName && row.record) ? [{ name: row.recordName, id: row.record }] : [] // 国宝单位档案
       this.addForm.introduction = row.introduction // 说明
       this.addForm.id = row.id
+    },
+    parseData(obj) {
+      const arr = []
+      for (const key in obj) {
+        arr.push({
+          name: obj[key],
+          id: key
+        })
+      }
+      return arr
     },
     del(row) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -506,6 +541,14 @@ export default {
         })
       })
     },
+    // 文件下载通用方法
+    downLoadFn(id) {
+      const link = document.createElement('a')
+      link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    },
     addOwner() {
       this.innerVisible1 = true
       this.ownerform.name = '' // 名称
@@ -566,4 +609,17 @@ export default {
     }
   }
 }
+.downloadList{
+  .list{
+    margin-bottom: 15px;
+    .name{
+      margin-right: 20px;
+    }
+    .action{
+      width: 30px;
+      cursor: pointer;
+    }
+  }
+}
+
 </style>
