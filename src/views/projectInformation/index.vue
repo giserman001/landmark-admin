@@ -135,7 +135,7 @@
               <div slot="label">
                 <Tips content="格式：xlsx,xls,pdf " />方案预算
               </div>
-              <upload v-model="addForm.budget" :type="['.xlsx', 'xls', '.pdf']" :is-tips="false" :multiple="false" />
+              <upload v-model="addForm.budget" :type="['.xlsx', 'xls', '.pdf']" :is-tips="false" :limit="4" />
             </el-form-item>
           </el-col>
         </el-row>
