@@ -3,7 +3,7 @@
     <el-form ref="form" :model="addForm" label-width="115px" label-suffix=":">
       <div class="top-select">
         <el-form-item label="项目" label-width="50px">
-          <el-select v-model="addForm.projectId" placeholder="请选择" class="ml10" @change="changeProject">
+          <el-select v-model="addForm.projectId" placeholder="请选择" filterable class="ml10" @change="changeProject">
             <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -59,13 +59,18 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <div class="td flex1"><el-input v-model="item.executeBy" placeholder="请输入" style="width:120px;" /></div>
+              <div class="td flex1">
+                <el-select v-model="item.executeBy" multiple placeholder="选择实施人员" collapse-tags value-key="value" filterable style="width:140px;">
+                  <el-option v-for="list in executeList" :key="list.id" :label="list.name" :value="`${list.id}`" />
+                </el-select>
+                <!-- <el-input v-model="item.executeBy" placeholder="请输入" style="width:120px;" /> -->
+              </div>
               <div class="td flex1">
                 <a class="active_color" @click="view(item, index)">查看</a>
               </div>
               <div class="td flex1">
                 <el-form-item label-width="0">
-                  <el-input v-model="item.other" placeholder="请输入" style="width:120px;" />
+                  <el-input v-model="item.other" type="textarea" placeholder="请输入" style="width:120px;" />
                 </el-form-item>
               </div>
               <div class="td flex1">
@@ -311,7 +316,7 @@
   </div>
 </template>
 <script>
-import { getProjectList, getProjectSonIdAndName, saveWeekReport, getWeekReportByIdDetail, getFiles, getArchitectureIdAndName, updateWeekReportRecord } from '@/api/common'
+import { getProjectList, getProjectSonIdAndName, saveWeekReport, getWeekReportByIdDetail, getFiles, getArchitectureIdAndName, updateWeekReportRecord, getListByTypeAndComId } from '@/api/common'
 import upload from '@/components/upload'
 import Tips from '@/components/tips.vue'
 export default {
@@ -321,6 +326,7 @@ export default {
   },
   data() {
     return {
+      curPutId: '',
       optionArr: [],
       sonProject: [],
       architectureArr: [],
@@ -362,7 +368,22 @@ export default {
         observationComparison: '', // 检修后观测对比
         observationVerdict: '' // 检修后评估结论
       },
-      curIndex: ''
+      curIndex: '',
+      executeList: [] // 特定实施单位实施人员下拉
+    }
+  },
+  watch: {
+    curPutId(val) {
+      if (val) {
+        getListByTypeAndComId({ type: 2, comId: this.curPutId }).then(res => {
+          if (res.code === 0) {
+            this.executeList = res.data.list
+          }
+        })
+      } else {
+        // 无实施人员
+        this.executeList = []
+      }
     }
   },
   mounted() {
@@ -375,7 +396,9 @@ export default {
               this.addForm.reportArray.push({
                 ...item.weekReportRecord,
                 patrol: `${item.weekReportRecord.patrol}`,
-                diseaseArray: item.diseaseRecordList || []
+                diseaseArray: item.diseaseRecordList || [],
+                // 2021-9-1添加
+                executeBy: item.weekReportRecord.executeBy.split(',')
               })
             })
             // 转换文件数据结构
@@ -398,6 +421,8 @@ export default {
     getProjectList({ pageNum: 1, pageSize: 9999 }).then(res => {
       this.optionArr = res.data.projectList.rows
       this.addForm.projectId = this.optionArr[0].id
+      // 项目实施单位id
+      this.curPutId = this.optionArr[0].projectExecuteCom
       return true
     }).then(res => {
       // 当前项目下的子项
@@ -419,10 +444,16 @@ export default {
         this.architectureArr = res.data.sonIdAndName
       })
     },
-    changeProject() {
+    changeProject(val) {
       this.getSonProject()
       this.addForm.projectSonId = ''
       this.addForm.architectureId = ''
+      this.optionArr.forEach(item => {
+        if (+item.id === +val) {
+          this.curPutId = item.projectExecuteCom
+        }
+      })
+      console.log(this.curPutId, 'this.curPutId')
     },
     changeProjectSon() {
       this.getArchitecture()
@@ -433,11 +464,13 @@ export default {
         this.$message.error('请先添加数据!')
         return
       }
+      console.log(this.addForm, 'this.addForm')
       // 深拷贝
       const parseData = JSON.parse(JSON.stringify(this.addForm))
-      console.log(parseData, 'parseDataparseDataparseDataparseData')
       parseData.reportArray.forEach(item => {
         item.observationFileId = item.observationFileId.map(it => it.id).join(',')
+        // 2021-9-1添加
+        item.executeBy = item.executeBy.join(',')
         item.patrolFileId = item.patrolFileId.map(it => it.id).join(',')
         item.reconditionPhoto = item.reconditionPhoto.map(it => it.id).join(',')
         item.diseaseArray.forEach(list => {
