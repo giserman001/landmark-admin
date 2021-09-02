@@ -3,17 +3,17 @@
     <el-form ref="form" :model="addForm" label-width="115px" label-suffix=":">
       <div class="top-select">
         <el-form-item label="项目" label-width="50px">
-          <el-select v-model="addForm.projectId" placeholder="请选择" filterable class="ml10" @change="changeProject">
+          <el-select v-model="addForm.projectId" placeholder="请选择" filterable :disabled="!!$route.query.id" class="ml10" @change="changeProject">
             <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="子项" label-width="60px">
-          <el-select v-model="addForm.projectSonId" placeholder="请选择" class="ml10" @change="changeProjectSon">
+          <el-select v-model="addForm.projectSonId" filterable placeholder="请选择" class="ml10" @change="changeProjectSon">
             <el-option v-for="item in sonProject" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="单体" label-width="60px">
-          <el-select v-model="addForm.architectureId" placeholder="请选择" class="ml10">
+          <el-select v-model="addForm.architectureId" filterable placeholder="请选择" class="ml10">
             <el-option v-for="item in architectureArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -51,7 +51,7 @@
               </div>
               <div class="td flex1">
                 <el-form-item label-width="0">
-                  <el-select v-model="item.patrol" placeholder="请选择">
+                  <el-select v-model="item.patrol" filterable placeholder="请选择">
                     <el-option label="常规巡查" value="1" />
                     <el-option label="定期观测" value="2" />
                     <el-option label="专业检修" value="3" />
@@ -162,7 +162,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="结构性病害">
-                    <el-select v-model="item.diseaseIsStructure" placeholder="请选择" class="inputWith">
+                    <el-select v-model="item.diseaseIsStructure" filterable placeholder="请选择" class="inputWith">
                       <el-option label="是" value="1" />
                       <el-option label="否" value="2" />
                       <el-option label="有待检测鉴定" value="3" />
@@ -171,7 +171,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="病害严重程度">
-                    <el-select v-model="item.diseaseDegree" placeholder="请选择" class="inputWith">
+                    <el-select v-model="item.diseaseDegree" filterable placeholder="请选择" class="inputWith">
                       <el-option label="轻微" value="1" />
                       <el-option label="严重" value="2" />
                       <el-option label="有待检测检测" value="3" />
@@ -201,7 +201,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="观测对比">
-                <el-select v-model="detailForm.beforeComparison" placeholder="请选择" class="inputWith">
+                <el-select v-model="detailForm.beforeComparison" filterable placeholder="请选择" class="inputWith">
                   <el-option label="无发展" value="1" />
                   <el-option label="轻微发展" value="2" />
                   <el-option label="迅速发展" value="3" />
@@ -210,7 +210,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="评估结论">
-                <el-select v-model="detailForm.beforeVerdict" placeholder="请选择" class="inputWith">
+                <el-select v-model="detailForm.beforeVerdict" filterable placeholder="请选择" class="inputWith">
                   <el-option label="继续观测" value="1" />
                   <el-option label="停止观测" value="2" />
                   <el-option label="加密观测" value="3" />
@@ -290,7 +290,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="检修后观测对比">
-                <el-select v-model="detailForm.observationComparison" placeholder="请选择" class="inputWith">
+                <el-select v-model="detailForm.observationComparison" filterable placeholder="请选择" class="inputWith">
                   <el-option label="效果良好" value="1" />
                   <el-option label="有一定效果" value="2" />
                   <el-option label="无效" value="3" />
@@ -299,7 +299,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="检修后评估结论">
-                <el-select v-model="detailForm.observationVerdict" placeholder="请选择" class="inputWith">
+                <el-select v-model="detailForm.observationVerdict" filterable placeholder="请选择" class="inputWith">
                   <el-option label="持续巡查评估" value="1" />
                   <el-option label="再次检修" value="2" />
                   <el-option label="检测鉴定" value="3" />
@@ -386,50 +386,49 @@ export default {
       }
     }
   },
-  mounted() {
-    if (this.$route.query.id) {
-      getWeekReportByIdDetail({ reportId: this.$route.query.id }).then(async(res) => {
-        console.log(res, '详情')
-        if (res.code === 0) {
-          if (res.data.list && res.data.list.length) {
-            res.data.list.forEach(item => {
-              this.addForm.reportArray.push({
-                ...item.weekReportRecord,
-                patrol: `${item.weekReportRecord.patrol}`,
-                diseaseArray: item.diseaseRecordList || [],
-                // 2021-9-1添加
-                executeBy: item.weekReportRecord.executeBy.split(',')
-              })
-            })
-            // 转换文件数据结构
-            this.addForm.reportArray.forEach(async(item) => {
-              item.observationFileId = item.observationFileId && await this.getFilesFn(item.observationFileId) || []
-              item.patrolFileId = item.patrolFileId && await this.getFilesFn(item.patrolFileId) || []
-              item.reconditionPhoto = item.reconditionPhoto && await this.getFilesFn(item.reconditionPhoto) || []
-              if (item.diseaseArray && item.diseaseArray.length) {
-                item.diseaseArray.forEach(async(list) => {
-                  list.diseasePhotos = list.diseasePhotos && await this.getFilesFn(list.diseasePhotos) || []
-                  // 处理方式
-                  list.diseaseSolveWay = list.diseaseSolveWay && list.diseaseSolveWay.split(',') || []
-                })
-              }
-            })
-          }
-        }
-      })
-    }
-    getProjectList({ pageNum: 1, pageSize: 9999 }).then(res => {
-      this.optionArr = res.data.projectList.rows
+  async mounted() {
+    const re = await getProjectList({ pageNum: 1, pageSize: 9999 })
+    if (re.code === 0) {
+      this.optionArr = re.data.projectList.rows
       this.addForm.projectId = this.optionArr[0].id
       // 项目实施单位id
       this.curPutId = this.optionArr[0].projectExecuteCom
-      return true
-    }).then(res => {
-      // 当前项目下的子项
-      if (res) {
-        this.getSonProject()
+      this.getSonProject()
+    }
+    if (this.$route.query.id) {
+      const res = await getWeekReportByIdDetail({ reportId: this.$route.query.id })
+      console.log(res, '详情')
+      if (res.code === 0) {
+        if (res.data.list && res.data.list.length) {
+          console.log(res.data.projectId, '')
+          this.addForm.projectId = res.data.projectId
+          // 注意点
+          this.curPutId = this.addForm.projectId
+          res.data.list.forEach(item => {
+            this.addForm.reportArray.push({
+              ...item.weekReportRecord,
+              patrol: `${item.weekReportRecord.patrol}`,
+              diseaseArray: item.diseaseRecordList || [],
+              // 2021-9-1添加
+              executeBy: item.weekReportRecord.executeBy.split(',')
+            })
+          })
+          // 转换文件数据结构
+          this.addForm.reportArray.forEach(async(item) => {
+            item.observationFileId = item.observationFileId && await this.getFilesFn(item.observationFileId) || []
+            item.patrolFileId = item.patrolFileId && await this.getFilesFn(item.patrolFileId) || []
+            item.reconditionPhoto = item.reconditionPhoto && await this.getFilesFn(item.reconditionPhoto) || []
+            if (item.diseaseArray && item.diseaseArray.length) {
+              item.diseaseArray.forEach(async(list) => {
+                list.diseasePhotos = list.diseasePhotos && await this.getFilesFn(list.diseasePhotos) || []
+                // 处理方式
+                list.diseaseSolveWay = list.diseaseSolveWay && list.diseaseSolveWay.split(',') || []
+              })
+            }
+          })
+        }
       }
-    })
+    }
   },
   methods: {
     // 获取子项下拉
@@ -453,7 +452,8 @@ export default {
           this.curPutId = item.projectExecuteCom
         }
       })
-      console.log(this.curPutId, 'this.curPutId')
+      // 注意：只能对同一个项目添加周报
+      this.addForm.reportArray = []
     },
     changeProjectSon() {
       this.getArchitecture()

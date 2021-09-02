@@ -6,20 +6,20 @@
           <el-input v-model="form.name" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="所属项目">
-          <el-select v-model="form.projectId" placeholder="请选择">
+          <el-select v-model="form.projectId" filterable placeholder="请选择">
             <el-option label="全部" value="" />
             <el-option v-for="item in projectArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="所属类型">
-          <el-select v-model="form.type" placeholder="请选择" @change="(val) => changeType(val, 1)">
+          <el-select v-model="form.type" filterable placeholder="请选择" @change="(val) => changeType(val, 1)">
             <el-option label="全部" value="" />
             <el-option label="业主单位" :value="1" />
             <el-option label="实施单位" :value="2" />
           </el-select>
         </el-form-item>
         <el-form-item label="单位">
-          <el-select v-model="addForm.id" placeholder="请选择">
+          <el-select v-model="form.id" filterable placeholder="请选择">
             <el-option
               v-for="item in option"
               :key="item.id"
@@ -87,7 +87,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="所属类型" prop="type">
-              <el-select v-model="addForm.type" placeholder="请选择" @change="(val) => changeType(val, 2)">
+              <el-select v-model="addForm.type" filterable placeholder="请选择" @change="(val) => changeType(val, 2)">
                 <el-option label="业主单位" :value="1" />
                 <el-option label="实施单位" :value="2" />
               </el-select>
@@ -95,7 +95,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="单位" prop="executeId">
-              <el-select v-model="addForm.executeId" placeholder="请选择">
+              <el-select v-model="addForm.executeId" filterable placeholder="请选择">
                 <el-option
                   v-for="item in optionArr"
                   :key="item.id"

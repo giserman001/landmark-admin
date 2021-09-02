@@ -3,7 +3,7 @@
     <div class="flex_between1">
       <el-form :inline="true" :model="form" size="small" label-suffix=":">
         <el-form-item label="项目">
-          <el-select v-model="form.projectId" placeholder="请选择" class="w100" @change="query">
+          <el-select v-model="form.projectId" filterable placeholder="请选择" class="w100" @change="query">
             <el-option label="全部" value="" />
             <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
@@ -57,9 +57,9 @@
       </template>
     </zf-table>
     <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}月报`" :visible.sync="addVisible" width="600px" center>
-      <el-form ref="mounthReport" :model="addForm" label-suffix=":" :rules="rules" :disabled="mode === 3">
+      <el-form ref="mounthReport" :model="addForm" label-suffix=":" :rules="rules" :disabled="mode === 3" label-width="165px">
         <el-form-item label="项目" prop="projectId">
-          <el-select v-model="addForm.projectId" placeholder="请选择" class="inputWith" clearable :disabled="mode === 2">
+          <el-select v-model="addForm.projectId" placeholder="请选择" class="inputWith" filterable :disabled="mode === 2">
             <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -419,6 +419,11 @@ export default {
       color: red;
       cursor: pointer;
     }
+  }
+}
+::v-deep{
+  .el-form-item--medium .el-form-item__label{
+    line-height: 20px;
   }
 }
 </style>

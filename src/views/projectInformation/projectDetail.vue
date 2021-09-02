@@ -39,7 +39,8 @@
         slot="singleArchitectureInfo"
         slot-scope="{ row }"
       >
-        <svg-icon icon-class="share" class-name="svg-class" @click="goDetail(row)" />
+        <!-- <svg-icon icon-class="share" class-name="svg-class" @click="goDetail(row)" /> -->
+        <a class="active_color" @click="goDetail(row)">查看</a>
       </template>
       <!-- 操作 -->
       <template

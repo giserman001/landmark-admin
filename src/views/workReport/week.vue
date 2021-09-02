@@ -3,7 +3,7 @@
     <div class="flex_between1">
       <el-form :inline="true" :model="form" size="small" label-suffix=":">
         <el-form-item label="项目">
-          <el-select v-model="form.projectId" placeholder="请选择" class="w100" @change="query">
+          <el-select v-model="form.projectId" filterable placeholder="请选择" class="w100" @change="query">
             <el-option label="全部" value="" />
             <el-option v-for="item in optionArr" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>

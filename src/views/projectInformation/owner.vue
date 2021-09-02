@@ -30,7 +30,7 @@
         <a class="del ml20" @click="del(row)">删除</a>
       </template>
     </zf-table>
-    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}业主信息`" :visible.sync="formVisible" width="60%" center>
+    <el-dialog :title="`${mode === 1 ? '新增' : '编辑'}业主信息`" :visible.sync="formVisible" width="920px" center>
       <el-form ref="addForm" :model="addForm" label-suffix=":" class="addFormcc" label-position="right" label-width="200px" :rules="rules">
         <el-row>
           <el-col :span="12">
@@ -40,7 +40,7 @@
           </el-col>
           <el-col v-if="mode == 2" :span="12">
             <el-form-item label="项目责任人" prop="principal">
-              <el-select v-model="addForm.principal">
+              <el-select v-model="addForm.principal" filterable>
                 <el-option v-for="(item, index) in staffArr" :key="index" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>

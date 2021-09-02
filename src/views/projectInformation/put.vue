@@ -40,7 +40,7 @@
           </el-col>
           <el-col v-if="mode == 2" :span="12">
             <el-form-item label="项目责任人" prop="principal">
-              <el-select v-model="addForm.principal">
+              <el-select v-model="addForm.principal" filterable>
                 <el-option v-for="(item, index) in staffArr" :key="index" :label="item.name" :value="item.id" />
               </el-select>
             </el-form-item>

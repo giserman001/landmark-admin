@@ -44,7 +44,8 @@
         slot="singleArchitectureInfo"
         slot-scope="{ row }"
       >
-        <svg-icon icon-class="share" class-name="svg-class" @click="goDetail(row)" />
+        <!-- <svg-icon icon-class="share" class-name="svg-class" @click="goDetail(row)" /> -->
+        <a class="active_color" @click="goDetail(row)">查看</a>
       </template>
       <!-- 操作 -->
       <template
@@ -84,7 +85,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="业主单位" prop="ownerId">
-              <el-select v-model="addForm.ownerId" style="width:253px;" placeholder="请选择">
+              <el-select v-model="addForm.ownerId" filterable style="width:253px;" placeholder="请选择">
                 <el-option
                   v-for="item in ownerArr"
                   :key="item.id"
@@ -97,7 +98,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="项目实施单位" prop="projectExecuteCom">
-              <el-select v-model="addForm.projectExecuteCom" style="width:253px;" placeholder="请选择">
+              <el-select v-model="addForm.projectExecuteCom" filterable style="width:253px;" placeholder="请选择">
                 <el-option
                   v-for="item in projectExecuteComArr"
                   :key="item.id"

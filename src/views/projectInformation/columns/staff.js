@@ -22,11 +22,13 @@ export default [
   },
   {
     prop: 'post',
-    label: '职务'
+    label: '职务',
+    tooltip: true
   },
   {
     prop: 'professional',
-    label: '项目组成员构成'
+    label: '项目组成员构成',
+    tooltip: true
   },
   {
     prop: 'certificate',
@@ -35,19 +37,23 @@ export default [
   },
   {
     prop: 'speciality',
-    label: '专长'
+    label: '专长',
+    tooltip: true
   },
   {
     prop: 'manage',
-    label: '管理分工'
+    label: '管理分工',
+    tooltip: true
   },
   {
     prop: 'jop',
-    label: '项目内分工'
+    label: '项目内分工',
+    tooltip: true
   },
   {
     prop: 'workTime',
-    label: '工作时间'
+    label: '工作时间',
+    tooltip: true
   },
   {
     prop: 'action',
