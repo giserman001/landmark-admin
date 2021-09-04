@@ -144,6 +144,7 @@ import upload from '@/components/upload'
 import { mouth } from './columns/list'
 // import Tips from '@/components/tips.vue'
 import { getMonthReportList, getProjectList, deteleMonthReportById, saveMonthReport, updateMonthReport, getFiles } from '@/api/common'
+import downFile from '@/utils/downFile'
 export default {
   name: 'List',
   components: {
@@ -322,11 +323,7 @@ export default {
       })
     },
     downLoad(id) {
-      const link = document.createElement('a')
-      link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      downFile(id)
     },
     feedBackView(row) {
       this.feedVisible = true

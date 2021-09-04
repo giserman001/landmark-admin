@@ -127,6 +127,7 @@ import ZfTable from '@/components/ZfTable/CoreTable'
 import upload from '@/components/upload'
 import { day } from './columns/list'
 import { getDayReportList, getProjectList, saveDayReport, updateDayReport, getFiles, deteleDayReportById } from '@/api/common'
+import downFile from '@/utils/downFile'
 export default {
   name: 'List',
   components: {
@@ -280,11 +281,7 @@ export default {
       })
     },
     downLoad(id) {
-      const link = document.createElement('a')
-      link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      downFile(id)
     },
     async view(ids) {
       this.dlfvisible = true

@@ -300,6 +300,7 @@ import upload from '@/components/upload'
 import column from './columns/list'
 import Tips from '@/components/tips.vue'
 import { getProjectList, getOwnerIdAndName, getExecuteIdAndName, saveProject, updateProject, deteleProjectById, saveOwner, saveExecute } from '@/api/common'
+import downFile from '@/utils/downFile'
 export default {
   name: 'List',
   components: {
@@ -529,11 +530,7 @@ export default {
         type: 'warning'
       }).then(async() => {
         // 下载
-        const link = document.createElement('a')
-        link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        downFile(id)
         this.formVisible = false
       }).catch(() => {
         this.$message({
@@ -544,11 +541,7 @@ export default {
     },
     // 文件下载通用方法
     downLoadFn(id) {
-      const link = document.createElement('a')
-      link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      downFile(id)
     },
     addOwner() {
       this.innerVisible1 = true

@@ -357,6 +357,7 @@ import upload from '@/components/upload'
 import Tips from '@/components/tips.vue'
 // import { validNumber } from '@/utils/fn'
 import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles, deteleProjectSonById, getOwnerById, getExecuteById, staffInfoById, getListByTypeAndComId } from '@/api/common'
+import downFile from '@/utils/downFile'
 export default {
   name: 'ProjectDetail',
   components: {
@@ -581,11 +582,7 @@ export default {
       this.showFiles = await this.getFilesFn(ids)
     },
     downLoad(id) {
-      const link = document.createElement('a')
-      link.href = `${process.env.VUE_APP_BASE_API}/file/download?id=${id}`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      downFile(id)
     },
     async getYZInfo() {
       this.yzVisible = true
