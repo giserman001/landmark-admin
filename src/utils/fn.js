@@ -211,3 +211,10 @@ export const throttle = function(fn, timerDelay, immediate = false) {
 export const validNumber = (val) => {
   return /^[+]?(0|([1-9]\d*))(\/\d+)?$/g.test(val)
 }
+
+// 密码加密
+export const encryption = (str) => {
+  var encStr = encodeURIComponent(str)
+  encStr = btoa(encStr)
+  return encStr
+}

@@ -40,6 +40,10 @@
           <el-form-item prop="password">
             <el-input ref="password" v-model="form.password" type="password" placeholder="请输入密码" show-password prefix-icon="el-icon-lock" @keyup.native.13="submitForm('form')" />
           </el-form-item>
+          <el-form-item prop="code" class="yzmCode">
+            <el-input v-model="form.code" style="width:280px;" type="text" placeholder="请输入验证码(不区分大小写)" />
+            <canvas id="canvas" class="canvasClass" width="100" height="50" @click="updateCode" />
+          </el-form-item>
           <el-button type="primary" class="login_btn w100 fs18" round @click="submitForm('form')">登录</el-button>
         </el-form>
       </div>
@@ -49,25 +53,43 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { encryption } from '@/utils/fn'
 export default {
   data() {
+    const validateCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入验证码'))
+      } else if (value !== this.form.show_num.join('')) {
+        callback(new Error('验证码不正确'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         userName: '',
-        password: ''
+        password: '',
+        show_num: [], // 不用传送给后端
+        code: '' // 不用传送给后端
       },
       rules: {
         userName: [{ required: true, message: '请输入账号', trigger: 'change' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'change' }]
+        password: [{ required: true, message: '请输入密码', trigger: 'change' }],
+        code: [{ required: true, validator: validateCode, trigger: 'change' }]
       }
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.draw()
+    })
   },
   methods: {
     ...mapActions('user', ['loginFn']),
     submitForm(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const res = await this.loginFn(this.form)
+          const res = await this.loginFn({ userName: this.form.userName, password: encryption(this.form.password) })
           if (res.code === 0) {
             if (!res.data.codes.length) {
               this.$message.error('当前用户没有权限，请联系平台管理员')
@@ -79,6 +101,58 @@ export default {
           return false
         }
       })
+    },
+    updateCode() {
+      this.draw()
+    },
+    draw() {
+      var canvas = document.getElementById('canvas')// 获取到canvas的对象
+      var canvas_width = 100
+      var canvas_height = 50
+      var context = canvas.getContext('2d')// 获取到canvas画图的环境
+      canvas.width = canvas_width
+      canvas.height = canvas_height
+      var sCode = 'A,B,C,E,F,G,H,J,K,L,M,N,P,Q,R,S,T,W,X,Y,Z,1,2,3,4,5,6,7,8,9,0'
+      var aCode = sCode.split(',')
+      var aLength = aCode.length// 获取到数组的长度
+
+      for (var i = 0; i <= 3; i++) {
+        var j = Math.floor(Math.random() * aLength)// 获取到随机的索引值
+        var deg = Math.random() * 30 * Math.PI / 180// 产生0~30之间的随机弧度
+        var txt = aCode[j]// 得到随机的一个内容
+        this.form.show_num[i] = txt.toLowerCase()
+        var x = 10 + i * 20// 文字在canvas上的x坐标
+        var y = 20 + Math.random() * 8// 文字在canvas上的y坐标
+        context.font = 'bold 23px 微软雅黑'
+        context.translate(x, y)
+        context.rotate(deg)
+        context.fillStyle = this.randomColor()
+        context.fillText(txt, 0, 0)
+        context.rotate(-deg)
+        context.translate(-x, -y)
+      }
+      for (var n = 0; n <= 5; n++) { // 验证码上显示线条
+        context.strokeStyle = this.randomColor()
+        context.beginPath()
+        context.moveTo(Math.random() * canvas_width, Math.random() * canvas_height)
+        context.lineTo(Math.random() * canvas_width, Math.random() * canvas_height)
+        context.stroke()
+      }
+      for (var m = 0; m <= 30; m++) { // 验证码上显示小点
+        context.strokeStyle = this.randomColor()
+        context.beginPath()
+        var p = Math.random() * canvas_width
+        var q = Math.random() * canvas_height
+        context.moveTo(p, q)
+        context.lineTo(p + 1, q + 1)
+        context.stroke()
+      }
+    },
+    randomColor() { // 得到随机的颜色值
+      var r = Math.floor(Math.random() * 256)
+      var g = Math.floor(Math.random() * 256)
+      var b = Math.floor(Math.random() * 256)
+      return 'rgb(' + r + ',' + g + ',' + b + ')'
     }
   }
 }
@@ -129,7 +203,7 @@ export default {
         }
         .login_btn{
           height: 46px;
-          margin-top: 35px;
+          // margin-top: 35px;
         }
       }
       .bigTit{
@@ -143,5 +217,9 @@ export default {
       }
     }
   }
+}
+.canvasClass{
+  vertical-align:middle;
+  cursor: pointer;
 }
 </style>

@@ -176,11 +176,11 @@ export function saveDayReport(params) {
 }
 
 // 编辑日报
-export function updateDayReport(params) {
-  return request({ url: '/dayReport/updateDayReport', method: 'get', params })
+export function updateDayReport(data) {
+  return request({ url: '/dayReport/updateDayReport', method: 'post', data })
 }
 
-// 编辑日报
+// 删除日报
 export function deteleDayReportById(params) {
   return request({ url: '/dayReport/deteleDayReportById', method: 'get', params })
 }
@@ -297,13 +297,13 @@ export function getStaffInfoList(params) {
 }
 
 // 新增职工
-export function saveStaffInfo(params) {
-  return request({ url: '/staffInfo/saveStaffInfo', method: 'get', params })
+export function saveStaffInfo(data) {
+  return request({ url: '/staffInfo/saveStaffInfo', method: 'post', data })
 }
 
 // 编辑职工
-export function updateStaffInfo(params) {
-  return request({ url: '/staffInfo/updateStaffInfo', method: 'get', params })
+export function updateStaffInfo(data) {
+  return request({ url: '/staffInfo/updateStaffInfo', method: 'post', data })
 }
 
 // 删除职工
@@ -354,3 +354,9 @@ export function saveExecute(params) {
 export function updateExecute(params) {
   return request({ url: '/execute/updateExecute', method: 'get', params })
 }
+
+// 修改密码
+export function updatePasswordByUserId(params) {
+  return request({ url: '/user/updatePasswordByUserId', method: 'get', params })
+}
+

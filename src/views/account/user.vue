@@ -93,10 +93,16 @@ export default {
       },
       dialogVisible: false,
       rules: {
-        userName: [{ required: true, message: '请输入员工姓名', trigger: 'change' }],
+        userName: [
+          { required: true, message: '请输入员工姓名', trigger: 'change' },
+          { min: 2, max: 15, message: '用户名长度在2到15个字符', trigger: 'blur' }
+        ],
         mobile: [{ required: true, validator: validateAccount, trigger: 'change' }],
         roleId: [{ required: true, message: '请选择权限角色', trigger: 'change' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'change' }]
+        password: [
+          { required: true, message: '请输入密码', trigger: 'change' },
+          { min: 2, max: 15, message: '密码长度在2到15个字符', trigger: 'blur' }
+        ]
       },
       optionArr: [],
       form: {

@@ -27,6 +27,9 @@
             <i class="el-icon-arrow-down" />
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <el-dropdown-item @click.native="updatePasswordFn">
+              <span style="display:block;">修改密码</span>
+            </el-dropdown-item>
             <el-dropdown-item @click.native="logout">
               <span style="display:block;">退出登录</span>
             </el-dropdown-item>
@@ -40,6 +43,20 @@
     <div class="main-container">
       <app-main />
     </div>
+    <el-dialog title="修改密码" :visible.sync="updatePasswordVisible" center width="400px">
+      <el-form ref="updatePassword" :model="updatePassword" label-width="80px" :rules="rules">
+        <el-form-item label="原密码" prop="oldPassword">
+          <el-input v-model="updatePassword.oldPassword" />
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input v-model="updatePassword.newPassword" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" @click="submitUpdatePasswordFn('updatePassword')">确 定</el-button>
+        <el-button @click="updatePasswordVisible = false">取 消</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -47,6 +64,9 @@
 import { AppMain, HeadItem, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { resetRouter } from '@/router'
+import { updatePasswordByUserId } from '@/api/common'
+import { get } from '@/utils/storage'
+import { encryption } from '@/utils/fn'
 
 export default {
   name: 'Layout',
@@ -58,7 +78,21 @@ export default {
   mixins: [ResizeMixin],
   data() {
     return {
-      avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+      avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+      updatePasswordVisible: false,
+      updatePassword: {
+        oldPassword: '',
+        newPassword: ''
+      },
+      rules: {
+        oldPassword: [
+          { required: true, message: '请输入旧密码', trigger: 'blur' }
+        ],
+        newPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 2, max: 15, message: '新密码长度在2到15个字符', trigger: 'change' }
+        ]
+      }
     }
   },
   computed: {
@@ -111,6 +145,32 @@ export default {
       // 重置路由
       resetRouter()
       this.$router.replace({ path: '/login' })
+    },
+    updatePasswordFn() {
+      this.updatePasswordVisible = true
+      this.updatePassword.oldPassword = ''
+      this.updatePassword.newPassword = ''
+    },
+    submitUpdatePasswordFn(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          const userId = JSON.parse(get('userinfo')).userId
+          const res = await updatePasswordByUserId({
+            oldPassword: encryption(this.updatePassword.oldPassword),
+            newPassword: encryption(this.updatePassword.newPassword),
+            userId
+          })
+          if (res.code === 0) {
+            this.$message.success('修改密码成功')
+            this.updatePasswordVisible = false
+            setTimeout(() => {
+              this.logout()
+            }, 1000)
+          }
+        } else {
+          return false
+        }
+      })
     }
   }
 }
