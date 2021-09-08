@@ -32,7 +32,7 @@
       </template>
     </zf-table>
     <el-dialog
-      :title="mode == 1 ? '新建员工' : '编辑员工'"
+      :title="mode == 1 ? '新建用户' : '编辑用户'"
       :visible.sync="dialogVisible"
       center
       width="400px"
