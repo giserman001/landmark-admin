@@ -41,7 +41,7 @@
             <el-input ref="password" v-model="form.password" type="password" placeholder="请输入密码" show-password prefix-icon="el-icon-lock" @keyup.native.13="submitForm('form')" />
           </el-form-item>
           <el-form-item prop="code" class="yzmCode">
-            <el-input v-model="form.code" style="width:280px;" type="text" placeholder="请输入验证码(不区分大小写)" />
+            <el-input v-model="form.code" style="width:288px;" type="text" placeholder="请输入验证码(不区分大小写)" />
             <canvas id="canvas" class="canvasClass" width="100" height="50" @click="updateCode" />
           </el-form-item>
           <el-button type="primary" class="login_btn w100 fs18" round @click="submitForm('form')">登录</el-button>
@@ -221,5 +221,6 @@ export default {
 .canvasClass{
   vertical-align:middle;
   cursor: pointer;
+  margin-left: 10px;
 }
 </style>
