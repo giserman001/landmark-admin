@@ -355,7 +355,7 @@ import ZfTable from '@/components/ZfTable/CoreTable'
 import column from './columns/projectDetail'
 import upload from '@/components/upload'
 import Tips from '@/components/tips.vue'
-// import { validNumber } from '@/utils/fn'
+import { get, set } from '@/utils/storage'
 import { getProjectSonList, saveProjectSon, updateProjectSon, getFiles, deteleProjectSonById, getOwnerById, getExecuteById, staffInfoById, getListByTypeAndComId } from '@/api/common'
 import downFile from '@/utils/downFile'
 export default {
@@ -443,8 +443,23 @@ export default {
       reportType: 1 // 默认是日报
     }
   },
+  watch: {
+    '$route'(to, from) {
+      // 当前路由和上一个路由
+      if (to.path === '/projectInformation/project-detail') {
+        if (+get('project_id') !== +to.query.id) {
+          this.form.projectId = +to.query.id
+          this.pages.pageNum = 1
+          this.query()
+          set('project_id', to.query.id)
+        }
+      }
+    }
+  },
   mounted() {
     this.query()
+    // 缓存项目id
+    set('project_id', this.$route.query.id)
   },
   methods: {
     mapProfessional(id) {

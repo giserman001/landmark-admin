@@ -6,67 +6,50 @@
           <swiper-slide v-for="(item, index) in swiperArr" :key="index">
             <img class="img-item" :src="item.url" alt="">
           </swiper-slide>
-          <!-- <swiper-slide>
-            <img class="img-item" src="@/assets/test/2.jpg" alt="">
-          </swiper-slide>
-          <swiper-slide>
-            <img class="img-item" src="@/assets/test/3.jpg" alt="">
-          </swiper-slide> -->
           <div slot="pagination" class="swiper-pagination" />
         </swiper>
       </div>
       <div class="single-detail">
-        <el-row class="mb20">
-          <el-col :span="12">
-            <span class="label">单体名称：</span>
-            <span>{{ detail.name }}</span>
-          </el-col>
-          <el-col :span="12">
-            <span class="label">单体编号：</span>
-            <span>{{ detail.code }}</span>
-          </el-col>
-        </el-row>
-        <el-row class="mb20">
-          <el-col :span="12">
-            <span class="label">始建年代：</span>
-            <span>{{ detail.beginBuildTime }}</span>
-          </el-col>
-          <el-col :span="12">
-            <span class="label">历史沿革：</span>
-            <span>{{ detail.history }}</span>
-          </el-col>
-        </el-row>
-        <el-row class="mb20">
-          <el-col :span="12">
-            <span class="label">历史修缮情况：</span>
-            <span>{{ detail.maintain }}</span>
-          </el-col>
-          <el-col :span="12">
-            <span class="label">价值评估结论：</span>
-            <span>{{ detail.valueAssess }}</span>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <div class="flex">
-              <span class="label">测绘图附件：</span>
-              <div style="flex:1;">
-                <template v-if="filesArr.length">
-                  <div v-for="(item, index) in filesArr" :key="index" :class="['file-con', (filesArr.length - 1) === index ? '' : 'mb10']">
-                    <div>{{ item.name }}</div>
-                    <div @click="downLoad(item.id)">下载</div>
-                  </div>
-                </template>
-                <div v-else>暂无数据</div>
+        <div class="flex mb20">
+          <div class="label">单体名称：</div>
+          <div>{{ detail.name }}</div>
+        </div>
+        <div class="flex mb20">
+          <div class="label">单体编号：</div>
+          <div>{{ detail.code }}</div>
+        </div>
+        <div class="flex mb20">
+          <div class="label">始建年代：</div>
+          <div>{{ detail.beginBuildTime }}</div>
+        </div>
+        <div class="flex mb20">
+          <div class="label">历史沿革：</div>
+          <div>{{ detail.history }}</div>
+        </div>
+        <div class="flex mb20">
+          <div class="label">历史修缮情况：</div>
+          <div>{{ detail.maintain }}</div>
+        </div>
+        <div class="flex mb20">
+          <div class="label">价值评估结论：</div>
+          <div>{{ detail.valueAssess }}</div>
+        </div>
+        <div class="flex mb20">
+          <span class="label">测绘图附件：</span>
+          <div style="flex:1;">
+            <template v-if="filesArr.length">
+              <div v-for="(item, index) in filesArr" :key="index" :class="['file-con', (filesArr.length - 1) === index ? '' : 'mb10']">
+                <div>{{ item.name }}</div>
+                <div @click="downLoad(item.id)">下载</div>
               </div>
-            </div>
-          </el-col>
-        </el-row>
+            </template>
+            <div v-else>暂无数据</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
@@ -169,19 +152,17 @@ export default {
       display: inline-block;
       text-align: right;
       font-weight: bold;
+      flex-shrink: 0;
     }
   }
 }
 .file-con{
   display: flex;
   &>div{
-    &:first-child{
-      flex: 3;
-    }
     &:last-child{
-      flex: 1;
       color: #3a8ee6;
       cursor: pointer;
+      margin-left: 20px;
     }
   }
 }

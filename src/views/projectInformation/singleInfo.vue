@@ -142,6 +142,7 @@ import Tips from '@/components/tips.vue'
 import { getProjectArchitectureList, saveArchitecture, updateArchitecture, deteleArchitectureById, getFiles } from '@/api/common'
 import upload from '@/components/upload'
 import downFile from '@/utils/downFile'
+import { get, set } from '@/utils/storage'
 export default {
   name: 'SingleInfo',
   components: {
@@ -186,8 +187,23 @@ export default {
       showFiles: []
     }
   },
+  watch: {
+    '$route'(to, from) {
+      // 当前路由和上一个路由
+      if (to.path === '/projectInformation/single-info') {
+        if (+get('project_son_id') !== +to.query.sonId) {
+          this.form.sonId = +to.query.sonId
+          this.pages.pageNum = 1
+          this.query()
+          set('project_son_id', to.query.sonId)
+        }
+      }
+    }
+  },
   mounted() {
     this.query()
+    // 缓存项目id
+    set('project_son_id', this.$route.query.sonId)
   },
   methods: {
     async query() {

@@ -72,7 +72,7 @@ export const constantRoutes = [
       path: 'list',
       name: 'ProjectInformationList',
       component: () => import('@/views/projectInformation/index'),
-      meta: { title: '项目信息', affix: true }
+      meta: { title: '项目信息', affix: true, keepAlive: true }
     }, {
       path: 'staff',
       name: 'Staff',
@@ -93,13 +93,13 @@ export const constantRoutes = [
       name: 'ProjectDetail',
       hidden: true,
       component: () => import('@/views/projectInformation/projectDetail'),
-      meta: { title: '项目详细信息', activeMenu: '/projectInformation/list' }
+      meta: { title: '项目详细信息', activeMenu: '/projectInformation/list', keepAlive: true }
     }, {
       path: 'single-info',
       name: 'SingleInfo',
       hidden: true,
       component: () => import('@/views/projectInformation/singleInfo'),
-      meta: { title: '单体建筑信息', activeMenu: '/projectInformation/list' }
+      meta: { title: '单体建筑信息', activeMenu: '/projectInformation/list', keepAlive: true }
     }, {
       path: 'single-detail',
       name: 'SingleDetail',
